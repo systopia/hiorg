@@ -23,6 +23,7 @@
   <comments>See https://info.hiorg-server.de for information on HiOrg-Server.</comments>
   <requires>
     <ext>oauth-client</ext>
+    <ext>config-profiles</ext>
   </requires>
   <classloader>
     <psr0 prefix="CRM_" path="."/>
