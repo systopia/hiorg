@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="hiorg" type="module">
   <file>hiorg</file>
-  <name>hiorg</name>
+  <name>HiOrg-Server API</name>
   <description>An API client for connecting to a HiOrg-Server instance.</description>
   <license>AGPL-3.0</license>
   <maintainer>
