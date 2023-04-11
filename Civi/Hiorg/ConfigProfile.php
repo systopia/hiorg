@@ -2,7 +2,13 @@
 
 namespace Civi\Hiorg;
 
-class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile {
+use Civi\Api4\Service\Spec\FieldSpec;
+use Civi\Api4\Service\Spec\RequestSpec;
+use Civi\ConfigProfiles\ConfigProfileInterface;
+use Civi\Core\Event\GenericHookEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements EventSubscriberInterface, ConfigProfileInterface {
 
   /**
    * @var int $oauth_client_id
@@ -23,6 +29,37 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile {
   public function __construct() {
     $this->xcm_profile_name = $this->data['xcm_profile'];
     $this->oauth_client_id = $this->data['oauth_client_id'];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function getSubscribedEvents(): array {
+    return [
+      'civi.config_profiles.types' => 'configProfileTypes'
+      ] + parent::getSubscribedEvents();
+  }
+
+  public static function configProfileTypes(GenericHookEvent $event) {
+    $event->types['hiorg'] = self::class;
+  }
+
+  public static function modifyFieldSpec(RequestSpec $spec) {
+    $field = new FieldSpec('xcm_profile', 'ConfigProfile', 'String');
+    $field->setTitle(ts('Extended Contact manager (XCM) Profile'));
+    $field->setLabel(ts('XCM Profile'));
+    $field->setDescription(ts('XCM profile to use for processing contacts with this configuration profile.'));
+    $field->setRequired(TRUE);
+    $field->setInputType('Text');
+    $spec->addFieldSpec($field);
+
+    $field = new FieldSpec('oauth_client_id', 'ConfigProfile', 'String');
+    $field->setTitle(ts('OAuth Client ID'));
+    $field->setLabel(ts('OAuth Client ID'));
+    $field->setDescription(ts('CiviCRM OAuth Client ID to use for authenticating with this configuration profile.'));
+    $field->setRequired(TRUE);
+    $field->setInputType('Text');
+    $spec->addFieldSpec($field);
   }
 
   /**

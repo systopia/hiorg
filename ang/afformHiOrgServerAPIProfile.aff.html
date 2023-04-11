@@ -1,0 +1,10 @@
+<af-form ctrl="afform">
+  <af-entity type="ConfigProfile" name="ConfigProfile1" label="Configuration Profile 1" actions="{create: true, update: true}" security="RBAC" url-autofill="1" data="{type: '\\Civi\\Hiorg\\ConfigProfile'}" />
+  <fieldset af-fieldset="ConfigProfile1" class="af-container" af-title="Configuration Profile 1">
+    <af-field name="name" />
+    <af-field name="selector" />
+    <af-field name="is_active" />
+    <af-field name="is_default" />
+  </fieldset>
+  <button class="af-button btn btn-primary" crm-icon="fa-check" ng-click="afform.submit()">Save</button>
+</af-form>
