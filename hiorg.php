@@ -27,6 +27,7 @@ function hiorg_civicrm_config(&$config): void {
   _hiorg_civix_civicrm_config($config);
 
   Civi::dispatcher()->addSubscriber(new \Civi\Hiorg\OAuthProviderSubscriber());
+  Civi::dispatcher()->addSubscriber(new \Civi\Hiorg\ConfigProfilesSubscriber());
 }
 
 /**

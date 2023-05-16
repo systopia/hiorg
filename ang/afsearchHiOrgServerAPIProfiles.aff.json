@@ -3,7 +3,7 @@
     "title": "HiOrg-Server API Profiles",
     "icon": "fa-cogs",
     "server_route": "civicrm/admin/setting/hiorg/profiles",
-    "permission": "access CiviCRM",
+    "permission": "administer CiviCRM",
     "navigation": {
         "parent": "System Settings",
         "label": "HiOrg-Server API Profiles",
