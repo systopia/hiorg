@@ -11,6 +11,16 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements ConfigProfileInterface {
 
+  const NAME = 'hiorg';
+
+  public static function getMetadata(): array {
+    return [
+      'name' => self::NAME,
+      'label' => E::ts('HiOrg-Server API'),
+      'description' => E::ts('Configuration profiles for the HiOrg-Server API extension.')
+    ];
+  }
+
   public static function modifyFieldSpec(RequestSpec $spec): void {
     $field = new FieldSpec('xcm_profile', 'ConfigProfile', 'String');
     $field->setTitle(ts('Extended Contact manager (XCM) Profile'));

@@ -15,6 +15,8 @@
 
 use CRM_Hiorg_ExtensionUtil as E;
 
+$metadata = \Civi\Hiorg\ConfigProfile::getMetadata();
+
 return [
   [
     'name' => 'OptionValue__config_profile_type__hiorg',
@@ -25,14 +27,14 @@ return [
       'version' => 4,
       'values' => [
         'option_group_id.name' => 'config_profile_type',
-        'label' => E::ts('HiOrg-Server API'),
-        'value' => 'Civi\Hiorg\ConfigProfile',
-        'name' => 'hiorg',
+        'label' => $metadata['label'],
+        'value' => Civi\Hiorg\ConfigProfile::class,
+        'name' => $metadata['name'],
         'grouping' => NULL,
         'filter' => 0,
         'is_default' => FALSE,
         'weight' => 1,
-        'description' => E::ts('Configuration profiles for the HiOrg-Server API extension.'),
+        'description' => $metadata['description'],
         'is_optgroup' => FALSE,
         'is_reserved' => TRUE,
         'is_active' => TRUE,
