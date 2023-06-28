@@ -70,4 +70,16 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
     return $this->data['oauth_client_id'];
   }
 
+  public static function getById(int $id) {
+    return (new self())->copyValues(['id' => $id]);
+  }
+
+  public static function loadAll() {
+    return \Civi\Api4\ConfigProfile::get('hiorg')
+      ->addWhere('is_active', '=', TRUE)
+      ->execute()
+      ->indexBy('id')
+      ->column('name');
+  }
+
 }
