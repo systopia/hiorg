@@ -8,9 +8,15 @@ use Civi\Hiorg\HiorgClient;
 
 class GetPersonalAction extends AbstractHiorgAction {
 
+  /**
+   * @var bool|null
+   */
   protected ?bool $self = FALSE;
 
-  protected ?\DateTime $changedSince = NULL;
+  /**
+   * @var string|null
+   */
+  protected ?string $changedSince = NULL;
 
   /**
    * @inheritDoc
@@ -18,7 +24,7 @@ class GetPersonalAction extends AbstractHiorgAction {
   protected function doRun(): void {
     $this->_response = $this->_hiorgClient->getPersonal(
       $this->self,
-      $this->changedSince
+      $this->changedSince ? \DateTime::createFromFormat('Y-m-dTH:i:sP', $this->changedSince) : NULL
     );
   }
 

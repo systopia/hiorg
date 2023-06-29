@@ -8,13 +8,25 @@ use Civi\Hiorg\HiorgClient;
 
 class GetHelferstundenAction extends AbstractHiorgAction {
 
+  /**
+   * @var int|null
+   */
   protected ?int $id = NULL;
 
+  /**
+   * @var bool|null
+   */
   protected ?bool $own = TRUE;
 
-  protected ?\DateTime $from = NULL;
+  /**
+   * @var string|null
+   */
+  protected ?string $from = NULL;
 
-  protected ?\DateTime $to = NULL;
+  /**
+   * @var string|null
+   */
+  protected ?string $to = NULL;
 
   /**
    * @inheritDoc
@@ -23,8 +35,8 @@ class GetHelferstundenAction extends AbstractHiorgAction {
     $this->_response = $this->_hiorgClient->getHelferstunden(
       $this->id,
       $this->own,
-      $this->from,
-      $this->to
+      \DateTime::createFromFormat('Y-m-d', $this->from),
+      \DateTime::createFromFormat('Y-m-d', $this->to)
     );
   }
   public static function fields() {
