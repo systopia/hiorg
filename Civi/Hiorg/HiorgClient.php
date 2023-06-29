@@ -3,14 +3,26 @@
 namespace Civi\Hiorg;
 
 use Civi\Api4\OAuthSysToken;
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
 
-class HiorgClient extends \GuzzleHttp\Client {
+class HiorgClient {
 
   const BASE_URI = 'https://api.hiorg-server.de/core/v1/';
 
+  protected $oauthToken;
+
+  protected Client $guzzleClient;
+
+  protected ResponseInterface $result;
+
   public function __construct(ConfigProfile $configProfile) {
-    $tokenRecord = self::lookupToken($configProfile->getOauthClientId());
-    parent::__construct([
+    if (!$tokenRecord = self::lookupToken($oauthClientId = $configProfile->getOauthClientId())) {
+      throw new \Exception(E::ts('Error looking up OAuth token for OAuth client with ID %1', [1 => $oauthClientId]));
+    }
+    $this->oauthToken = $tokenRecord['access_token'];
+    $this->guzzleClient = new \GuzzleHttp\Client([
       'base_uri' => self::BASE_URI,
       'headers' => [
         'Authorization' => 'Bearer ' . $tokenRecord['access_token'],
@@ -29,11 +41,21 @@ class HiorgClient extends \GuzzleHttp\Client {
    * @throws \CRM_Core_Exception
    * @throws \Civi\API\Exception\UnauthorizedException
    */
-  public function lookupToken($oauthClientId) {
+  protected function lookupToken($oauthClientId) {
     return OAuthSysToken::refresh(FALSE)
-      ->addWhere('client_id', '=', $oauthClientId)
+      ->addWhere('client_id.guid', '=', $oauthClientId)
       ->execute()
       ->first();
+  }
+
+  protected function formatRequestOptions($options = []) {
+    return [
+      RequestOptions::JSON => $options,
+    ];
+  }
+
+  protected function formatResult(): object {
+    return json_decode($this->result->getBody());
   }
 
   /**
@@ -44,14 +66,14 @@ class HiorgClient extends \GuzzleHttp\Client {
    * @param \DateTime|NULL $changedSince
    *   The date retrieved records have to have been changed since. Only applies
    *   when $self is FALSE.
-   * @param array|NULL $include
+   * @param array $include
    *   A list of linked objects to include in the response, e. g.
    *   - "organisation"
    *
    * @return \Psr\Http\Message\ResponseInterface
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getPersonal(bool $self = FALSE, \DateTime $changedSince = NULL, array $include = NULL) {
+  public function getPersonal(bool $self = FALSE, \DateTime $changedSince = NULL, array $include = []) {
     if (!$self) {
       $body = [
         'filter' => [
@@ -60,16 +82,17 @@ class HiorgClient extends \GuzzleHttp\Client {
         'include' => implode(',', $include),
       ];
     }
-    return $this->get(
+    $this->result = $this->guzzleClient->get(
       'personal' . ($self ? '/selbst' : ''),
-      [
-        'body' => $body,
-      ]
+      $this->formatRequestOptions($body ?? [])
     );
+    return $this->formatResult();
   }
 
   public function getOrganisation(bool $self = TRUE) {
-    return $this->get('organisation/selbst/stammdaten');
+    return $this->guzzleClient
+      ->get('organisation/selbst/stammdaten')
+      ->getBody();
   }
 
   /**

@@ -60,18 +60,23 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
    * @return string
    */
   public function getXcmProfileName(): string {
-    return $this->data['xcm_profile'];
+    $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
+    return $data['xcm_profile'];
   }
 
   /**
-   * @return int
+   * @return string
    */
-  public function getOauthClientId(): int {
-    return $this->data['oauth_client_id'];
+  public function getOauthClientId(): string {
+    $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
+    return $data['oauth_client_id'];
   }
 
   public static function getById(int $id) {
-    return (new self())->copyValues(['id' => $id]);
+    $configProfile = new self();
+    $configProfile->copyValues(['id' => $id]);
+    $configProfile->find(TRUE);
+    return $configProfile;
   }
 
   public static function loadAll() {
