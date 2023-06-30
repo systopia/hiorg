@@ -25,7 +25,7 @@ class HiorgClient {
     $this->guzzleClient = new \GuzzleHttp\Client([
       'base_uri' => self::BASE_URI,
       'headers' => [
-        'Authorization' => 'Bearer ' . $tokenRecord['access_token'],
+        'Authorization' => 'Bearer ' . $this->oauthToken,
         'Accept' => 'application/json',
       ],
     ]);
@@ -43,7 +43,7 @@ class HiorgClient {
    */
   protected function lookupToken($oauthClientId) {
     return OAuthSysToken::refresh(FALSE)
-      ->addWhere('client_id.guid', '=', $oauthClientId)
+      ->addWhere('client_id.id', '=', $oauthClientId)
       ->execute()
       ->first();
   }

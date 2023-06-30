@@ -24,7 +24,7 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
       $oauth_clients = \Civi\Api4\OAuthClient::get(FALSE)
         ->addSelect('guid', 'provider:label')
         ->execute()
-        ->indexBy('guid')
+        ->indexBy('id')
         ->getArrayCopy();
       array_walk($oauth_clients, function (&$oauth_client) {
         $oauth_client = $oauth_client['guid'] . ' (' . $oauth_client['provider:label'] . ')';
