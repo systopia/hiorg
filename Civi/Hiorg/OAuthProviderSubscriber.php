@@ -39,7 +39,7 @@ class OAuthProviderSubscriber implements EventSubscriberInterface {
         'urlAccessToken' => 'https://api.hiorg-server.de/oauth/v1/token',
         'urlResourceOwnerDetails' => '{{use_id_token}}',
         'scopes' => [
-          'openid personal/selbst:read organisation/selbst/stammdaten:read helferstunden:read',
+          'openid personal/selbst:read personal:read organisation/selbst/stammdaten:read helferstunden:read',
         ],
       ]
     ];
