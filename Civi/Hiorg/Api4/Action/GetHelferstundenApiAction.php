@@ -6,7 +6,7 @@ use Civi\Api4\Generic\Result;
 use Civi\Hiorg\ConfigProfile;
 use Civi\Hiorg\HiorgClient;
 
-class GetHelferstundenAction extends AbstractHiorgAction {
+class GetHelferstundenApiAction extends AbstractHiorgApiAction {
 
   /**
    * @var int|null

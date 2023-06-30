@@ -77,7 +77,7 @@ class HiorgClient {
     if (!$self) {
       $body = [
         'filter' => [
-          'changed_since' => $changedSince ? $changedSince->format('Y-m-dTH:i:sP') : NULL,
+          'changed_since' => $changedSince ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
         ],
         'include' => implode(',', $include),
       ];

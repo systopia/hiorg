@@ -6,7 +6,11 @@ use Civi\Api4\Generic\Result;
 use Civi\Hiorg\ConfigProfile;
 use Civi\Hiorg\HiorgClient;
 
-class GetPersonalAction extends AbstractHiorgAction {
+/**
+ * @method $this setSelf(bool $self)
+ * @method $this setChangedSince(string $changedSince)
+ */
+class GetPersonalApiAction extends AbstractHiorgApiAction {
 
   /**
    * @var bool|null
@@ -24,7 +28,7 @@ class GetPersonalAction extends AbstractHiorgAction {
   protected function doRun(): void {
     $this->_response = $this->_hiorgClient->getPersonal(
       $this->self,
-      $this->changedSince ? \DateTime::createFromFormat('Y-m-dTH:i:sP', $this->changedSince) : NULL
+      $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL
     );
   }
 
