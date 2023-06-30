@@ -25,6 +25,7 @@
     <ext>config-profiles</ext>
     <ext>oauth-client</ext>
     <ext>de.systopia.xcm</ext>
+    <ext>de.systopia.identitytracker</ext>
   </requires>
   <classloader>
     <psr0 prefix="CRM_" path="."/>
