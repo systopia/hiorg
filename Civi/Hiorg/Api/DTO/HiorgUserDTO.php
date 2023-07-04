@@ -16,4 +16,28 @@ class HiorgUserDTO extends AbstractDTO {
 
   public string $email;
 
+  public string $adresse;
+
+  public string $plz;
+
+  public string $ort;
+
+  public string $land;
+
+  public string $gebdat;
+
+  public array $gruppen_namen;
+
+  public string $orgakuerzel;
+
+  public bool $leitung;
+
+  public bool $gesperrt;
+
+  public array $rechte;
+
+  public array $qualifikationen;
+
+  public array $relationships;
+
 }
