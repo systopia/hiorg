@@ -21,7 +21,7 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 return [
   [
-    'name' => 'Navigation_Automation',
+    'name' => 'Navigation__Automation',
     'entity' => 'Navigation',
     'cleanup' => 'unused',
     'update' => 'unmodified',
@@ -45,7 +45,7 @@ return [
     'match' => ['name', 'parent_id'],
   ],
   [
-    'name' => 'Navigation_Hiorg_Profiles',
+    'name' => 'Navigation__Hiorg_Profiles',
     'entity' => 'Navigation',
     'cleanup' => 'always',
     'update' => 'unmodified',
