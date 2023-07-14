@@ -44,6 +44,13 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
           ->setRequired(TRUE)
           ->setInputType('Select')
           ->setOptions($oauth_clients),
+        'organisation_id' => (new FieldSpec('organisation_id', 'ConfigProfile_' . self::NAME, 'String'))
+          ->setTitle(ts('Organisation ID'))
+          ->setLabel(ts('Organisation ID'))
+          ->setDescription(ts('CiviCRM organisation contact ID to use as corresponding contact with this configuration profile.'))
+          ->setRequired(TRUE)
+          ->setInputType('Select')
+          ->setOptions($oauth_clients),
       ];
     }
 
@@ -70,6 +77,14 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   public function getOauthClientId(): string {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
     return $data['oauth_client_id'];
+  }
+
+  /**
+   * @return string
+   */
+  public function getOrganisationId(): string {
+    $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
+    return $data['organisation_id'];
   }
 
   public static function getById(int $id) {
