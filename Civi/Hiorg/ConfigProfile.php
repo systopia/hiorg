@@ -49,8 +49,9 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
           ->setLabel(ts('Organisation ID'))
           ->setDescription(ts('CiviCRM organisation contact ID to use as corresponding contact with this configuration profile.'))
           ->setRequired(TRUE)
-          ->setInputType('Select')
-          ->setOptions($oauth_clients),
+          ->setFkEntity('Contact')
+          ->setInputAttrs(['filter' => ['contact_type' => 'Organization']])
+          ->setInputType('EntityRef'),
       ];
     }
 
