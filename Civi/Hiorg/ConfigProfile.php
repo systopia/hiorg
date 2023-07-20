@@ -38,16 +38,16 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
           ->setInputType('Select')
           ->setOptions(\CRM_Xcm_Configuration::getProfileList()),
         'oauth_client_id' => (new FieldSpec('oauth_client_id', 'ConfigProfile_' . self::NAME, 'String'))
-          ->setTitle(ts('OAuth Client ID'))
-          ->setLabel(ts('OAuth Client ID'))
-          ->setDescription(ts('CiviCRM OAuth Client ID to use for authenticating with this configuration profile.'))
+          ->setTitle(ts('OAuth Client'))
+          ->setLabel(ts('OAuth Client'))
+          ->setDescription(ts('CiviCRM OAuth Client to use for authenticating with this configuration profile.'))
           ->setRequired(TRUE)
           ->setInputType('Select')
           ->setOptions($oauth_clients),
         'organisation_id' => (new FieldSpec('organisation_id', 'ConfigProfile_' . self::NAME, 'String'))
-          ->setTitle(ts('Organisation ID'))
-          ->setLabel(ts('Organisation ID'))
-          ->setDescription(ts('CiviCRM organisation contact ID to use as corresponding contact with this configuration profile.'))
+          ->setTitle(ts('Organisation'))
+          ->setLabel(ts('Organisation'))
+          ->setDescription(ts('CiviCRM organisation contact to use as corresponding contact with this configuration profile.'))
           ->setRequired(TRUE)
           ->setFkEntity('Contact')
           ->setInputAttrs(['filter' => ['contact_type' => 'Organization']])
@@ -81,11 +81,11 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   }
 
   /**
-   * @return string
+   * @return int
    */
-  public function getOrganisationId(): string {
+  public function getOrganisationId(): int {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
-    return $data['organisation_id'];
+    return (int) $data['organisation_id'];
   }
 
   public static function getById(int $id) {

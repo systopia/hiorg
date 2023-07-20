@@ -17,20 +17,25 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 return [
   [
-    'name' => 'EckEntityType__Hiorg_Qualification',
-    'entity' => 'EckEntityType',
+    'name' => 'RelationshipType__hiorg_groups',
+    'entity' => 'RelationshipType',
     'cleanup' => 'never',
     'update' => 'unmodified',
     'params' => [
       'version' => 4,
       'values' => [
-        'name' => 'Hiorg_Qualification',
-        'label' => E::ts('HiOrg-Server: Qualification'),
-        'icon' => NULL,
-        'in_recent' => FALSE,
+        'name_a_b' => 'hiorg_groups',
+        'label_a_b' => E::ts('HiOrg-Server: Group Membership'),
+        'name_b_a' => 'hiorg_groups',
+        'label_b_a' => E::ts('HiOrg-Server: Group Membership'),
+        'description' => E::ts('Stores group memberships of HiOrg users in their organisation\'s groups.'),
+        'contact_type_a' => 'Individual',
+        'contact_type_b' => 'Organization',
+        'is_reserved' => TRUE,
+        'is_active' => TRUE,
       ],
       'match' => [
-        'name',
+        'name_a_b',
       ],
     ],
   ],
