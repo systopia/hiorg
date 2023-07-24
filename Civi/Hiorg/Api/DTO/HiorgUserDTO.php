@@ -4,6 +4,8 @@ namespace Civi\Hiorg\Api\DTO;
 
 class HiorgUserDTO extends AbstractDTO {
 
+  public string $id;
+
   public string $vorname;
 
   public string $nachname;

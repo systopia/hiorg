@@ -13,7 +13,7 @@ class AbstractDTO {
       switch (TRUE) {
         // Lookup property in top level of the given object.
         case property_exists($object, $key):
-          $value = $object->key;
+          $value = $object->$key;
           break;
         // Lookup property in "attributes" property of the given object.
         case property_exists($object, 'attributes') && property_exists($object->attributes, $key):

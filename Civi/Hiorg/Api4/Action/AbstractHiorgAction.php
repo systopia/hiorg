@@ -2,12 +2,13 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use \Civi\Api4\Generic\AbstractAction;
 use Civi\Api4\Generic\Result;
 
 /**
  * @method $this setConfigProfileId(int $configProfileId)
  */
-abstract class AbstractHiorgAction extends \Civi\Api4\Generic\AbstractAction {
+abstract class AbstractHiorgAction extends AbstractAction {
 
   /**
    * The configuration profile to use for the HiOrg-Server API call.

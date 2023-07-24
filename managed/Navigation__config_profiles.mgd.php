@@ -64,6 +64,6 @@ return [
         'has_separator' => 0,
       ],
     ],
-    'match' => ['name'],
+    'match' => ['name', 'parent_id'],
   ],
 ];
