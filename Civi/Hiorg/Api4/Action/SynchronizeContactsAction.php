@@ -30,56 +30,95 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     foreach ($personalResult as $record) {
       $hiorgUserResult = [];
       $hiorgUser = new HiorgUserDTO($record);
-      $xcmParams = ['xcm_profile' => $xcmProfile] + self::mapParameters($hiorgUser);
-
-      // Identitfy contact using Identity Tracker and Pass contact ID to XCM.
-      $idTrackerResult = civicrm_api3(
-        'Contact',
-        'findbyidentity',
-        [
-          'identifier_type' => 'hiorg_user',
-          'identifier' => $hiorgUser->id,
-        ]
-      );
-      if (1 === $idTrackerResult['count']) {
-        $xcmParams['id'] = $idTrackerResult['id'];
-      }
+      $idTrackerResult = static::identifyContact($hiorgUser->id);
 
       // Synchronize contact data using Extended Contact Manager (XCM) with
       // profile defined in HiOrg-Server API configuration profile.
-      $xcmResult = civicrm_api3(
-        'Contact',
-        'createifnotexists',
-        ['xcm_profile' => $xcmProfile] + self::mapParameters($hiorgUser)
+      $hiorgUserResult['contact_id'] = static::synchronizeContactData(
+        $xcmProfile,
+        self::mapParameters($hiorgUser),
+        $idTrackerResult,
+        $hiorgUser->id
       );
-      if (empty($contactId = $xcmResult['id'])) {
-        throw new Exception(E::ts('Error retrieving/creating contact with Extended Contact Manager (XCM).'));
-      }
-      $hiorgUserResult['contact_id'] = $xcmResult['id'];
-
-      // Add HiOrg user ID as Identity Tracker ID.
-      if (1 !== $idTrackerResult['count']) {
-        civicrm_api3(
-          'Contact',
-          'addidentity',
-          [
-            'contact_id' => $xcmResult['id'],
-            'identifier_type' => 'hiorg_user',
-            'identifier' => $hiorgUser->id,
-          ]
-        );
-      }
 
       // TODO: Synchronize "qualifikationen": custom entity "qualifikation instance" referencing the contact and a "qualifikation" custom entity.
 
       // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact and a "ausbildung" custom entity.
 
       // Synchronize groups with relationships of type "hiorg_groups".
-      $hiorgUserResult['relationships'] = static::processGroups($contactId, $configProfile->getOrganisationId(), $hiorgUser->gruppen_namen);
+      $hiorgUserResult['relationships'] = static::processGroups(
+        $contactId,
+        $configProfile->getOrganisationId(),
+        $hiorgUser->gruppen_namen
+      );
+
       $syncResult[] = $hiorgUserResult;
     }
 
     $result->exchangeArray($syncResult);
+  }
+
+  /**
+   * @param int $hiorgUserId
+   *   The HiOrg-Server user ID to pass to ID Tracker.
+   *
+   * @return int|null
+   *   The CiviCRM Contact ID.
+   * @throws \CRM_Core_Exception
+   */
+  public static function identifyContact(int $hiorgUserId): ?int {
+    $idTrackerResult = civicrm_api3(
+      'Contact',
+      'findbyidentity',
+      [
+        'identifier_type' => 'hiorg_user',
+        'identifier' => $$hiorgUserId,
+      ]
+    );
+    return $idTrackerResult['id'] ?? NULL;
+  }
+
+  /**
+   * @param string $xcmProfile
+   *   The XCM profile name.
+   * @param array $params
+   *   Contact parameters to pass to XCM.
+   * @param int|null $contactId
+   *   The CiviCRM contact ID of the already idfentified contact to pass to XCM.
+   * @param int|null $hiorgUserId
+   *   The HiOrg-Server user ID to add as ID Tracker record on the contact.
+   *
+   * @return int
+   *   The CiviCRM contact ID of the synchronized contact.
+   * @throws \CRM_Core_Exception
+   */
+  public static function synchronizeContactData(string $xcmProfile, array $params, ?int $contactId = NULL, ?int $hiorgUserId) {
+    if ($contactId) {
+      $params['id'] = $contactId;
+    }
+    $xcmResult = civicrm_api3(
+      'Contact',
+      'createifnotexists',
+      ['xcm_profile' => $xcmProfile] + $params
+    );
+    if (empty($xcmResult['id'])) {
+      throw new Exception(E::ts('Error retrieving/creating contact with Extended Contact Manager (XCM).'));
+    }
+
+    // Add HiOrg-Server user ID as Identity Tracker ID.
+    if (!$contactId && !empty($hiorgUserId)) {
+      civicrm_api3(
+        'Contact',
+        'addidentity',
+        [
+          'contact_id' => $contactId,
+          'identifier_type' => 'hiorg_user',
+          'identifier' => $hiorgUserId,
+        ]
+      );
+    }
+
+    return (int) $xcmResult['id'];
   }
 
   public static function processGroups($contactId, $organisationId, $groups) {
