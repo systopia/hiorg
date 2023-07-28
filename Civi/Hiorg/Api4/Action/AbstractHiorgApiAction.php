@@ -58,7 +58,7 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
       );
     }
     elseif (isset($this->_response->data)) {
-      // Warp single result in array for CiviCRM API to count correctly.
+      // Wrap single result in array for CiviCRM API to count correctly.
       $result->exchangeArray(is_object($this->_response->data) ? [$this->_response->data] : $this->_response->data);
     }
   }
