@@ -19,7 +19,7 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 return [
   [
-    'name' => 'Navigation__Automation',
+    'name' => 'Navigation__automation',
     'entity' => 'Navigation',
     'cleanup' => 'unused',
     'update' => 'unmodified',
