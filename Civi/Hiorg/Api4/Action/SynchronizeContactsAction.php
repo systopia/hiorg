@@ -24,17 +24,16 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       ->setChangedSince($changedSince)
       ->execute();
 
-    $configProfile = ConfigProfile::getById($this->configProfileId);
-    $xcmProfile = $configProfile->getXcmProfileName();
+    $xcmProfile = $this->_configProfile->getXcmProfileName();
     $syncResult = [];
     foreach ($personalResult as $record) {
       $hiorgUserResult = [];
       $hiorgUser = new HiorgUserDTO($record);
-      $idTrackerResult = static::identifyContact($hiorgUser->id);
+      $idTrackerResult = $this->identifyContact($hiorgUser->id);
 
       // Synchronize contact data using Extended Contact Manager (XCM) with
       // profile defined in HiOrg-Server API configuration profile.
-      $hiorgUserResult['contact_id'] = static::synchronizeContactData(
+      $hiorgUserResult['contact_id'] = $this->synchronizeContactData(
         $xcmProfile,
         self::mapParameters($hiorgUser),
         $idTrackerResult,
@@ -46,9 +45,9 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact and a "ausbildung" custom entity.
 
       // Synchronize groups with relationships of type "hiorg_groups".
-      $hiorgUserResult['relationships'] = static::processGroups(
-        $contactId,
-        $configProfile->getOrganisationId(),
+      $hiorgUserResult['relationships'] = $this->processGroups(
+        $hiorgUserResult['contact_id'],
+        $this->_configProfile->getOrganisationId(),
         $hiorgUser->gruppen_namen
       );
 
@@ -62,17 +61,18 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    * @param int $hiorgUserId
    *   The HiOrg-Server user ID to pass to ID Tracker.
    *
-   * @return int|null
+   * @return string|null
    *   The CiviCRM Contact ID.
    * @throws \CRM_Core_Exception
    */
-  public static function identifyContact(int $hiorgUserId): ?int {
+  protected function identifyContact(string $hiorgUserId): ?int {
     $idTrackerResult = civicrm_api3(
       'Contact',
       'findbyidentity',
       [
         'identifier_type' => 'hiorg_user',
-        'identifier' => $$hiorgUserId,
+        'identifier' => $hiorgUserId,
+        'context' => $this->configProfileId,
       ]
     );
     return $idTrackerResult['id'] ?? NULL;
@@ -85,14 +85,14 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    *   Contact parameters to pass to XCM.
    * @param int|null $contactId
    *   The CiviCRM contact ID of the already idfentified contact to pass to XCM.
-   * @param int|null $hiorgUserId
+   * @param string|null $hiorgUserId
    *   The HiOrg-Server user ID to add as ID Tracker record on the contact.
    *
    * @return int
    *   The CiviCRM contact ID of the synchronized contact.
    * @throws \CRM_Core_Exception
    */
-  public static function synchronizeContactData(string $xcmProfile, array $params, ?int $contactId = NULL, ?int $hiorgUserId) {
+  protected function synchronizeContactData(string $xcmProfile, array $params, ?int $contactId = NULL, ?string $hiorgUserId = NULL) {
     if ($contactId) {
       $params['id'] = $contactId;
     }
@@ -111,9 +111,10 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         'Contact',
         'addidentity',
         [
-          'contact_id' => $contactId,
+          'contact_id' => $xcmResult['id'],
           'identifier_type' => 'hiorg_user',
           'identifier' => $hiorgUserId,
+          'context' => $this->configProfileId,
         ]
       );
     }
@@ -121,7 +122,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     return (int) $xcmResult['id'];
   }
 
-  public static function processGroups($contactId, $organisationId, $groups) {
+  protected function processGroups($contactId, $organisationId, $groups) {
     $existingGroups = OptionValue::get(FALSE)
       ->addSelect('value', 'name')
       ->addWhere('option_group_id:name', '=', 'hiorg_groups')

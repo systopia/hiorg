@@ -4,20 +4,32 @@ namespace Civi\Hiorg\Api4\Action;
 
 use \Civi\Api4\Generic\AbstractAction;
 use Civi\Api4\Generic\Result;
+use Civi\Hiorg\ConfigProfile;
 
-/**
- * @method $this setConfigProfileId(int $configProfileId)
- */
 abstract class AbstractHiorgAction extends AbstractAction {
 
   /**
-   * The configuration profile to use for the HiOrg-Server API call.
+   * The ID of the configuration profile to use for the HiOrg-Server API call.
    *
    * @var int $configProfileId
    *
    * @required
    */
   protected ?int $configProfileId = NULL;
+
+  /**
+   * The configuration profile to use for the HiOrg-Server API call.
+   *
+   * @var \Civi\Hiorg\ConfigProfile
+   */
+  protected ?ConfigProfile $_configProfile = NULL;
+
+  public function setConfigProfileId($configProfileId) {
+    parent::setConfigProfileId($configProfileId);
+    // Load the profile.
+    $this->_configProfile = ConfigProfile::getById($this->configProfileId);
+    return $this;
+  }
 
   /**
    * @inheritDoc
