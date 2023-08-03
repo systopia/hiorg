@@ -39,8 +39,8 @@ return [
         'is_active' => TRUE,
         'has_separator' => 0,
       ],
+      'match' => ['name', 'parent_id'],
     ],
-    'match' => ['name', 'parent_id'],
   ],
   [
     'name' => 'Navigation__Hiorg_Profiles',
@@ -63,7 +63,7 @@ return [
         'is_active' => TRUE,
         'has_separator' => 0,
       ],
+      'match' => ['name', 'parent_id'],
     ],
-    'match' => ['name', 'parent_id'],
   ],
 ];
