@@ -52,6 +52,12 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
           ->setFkEntity('Contact')
           ->setInputAttrs(['filter' => ['contact_type' => 'Organization']])
           ->setInputType('EntityRef'),
+        'api_base_uri' => (new FieldSpec('api_base_uri', 'ConfigProfile_' . self::NAME, 'String'))
+          ->setTitle(ts('API Base URI'))
+          ->setLabel(ts('API Base URI'))
+          ->setDescription(ts('HiOrg-Server API base URI for this configuration profile.'))
+          ->setRequired(TRUE)
+          ->setInputType('Text'),
       ];
     }
 
@@ -86,6 +92,14 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   public function getOrganisationId(): int {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
     return (int) $data['organisation_id'];
+  }
+
+  /**
+   * @return string
+   */
+  public function getApiBaseUri(): string {
+    $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
+    return (string) $data['api_base_uri'];
   }
 
   public static function getById(int $id) {

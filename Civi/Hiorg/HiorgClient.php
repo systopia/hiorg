@@ -9,7 +9,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class HiorgClient {
 
-  const BASE_URI = 'https://api.hiorg-server.de/core/v1/';
+  const BASE_URI_DEFAULT = 'https://api.hiorg-server.de/';
+
+  const BASE_PATH = 'core/v1/';
 
   protected $oauthToken;
 
@@ -23,7 +25,7 @@ class HiorgClient {
     }
     $this->oauthToken = $tokenRecord['access_token'];
     $this->guzzleClient = new \GuzzleHttp\Client([
-      'base_uri' => self::BASE_URI,
+      'base_uri' => implode('/', [trim($configProfile->getApiBaseUri(), '/'), self::BASE_PATH]),
       'headers' => [
         'Authorization' => 'Bearer ' . $this->oauthToken,
         'Accept' => 'application/json',
