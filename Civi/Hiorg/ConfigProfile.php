@@ -105,7 +105,9 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   public static function getById(int $id) {
     $configProfile = new self();
     $configProfile->copyValues(['id' => $id]);
-    $configProfile->find(TRUE);
+    if (!$configProfile->find(TRUE)) {
+      throw new \Exception(E::ts('Error loading configuration profile with ID %1', [1 => $id]));
+    }
     return $configProfile;
   }
 
