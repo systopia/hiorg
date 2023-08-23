@@ -2,8 +2,10 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use Civi\Api4\EckEntity;
 use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
+use Civi\Api4\OptionGroup;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
 use Civi\Hiorg\Api\DTO\HiorgUserDTO;
@@ -40,7 +42,11 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         $hiorgUser->id
       );
 
-      // TODO: Synchronize "qualifikationen": custom entity "qualifikation instance" referencing the contact and a "qualifikation" custom entity.
+      // Synchronize qualifications with custom entities.
+      $hiorgUserResult['qualifications'] = $this->synchronizeQualifications(
+        $hiorgUserResult['contact_id'],
+        $hiorgUser->qualifikationen
+      );
 
       // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact and a "ausbildung" custom entity.
 
@@ -120,6 +126,60 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     }
 
     return (int) $xcmResult['id'];
+  }
+
+  protected function synchronizeQualifications(int $contactId, array $qualifications) {
+    // Load ECK sub-types for the "Hiorg_Qualification" entity type.
+    static $eckSubTypes;
+    if (!isset($eckSubTypes)) {
+      $eckSubTypes = OptionValue::get(FALSE)
+        ->addWhere('option_group_id:name', '=', 'eck_sub_types')
+        ->addWhere('grouping', '=', 'Hiorg_Qualification')
+        ->execute()
+        ->indexBy('name')
+        ->getArrayCopy();
+    }
+
+    $result = [];
+    foreach ($qualifications as $qualification) {
+      // Add ECK sub-type if it does not yet exist.
+      if (!array_key_exists($qualification->name_kurz, $eckSubTypes)) {
+        $eckSubTypes[$qualification->name_kurz] = OptionValue::create(FALSE)
+          ->addValue('option_group_id:name', 'eck_sub_types')
+          ->addValue('grouping', 'Hiorg_Qualification')
+          ->addValue('name', $qualification->name_kurz)
+          ->addValue('label', $qualification->name)
+          ->execute();
+      }
+      // Retrieve existing qualification for the contact.
+      // TODO: Retrieve only once per contact, group by type (name).
+      $existing = \Civi\Api4\EckEntity::get('Hiorg_Qualification')
+        ->addWhere('subtype:name', '=', $qualification->name_kurz)
+        ->addWhere('Eck_Hiorg_Qualification.Contact', '=', $contactId)
+        ->execute();
+
+      // Save  (create or update) custom entity.
+      $record = [
+        'subtype:name' => $qualification->name_kurz,
+        'title' => $qualification->name,
+        'Eck_Hiorg_Qualification.Date_acquired' => $qualification->erwerb_datum,
+        'Eck_Hiorg_Qualification.Contact' => $contactId,
+      ];
+      if ($existing->count()) {
+        $record['id'] = $existing->first()['id'];
+      }
+      $result[] = EckEntity::save('Hiorg_Qualification')
+        ->addRecord([
+          'subtype:name' => $qualification->name_kurz,
+          'title' => $qualification->name,
+          'Eck_Hiorg_Qualification.Date_acquired' => $qualification->erwerb_datum,
+          'Eck_Hiorg_Qualification.Contact' => $contactId,
+        ])
+        ->setMatch(['id'])
+        ->execute();
+    }
+
+    return $result;
   }
 
   protected function processGroups($contactId, $organisationId, $groups) {
