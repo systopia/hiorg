@@ -30,13 +30,12 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    * @inheritDoc
    */
   public function _run(Result $result): void {
-    //TODO: Retrieve $changedSince from synchronisation log (to be implemented).
-    $changedSince = (new \DateTime())->format('Y-m-d\TH:i:sP');
+    $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync');
 
     // Retrieve HiOrg user data via HiOrg-Server API.
     $personalResult = Hiorg::getPersonal()
       ->setConfigProfileId($this->configProfileId)
-      ->setChangedSince($changedSince)
+      ->setChangedSince($lastSync)
       ->execute();
 
     $xcmProfile = $this->_configProfile->getXcmProfileName();
