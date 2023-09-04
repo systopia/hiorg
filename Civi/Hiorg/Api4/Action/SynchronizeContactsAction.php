@@ -263,9 +263,16 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       'postal_code' => $user->plz,
       'city' => $user->ort,
       'country:label' => $user->land, // TODO: Translate to country_id.
-      'birth_date' => $user->gebdat ? \DateTime::createFromFormat('d.m.Y', $user->gebdat)
-        ->format('Y-m-d') : NULL,
-      // TODO: Übergang von Jugendorganisation
+      'birth_date' => $user->gebdat
+        ? \DateTime::createFromFormat('d.m.Y', $user->gebdat)->format('Y-m-d')
+        : NULL,
+      'driving_license.classes' => $user->fahrerlaubnis['klassen'],
+      'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
+      'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
+      'driving_license.license_date' => $user->fahrerlaubnis['fuehrerscheindatum']
+        ? \DateTime::createFromFormat('Y-m-d', $user->fahrerlaubnis['fuehrerscheindatum'])->format(('Y-m-d'))
+        : NULL,
+      // TODO: $user->leitung as (boolean) custom field.
     ];
   }
 

@@ -55,4 +55,6 @@ class HiorgUserDTO extends AbstractDTO {
 
   public array $relationships;
 
+  public array $fahrerlaubnis;
+
 }
