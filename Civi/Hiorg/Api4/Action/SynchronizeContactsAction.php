@@ -42,7 +42,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     $syncResult = [];
     foreach ($personalResult as $record) {
       $hiorgUserResult = [];
-      $hiorgUser = new HiorgUserDTO($record);
+      $hiorgUser = HiorgUserDTO::create($record);
       $idTrackerResult = $this->identifyContact($hiorgUser->id);
 
       // Synchronize contact data using Extended Contact Manager (XCM) with
