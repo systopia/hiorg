@@ -38,6 +38,8 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       ->setChangedSince($lastSync)
       ->execute();
 
+    // TODO: Consider using a queue for processing results.
+
     $xcmProfile = $this->_configProfile->getXcmProfileName();
     $syncResult = [];
     foreach ($personalResult as $record) {
@@ -60,7 +62,9 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         $hiorgUser->qualifikationen
       );
 
-      // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact and a "ausbildung" custom entity.
+      // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact.
+
+      // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.
 
       // Synchronize groups with relationships of type "hiorg_groups".
       $hiorgUserResult['relationships'] = $this->processGroups(
@@ -251,6 +255,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
   }
 
   protected static function mapParameters(HiorgUserDTO $user): array {
+    // TODO: Trigger event for custom mapping.
     return [
       'first_name' => $user->vorname,
       'last_name' => $user->nachname,
