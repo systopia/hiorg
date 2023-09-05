@@ -15,12 +15,14 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use Civi\Api4\CustomField;
 use Civi\Api4\EckEntity;
 use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
 use Civi\Api4\OptionGroup;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
+use Civi\Api4\Service\Spec\FieldSpec;
 use Civi\Hiorg\Api\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfile;
 
@@ -118,6 +120,9 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     if ($contactId) {
       $params['id'] = $contactId;
     }
+
+    self::synchronizeOptionValues($params);
+
     $xcmResult = civicrm_api3(
       'Contact',
       'createifnotexists',
@@ -142,6 +147,38 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     }
 
     return (int) $xcmResult['id'];
+  }
+
+  protected function synchronizeOptionValues(array $fields) {
+    /** @var \Civi\Api4\Service\Spec\SpecGatherer $gatherer */
+    $gatherer = \Civi::container()->get('spec_gatherer');
+    $spec = $gatherer->getSpec('Contact', 'create', TRUE);
+    $fieldSpecs = $spec->getFields(array_keys($fields));
+    foreach ($fields as $fieldName => $value) {
+      $fieldSpec = array_filter($fieldSpecs, function($fieldSpec) use ($fieldName) {
+        return $fieldSpec->getName() === $fieldName;
+      });
+      $fieldSpec = reset($fieldSpec);
+      if ($fieldSpec->type == 'Custom') {
+        $options = \CRM_Contact_DAO_Contact::buildOptions('custom_' . $fieldSpec->getCustomFieldId());
+        if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
+          $optionGroupId = CustomField::get(FALSE)
+            ->addWhere('id', '=', $fieldSpec->getCustomFieldId())
+            ->addWhere('option_group_id', 'IS NOT NULL')
+            ->addSelect('option_group_id')
+            ->execute()
+            ->column('option_group_id')[0];
+          foreach ($newOptionValues as $newOptionValue) {
+            OptionValue::create(FALSE)
+              ->addValue('option_group_id', $optionGroupId)
+              ->addValue('name', $newOptionValue)
+              ->addValue('value', $newOptionValue)
+              ->addValue('label', $newOptionValue)
+              ->execute();
+          }
+        }
+      }
+    }
   }
 
   protected function synchronizeQualifications(int $contactId, array $qualifications) {
@@ -270,7 +307,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       'birth_date' => $user->gebdat
         ? \DateTime::createFromFormat('d.m.Y', $user->gebdat)->format('Y-m-d')
         : NULL,
-      'driving_license.classes' => $user->fahrerlaubnis['klassen'],
+      'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
       'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
       'driving_license.license_date' => $user->fahrerlaubnis['fuehrerscheindatum']
