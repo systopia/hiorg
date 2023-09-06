@@ -121,7 +121,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       $params['id'] = $contactId;
     }
 
-    self::synchronizeOptionValues($params);
+    self::synchronizeOptionValues($params, 'Contact');
 
     $xcmResult = civicrm_api3(
       'Contact',
@@ -149,10 +149,10 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     return (int) $xcmResult['id'];
   }
 
-  protected function synchronizeOptionValues(array $fields) {
+  protected function synchronizeOptionValues(array $fields, string $entity = 'Contact') {
     /** @var \Civi\Api4\Service\Spec\SpecGatherer $gatherer */
     $gatherer = \Civi::container()->get('spec_gatherer');
-    $spec = $gatherer->getSpec('Contact', 'create', TRUE);
+    $spec = $gatherer->getSpec($entity, 'create', TRUE);
     $fieldSpecs = $spec->getFields(array_keys($fields));
     foreach ($fields as $fieldName => $value) {
       $fieldSpec = array_filter($fieldSpecs, function($fieldSpec) use ($fieldName) {
@@ -160,7 +160,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       });
       $fieldSpec = reset($fieldSpec);
       if ($fieldSpec->type == 'Custom') {
-        $options = \CRM_Contact_DAO_Contact::buildOptions('custom_' . $fieldSpec->getCustomFieldId());
+        $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec->getCustomFieldId());
         if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
           $optionGroupId = CustomField::get(FALSE)
             ->addWhere('id', '=', $fieldSpec->getCustomFieldId())
@@ -303,7 +303,8 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       'street_address' => $user->adresse,
       'postal_code' => $user->plz,
       'city' => $user->ort,
-      'country:label' => $user->land, // TODO: Translate to country_id.
+      // TODO: Validate country label or map, e. g. with similar_text().
+      'country:label' => $user->land,
       'birth_date' => $user->gebdat
         ? \DateTime::createFromFormat('d.m.Y', $user->gebdat)->format('Y-m-d')
         : NULL,
