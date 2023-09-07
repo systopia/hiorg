@@ -40,6 +40,13 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
 
     // TODO: Consider using a queue for processing results.
 
+    // TODO: Log/Report errors.
+
+    // TODO: Do not store current sync timestamp on errors.
+
+    // TODO: Log HiOrg-Server User IDs that were (not) synchronized (due to
+    //       errors, etc.) and skip/re-synchronize the next time.
+
     $xcmProfile = $this->_configProfile->getXcmProfileName();
     $syncResult = [];
     foreach ($personalResult as $record) {
