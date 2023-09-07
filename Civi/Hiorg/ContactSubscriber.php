@@ -24,13 +24,18 @@ class ContactSubscriber implements EventSubscriberInterface {
   /**
    * @inheritDoc
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       'civi.dao.preDelete' => 'preDelete',
     ];
   }
 
-  public function preDelete(PreDelete $event) {
+  /**
+   * @throws \API_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   * @throws \CRM_Core_Exception
+   */
+  public function preDelete(PreDelete $event): void {
     if ($event->object instanceof \CRM_Contact_DAO_Contact) {
       // Remove qualifications.
       EckEntity::delete('Hiorg_Qualification', FALSE)

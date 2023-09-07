@@ -26,11 +26,11 @@ class Hiorg extends Generic\AbstractEntity {
   /**
    * @inheritDoc
    */
-  public static function getFields($checkPermissions = TRUE) {
+  public static function getFields($checkPermissions = TRUE): BasicGetFieldsAction {
     return (new BasicGetFieldsAction(
       __CLASS__,
       __FUNCTION__,
-      function($getFieldsAction) {
+      function(BasicGetFieldsAction $self) {
         return [];
       }
     ))
@@ -38,22 +38,22 @@ class Hiorg extends Generic\AbstractEntity {
       ->setLoadOptions(TRUE);
   }
 
-  public static function getPersonal($checkPermissions = TRUE) {
+  public static function getPersonal($checkPermissions = TRUE): GetPersonalApiAction {
     return (new GetPersonalApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function getAusbildungen($checkPermissions = TRUE) {
+  public static function getAusbildungen($checkPermissions = TRUE): GetAusbildungenApiAction {
     return (new GetAusbildungenApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function getHelferstunden($checkPermissions = TRUE) {
+  public static function getHelferstunden($checkPermissions = TRUE): GetHelferstundenApiAction {
     return (new GetHelferstundenApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function synchronizeContacts($checkPermissions = TRUE) {
+  public static function synchronizeContacts($checkPermissions = TRUE): SynchronizeContactsAction {
     return (new SynchronizeContactsAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }

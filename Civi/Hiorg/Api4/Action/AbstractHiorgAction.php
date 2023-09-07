@@ -15,7 +15,7 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
-use \Civi\Api4\Generic\AbstractAction;
+use Civi\Api4\Generic\AbstractAction;
 use Civi\Api4\Generic\Result;
 use Civi\Hiorg\ConfigProfile;
 
@@ -24,7 +24,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
   /**
    * The ID of the configuration profile to use for the HiOrg-Server API call.
    *
-   * @var int $configProfileId
+   * @var int|null $configProfileId
    *
    * @required
    */
@@ -33,11 +33,15 @@ abstract class AbstractHiorgAction extends AbstractAction {
   /**
    * The configuration profile to use for the HiOrg-Server API call.
    *
-   * @var \Civi\Hiorg\ConfigProfile
+   * @var ConfigProfile|null
    */
   protected ?ConfigProfile $_configProfile = NULL;
 
-  public function setConfigProfileId($configProfileId) {
+  /**
+   * @throws \Exception
+   */
+  public function setConfigProfileId($configProfileId): static {
+    // Parent method is magic via parent::__call().
     parent::setConfigProfileId($configProfileId);
     // Load the profile.
     $this->_configProfile = ConfigProfile::getById($this->configProfileId);
@@ -54,7 +58,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
    *
    * @return array[]
    */
-  public static function fields() {
+  public static function fields(): array {
     return [
       [
         'name' => 'configProfile',

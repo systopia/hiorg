@@ -15,10 +15,6 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
-use Civi\Api4\Generic\Result;
-use Civi\Hiorg\ConfigProfile;
-use Civi\Hiorg\HiorgClient;
-
 /**
  * @method $this setUserId(string $userId)
  * @method $this setChangedSince(string $changedSince)
@@ -38,7 +34,7 @@ class GetAusbildungenApiAction extends AbstractHiorgApiAction {
   protected ?string $changedSince = NULL;
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   protected function doRun(): void {
     $this->_response = $this->_hiorgClient->getAusbildungen(
@@ -47,7 +43,10 @@ class GetAusbildungenApiAction extends AbstractHiorgApiAction {
     );
   }
 
-  public static function fields() {
+  /**
+   * {@inheritDoc}
+   */
+  public static function fields(): array {
     return parent::fields() + [
       [
         'name' => 'userId',

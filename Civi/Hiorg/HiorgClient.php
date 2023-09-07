@@ -15,8 +15,9 @@
 
 namespace Civi\Hiorg;
 
+use CRM_Hiorg_ExtensionUtil as E;
 use Civi\Api4\OAuthSysToken;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 
@@ -28,16 +29,20 @@ class HiorgClient {
 
   protected string $oauthToken;
 
-  protected Client $guzzleClient;
+  protected GuzzleClient $guzzleClient;
 
   protected ResponseInterface $result;
 
+  /**
+   * @throws \Civi\API\Exception\UnauthorizedException
+   * @throws \CRM_Core_Exception
+   */
   public function __construct(ConfigProfile $configProfile) {
     if (!$tokenRecord = self::lookupToken($oauthClientId = $configProfile->getOauthClientId())) {
       throw new \Exception(E::ts('Error looking up OAuth token for OAuth client with ID %1', [1 => $oauthClientId]));
     }
     $this->oauthToken = $tokenRecord['access_token'];
-    $this->guzzleClient = new \GuzzleHttp\Client([
+    $this->guzzleClient = new GuzzleClient([
       'base_uri' => implode('/', [trim($configProfile->getApiBaseUri(), '/'), self::BASE_PATH]),
       'headers' => [
         'Authorization' => 'Bearer ' . $this->oauthToken,
@@ -50,20 +55,20 @@ class HiorgClient {
    * Retrieves the first token for the OAuth Client set in the configuration
    * profile.
    *
-   * @param \Civi\Hiorg\ConfigProfile $configProfile
+   * @param int $oauthClientId
    *
-   * @return void
+   * @return array|null
    * @throws \CRM_Core_Exception
    * @throws \Civi\API\Exception\UnauthorizedException
    */
-  protected function lookupToken($oauthClientId) {
+  protected function lookupToken(int $oauthClientId): ?array {
     return OAuthSysToken::refresh(FALSE)
       ->addWhere('client_id.id', '=', $oauthClientId)
       ->execute()
       ->first();
   }
 
-  protected function formatRequestOptions($options = []) {
+  protected function formatRequestOptions($options = []): array {
     return [
       RequestOptions::JSON => $options,
     ];
@@ -73,6 +78,9 @@ class HiorgClient {
     return json_decode($this->result->getBody());
   }
 
+  /**
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
   public function get($uri, $options = []) {
     $this->result = $this->guzzleClient->get(
       $uri,
@@ -90,17 +98,16 @@ class HiorgClient {
    *   The date retrieved records have to have been changed since. Only applies
    *   when $self is FALSE.
    * @param array $include
-   *   A list of linked objects to include in the response, e. g.
+   *   A list of linked objects to include in the response, e.g.
    *   - "organisation"
    *
-   * @return \Psr\Http\Message\ResponseInterface
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getPersonal(bool $self = FALSE, \DateTime $changedSince = NULL, array $include = []) {
     if (!$self) {
       $body = [
         'filter' => [
-          'changed_since' => $changedSince ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
+          'changed_since' => $changedSince?->format('Y-m-d\TH:i:sP'),
         ],
         'include' => implode(',', $include),
       ];
@@ -120,7 +127,7 @@ class HiorgClient {
    *   The date user objects connected with retrieved records have to have been
    *   changed since.
    * @param array $include
-   *   A list of linked objects to include in the response, e. g.
+   *   A list of linked objects to include in the response, e.g.
    *   - "organisation"
    *
    * @return \Psr\Http\Message\ResponseInterface
@@ -131,7 +138,7 @@ class HiorgClient {
       'personal/' . $userId . '/ausbildungen',
       [
         'filter' => [
-          'changed_since' => $changedSince ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
+          'changed_since' => $changedSince?->format('Y-m-d\TH:i:sP'),
         ],
         'include' => implode(',', $include),
       ]
@@ -171,7 +178,7 @@ class HiorgClient {
   /**
    * Retrieves records of type "Helferstunden".
    *
-   * @param $id
+   * @param null $id
    *   The ID of a single record to retrieve.
    * @param bool $own
    *   Whether only own records are to be retrieved. Only applies when $id is
@@ -182,8 +189,8 @@ class HiorgClient {
    * @param \DateTime|NULL $to
    *   The latest date to retrieve records for. Only applies when $id is not
    *   given.
-   * @param array|NULL $include
-   *   A list of linked objects to include in the response, e. g.
+   * @param array $include
+   *   A list of linked objects to include in the response, e.g.
    *   - "anlass"
    *   - "typ"
    *   - "user"

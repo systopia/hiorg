@@ -15,11 +15,10 @@
 
 namespace Civi\Hiorg;
 
+use Civi\Api4\OAuthClient;
 use Civi\Api4\Service\Spec\FieldSpec;
 use Civi\Api4\Service\Spec\RequestSpec;
 use Civi\ConfigProfiles\ConfigProfileInterface;
-use Civi\Core\Event\GenericHookEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use CRM_Hiorg_ExtensionUtil as E;
 
 class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements ConfigProfileInterface {
@@ -27,7 +26,7 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   const NAME = 'hiorg';
 
   public static function getFields(): array {
-    $oauth_clients = \Civi\Api4\OAuthClient::get(FALSE)
+    $oauth_clients = OAuthClient::get(FALSE)
       ->addSelect('guid', 'provider:label')
       ->execute()
       ->indexBy('id')
@@ -75,6 +74,7 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
 
   /**
    * @return string
+   * @throws \CRM_Core_Exception
    */
   public function getXcmProfileName(): string {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
@@ -82,15 +82,17 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   }
 
   /**
-   * @return string
+   * @return int
+   * @throws \CRM_Core_Exception
    */
-  public function getOauthClientId(): string {
+  public function getOauthClientId(): int {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
-    return $data['oauth_client_id'];
+    return (int) $data['oauth_client_id'];
   }
 
   /**
    * @return int
+   * @throws \CRM_Core_Exception
    */
   public function getOrganisationId(): int {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
@@ -99,13 +101,17 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
 
   /**
    * @return string
+   * @throws \CRM_Core_Exception
    */
   public function getApiBaseUri(): string {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
     return (string) $data['api_base_uri'];
   }
 
-  public static function getById(int $id) {
+  /**
+   * @throws \Exception
+   */
+  public static function getById(int $id): ConfigProfile {
     $configProfile = new self();
     $configProfile->copyValues(['id' => $id]);
     if (!$configProfile->find(TRUE)) {
@@ -114,7 +120,12 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
     return $configProfile;
   }
 
-  public static function loadAll() {
+  /**
+   * @throws \API_Exception
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
+  public static function loadAll(): array {
     return \Civi\Api4\ConfigProfile::get('hiorg')
       ->addWhere('is_active', '=', TRUE)
       ->execute()

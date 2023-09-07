@@ -15,10 +15,6 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
-use Civi\Api4\Generic\Result;
-use Civi\Hiorg\ConfigProfile;
-use Civi\Hiorg\HiorgClient;
-
 class GetHelferstundenApiAction extends AbstractHiorgApiAction {
 
   /**
@@ -52,7 +48,10 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
       \DateTime::createFromFormat('Y-m-d', $this->to)
     );
   }
-  public static function fields() {
+  /**
+   * {@inheritDoc}
+   */
+  public static function fields(): array {
     return parent::fields() + [
         [
           'name' => 'id',

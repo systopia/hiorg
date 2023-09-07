@@ -15,7 +15,6 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
-use Civi\Api4\Generic\AbstractAction;
 use Civi\Api4\Generic\Result;
 use Civi\Hiorg\ConfigProfile;
 use Civi\Hiorg\HiorgClient;
@@ -52,6 +51,9 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
     $this->formatResult($result);
   }
 
+  /**
+   * @return void
+   */
   abstract protected function doRun(): void;
 
   /**
@@ -62,7 +64,7 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
    * @return void
    * @throws \CRM_Core_Exception
    */
-  protected function formatResult(Result $result) {
+  protected function formatResult(Result $result): void {
     if (isset($this->_response->errors)) {
       throw new \CRM_Core_Exception(
         $this->_response->errors[0]->title . '(' . $this->_response->errors[0]->detail . ')',

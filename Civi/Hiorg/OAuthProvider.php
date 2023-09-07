@@ -15,7 +15,6 @@
 
 namespace Civi\Hiorg;
 
-use Civi\Core\Event\GenericHookEvent;
 use Civi\OAuth\CiviGenericProvider;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
 use League\OAuth2\Client\Token\AccessToken;
@@ -37,8 +36,7 @@ class OAuthProvider extends CiviGenericProvider {
     parent::__construct($options, $collaborators);
   }
 
-  protected function createResourceOwner(array $response, AccessToken $token)
-  {
+  protected function createResourceOwner(array $response, AccessToken $token): GenericResourceOwner {
     return new GenericResourceOwner($response, 'sub');
   }
 

@@ -17,7 +17,7 @@ namespace Civi\Hiorg\Api\DTO;
 
 class HiorgUserDTO extends AbstractDTO {
 
-  public static function create(\stdClass $object) {
+  public static function create(\stdClass $object): HiorgUserDTO {
     // TODO: Extensible by specific implementations: Symfony event for
     //       retrieving a sub-class if self.
     return new self($object);

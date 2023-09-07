@@ -23,13 +23,13 @@ class OAuthProviderSubscriber implements EventSubscriberInterface {
   /**
    * @inheritDoc
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       'hook_civicrm_oauthProviders' => 'oauthProviders',
     ];
   }
 
-  public static function oauthProviders(GenericHookEvent $event) {
+  public static function oauthProviders(GenericHookEvent $event): void {
     $event->providers['hiorg'] = [
       'name' => 'hiorg',
       'title' => 'HiOrg-Server',

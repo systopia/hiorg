@@ -15,10 +15,6 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
-use Civi\Api4\Generic\Result;
-use Civi\Hiorg\ConfigProfile;
-use Civi\Hiorg\HiorgClient;
-
 /**
  * @method $this setSelf(bool $self)
  * @method $this setChangedSince(string $changedSince)
@@ -45,7 +41,10 @@ class GetPersonalApiAction extends AbstractHiorgApiAction {
     );
   }
 
-  public static function fields() {
+  /**
+   * {@inheritDoc}
+   */
+  public static function fields(): array {
     return parent::fields() + [
       [
         'name' => 'self',

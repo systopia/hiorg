@@ -14,7 +14,6 @@
 +--------------------------------------------------------*/
 
 use CRM_Hiorg_ExtensionUtil as E;
-use CRM_Identitytracker_Configuration;
 
 return [
   // Re-define a managed entity for the "context" custom fields for the Identity

@@ -13,6 +13,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+use Civi\Hiorg\ConfigProfile;
 use CRM_Hiorg_ExtensionUtil as E;
 
 return [
@@ -26,8 +27,8 @@ return [
       'values' => [
         'option_group_id.name' => 'config_profile_type',
         'label' => E::ts('HiOrg-Server API'),
-        'value' => Civi\Hiorg\ConfigProfile::class,
-        'name' => \Civi\Hiorg\ConfigProfile::NAME,
+        'value' => ConfigProfile::class,
+        'name' => ConfigProfile::NAME,
         'grouping' => NULL,
         'filter' => 0,
         'is_default' => FALSE,

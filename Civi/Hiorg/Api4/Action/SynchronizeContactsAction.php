@@ -15,16 +15,14 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use CRM_Hiorg_ExtensionUtil as E;
 use Civi\Api4\CustomField;
 use Civi\Api4\EckEntity;
 use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
-use Civi\Api4\OptionGroup;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
-use Civi\Api4\Service\Spec\FieldSpec;
 use Civi\Hiorg\Api\DTO\HiorgUserDTO;
-use Civi\Hiorg\ConfigProfile;
 
 class SynchronizeContactsAction extends AbstractHiorgAction {
 
@@ -87,10 +85,10 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
   }
 
   /**
-   * @param int $hiorgUserId
+   * @param string $hiorgUserId
    *   The HiOrg-Server user ID to pass to ID Tracker.
    *
-   * @return string|null
+   * @return int|null
    *   The CiviCRM Contact ID.
    * @throws \CRM_Core_Exception
    */
@@ -121,7 +119,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    *   The CiviCRM contact ID of the synchronized contact.
    * @throws \CRM_Core_Exception
    */
-  protected function synchronizeContactData(string $xcmProfile, array $params, ?int $contactId = NULL, ?string $hiorgUserId = NULL) {
+  protected function synchronizeContactData(string $xcmProfile, array $params, ?int $contactId = NULL, ?string $hiorgUserId = NULL): int {
     if ($contactId) {
       $params['id'] = $contactId;
     }
@@ -134,7 +132,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       ['xcm_profile' => $xcmProfile] + $params
     );
     if (empty($xcmResult['id'])) {
-      throw new Exception(E::ts('Error retrieving/creating contact with Extended Contact Manager (XCM).'));
+      throw new \Exception(E::ts('Error retrieving/creating contact with Extended Contact Manager (XCM).'));
     }
 
     // Add HiOrg-Server user ID as Identity Tracker ID.
@@ -186,7 +184,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     }
   }
 
-  protected function synchronizeQualifications(int $contactId, array $qualifications) {
+  protected function synchronizeQualifications(int $contactId, array $qualifications): array {
     // Load ECK sub-types for the "Hiorg_Qualification" entity type.
     static $eckSubTypes;
     if (!isset($eckSubTypes)) {
@@ -211,7 +209,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       }
       // Retrieve existing qualification for the contact.
       // TODO: Retrieve only once per contact, group by type (name).
-      $existing = \Civi\Api4\EckEntity::get('Hiorg_Qualification')
+      $existing = EckEntity::get('Hiorg_Qualification')
         ->addWhere('subtype:name', '=', $qualification->name_kurz)
         ->addWhere('Eck_Hiorg_Qualification.Contact', '=', $contactId)
         ->execute();
@@ -227,12 +225,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         $record['id'] = $existing->first()['id'];
       }
       $result[] = EckEntity::save('Hiorg_Qualification')
-        ->addRecord([
-          'subtype:name' => $qualification->name_kurz,
-          'title' => $qualification->name,
-          'Eck_Hiorg_Qualification.Date_acquired' => $qualification->erwerb_datum,
-          'Eck_Hiorg_Qualification.Contact' => $contactId,
-        ])
+        ->addRecord($record)
         ->setMatch(['id'])
         ->execute();
     }
@@ -240,7 +233,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     return $result;
   }
 
-  protected function processGroups($contactId, $organisationId, $groups) {
+  protected function processGroups($contactId, $organisationId, $groups): array {
     $existingGroups = OptionValue::get(FALSE)
       ->addSelect('value', 'name')
       ->addWhere('option_group_id:name', '=', 'hiorg_groups')
