@@ -52,7 +52,6 @@ class GetAusbildungenApiAction extends AbstractHiorgApiAction {
       [
         'name' => 'userId',
         'data_type' => 'String',
-        'default_value' => FALSE,
       ],
       [
         'name' => 'changedSince',
