@@ -73,6 +73,14 @@ class HiorgClient {
     return json_decode($this->result->getBody());
   }
 
+  public function get($uri, $options = []) {
+    $this->result = $this->guzzleClient->get(
+      $uri,
+      $this->formatRequestOptions($options)
+    );
+    return $this->formatResult();
+  }
+
   /**
    * Retrieves redcords of type "Personal".
    *
@@ -97,17 +105,41 @@ class HiorgClient {
         'include' => implode(',', $include),
       ];
     }
-    $this->result = $this->guzzleClient->get(
+    return $this->get(
       'personal' . ($self ? '/selbst' : ''),
-      $this->formatRequestOptions($body ?? [])
+        $body ?? []
     );
-    return $this->formatResult();
   }
 
-  public function getOrganisation(bool $self = TRUE) {
-    return $this->guzzleClient
-      ->get('organisation/selbst/stammdaten')
-      ->getBody();
+  /**
+   * Retrieves records of type "Ausbildungen".
+   *
+   * @param string $userId
+   *   The HiOrg-Server user ID to retrieve records for.
+   * @param \DateTime|NULL $changedSince
+   *   The date user objects connected with retrieved records have to have been
+   *   changed since.
+   * @param array $include
+   *   A list of linked objects to include in the response, e. g.
+   *   - "organisation"
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function getAusbildungen(string $userId, \DateTime $changedSince = NULL, array $include = []) {
+    return $this->get(
+      'personal/' . $userId . '/ausbildungen',
+      [
+        'filter' => [
+          'changed_since' => $changedSince ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
+        ],
+        'include' => implode(',', $include),
+      ]
+    );
+  }
+
+  public function getOrganisation() {
+    return $this->get('organisation/selbst/stammdaten');
   }
 
   /**
@@ -148,9 +180,7 @@ class HiorgClient {
     }
     return $this->get(
       'helferstunden' . ($id ? '/' . $id : ''),
-      [
-        'body' => $body,
-      ]
+      $body ?? []
     );
   }
 
