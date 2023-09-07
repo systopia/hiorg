@@ -26,7 +26,7 @@ class HiorgClient {
 
   const BASE_PATH = 'core/v1/';
 
-  protected $oauthToken;
+  protected string $oauthToken;
 
   protected Client $guzzleClient;
 
