@@ -138,6 +138,32 @@ class HiorgClient {
     );
   }
 
+  /**
+   * Retrieves records of type "Überprüfungen".
+   *
+   * @param string $userId
+   *   The HiOrg-Server user ID to retrieve records for.
+   * @param \DateTime|NULL $changedSince
+   *   The date retrieved records have to have been changed since.
+   * @param array $include
+   *   A list of linked objects to include in the response, e.g.
+   *   - "organisation"
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function getUeberpruefungen(string $userId, \DateTime $changedSince = NULL, array $include = []) {
+    return $this->get(
+      'personal/' . $userId . '/uberpruefungen',
+      [
+        'filter' => [
+          'changed_since' => $changedSince?->format('Y-m-d\TH:i:sP'),
+        ],
+        'include' => implode(',', $include),
+      ]
+    );
+  }
+
   public function getOrganisation() {
     return $this->get('organisation/selbst/stammdaten');
   }

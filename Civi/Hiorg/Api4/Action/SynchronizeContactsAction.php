@@ -64,16 +64,21 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         $hiorgUser->qualifikationen
       );
 
-      // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact.
-
-      // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.
-
       // Synchronize groups with relationships of type "hiorg_groups".
       $hiorgUserResult['relationships'] = $this->processGroups(
         $hiorgUserResult['contact_id'],
         $this->_configProfile->getOrganisationId(),
         $hiorgUser->gruppen_namen
       );
+
+      // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact.
+      $ausbildungenResult = Hiorg::getAusbildungen()
+        ->setConfigProfileId($this->configProfileId)
+        ->setChangedSince($lastSync)
+        ->setUserId($hiorgUser->id)
+        ->execute();
+
+      // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.
 
       $syncResult[] = $hiorgUserResult;
     }
