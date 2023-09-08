@@ -15,10 +15,11 @@
 
 require_once 'hiorg.civix.php';
 // phpcs:disable
-use Civi\Hiorg\ConfigProfilesSubscriber;
-use Civi\Hiorg\ContactSubscriber;
-use Civi\Hiorg\OAuthProviderSubscriber;
 use CRM_Hiorg_ExtensionUtil as E;
+use Civi\Hiorg\OAuthProviderSubscriber;
+use Civi\Hiorg\ConfigProfilesSubscriber;
+use Civi\Hiorg\IdentitytrackerSubscriber;
+use Civi\Hiorg\ContactSubscriber;
 // phpcs:enable
 
 /**
@@ -31,6 +32,7 @@ function hiorg_civicrm_config(&$config): void {
 
   Civi::dispatcher()->addSubscriber(new OAuthProviderSubscriber());
   Civi::dispatcher()->addSubscriber(new ConfigProfilesSubscriber());
+  Civi::dispatcher()->addSubscriber(new IdentitytrackerSubscriber());
   Civi::dispatcher()->addSubscriber(new ContactSubscriber());
 }
 
