@@ -89,6 +89,9 @@ return [
         'option_group_id.name' => 'hiorg_groups',
       ],
     ],
-    'match' => ['custom_group_id.name', 'name'],
+    'match' => [
+      'custom_group_id',
+      'name',
+    ],
   ],
 ];
