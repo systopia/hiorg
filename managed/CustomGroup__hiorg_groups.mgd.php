@@ -88,10 +88,10 @@ return [
         'column_name' => 'hiorg_group',
         'option_group_id.name' => 'hiorg_groups',
       ],
-    ],
-    'match' => [
-      'custom_group_id',
-      'name',
+      'match' => [
+        'custom_group_id',
+        'name',
+      ],
     ],
   ],
 ];
