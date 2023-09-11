@@ -58,7 +58,7 @@ return [
     ],
   ],
   [
-    'name' => 'CustomField__Hiorg_Qualififcation__Contact',
+    'name' => 'CustomField__Hiorg_Education__Contact',
     'entity' => 'CustomField',
     'cleanup' => 'never',
     'update' => 'unmodified',
