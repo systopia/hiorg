@@ -15,6 +15,7 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use Civi\Core\Event\GenericHookEvent;
 use CRM_Hiorg_ExtensionUtil as E;
 use Civi\Api4\CustomField;
 use Civi\Api4\EckEntity;
@@ -297,8 +298,9 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
   }
 
   protected static function mapParameters(HiorgUserDTO $user): array {
-    // TODO: Trigger event for custom mapping.
-    return [
+    $mapping = [
+      // TODO: $user->kontoinhaber etc. as CiviBanking BankingAccount entity.
+      'prefix_id' => self::getPrefixId($user->anrede),
       'first_name' => $user->vorname,
       'last_name' => $user->nachname,
       'phone' => $user->telpriv,
@@ -311,16 +313,44 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       // TODO: Validate country label or map, e. g. with similar_text().
       'country:label' => $user->land,
       'birth_date' => $user->gebdat
-        ? \DateTime::createFromFormat('d.m.Y', $user->gebdat)->format('Y-m-d')
+        ? \DateTime::createFromFormat('Y-m-d', $user->gebdat)->format('Y-m-d')
         : NULL,
+      'hiorg_contact_data.birth_place' => $user->gebort,
+      'hiorg_contact_data.emergency_info' => $user->angehoerige,
+      'hiorg_contact_data.profession' => $user->beruf,
+      'hiorg_contact_data.employer' => $user->arbeitgeber,
+      'hiorg_contact_data.position' => $user->funktion,
+      'hiorg_contact_data.management_function' => (bool) $user->leitung,
+      'hiorg_contact_data.note' => $user->bemerkung,
       'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
       'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
       'driving_license.license_date' => $user->fahrerlaubnis['fuehrerscheindatum']
         ? \DateTime::createFromFormat('Y-m-d', $user->fahrerlaubnis['fuehrerscheindatum'])->format(('Y-m-d'))
         : NULL,
-      // TODO: $user->leitung as (boolean) custom field.
+      // TODO: $user->username as IdentityTracker record (new type)
     ];
+
+    // Dispatch event for custom mapping.
+    $event = GenericHookEvent::create(['mapping' => $mapping, 'user' => $user]);
+    \Civi::dispatcher()->dispatch('civi.hiorg.mapParameters', $event);
+
+    return $event->mapping;
+  }
+
+  protected static function getPrefixId($prefix) {
+    try {
+      $prefix_id = OptionValue::get(FALSE)
+        ->addSelect('value')
+        ->addWhere('option:group_id:name', '=', 'individual_prefix')
+        ->addWhere('name', '=', $prefix)
+        ->addWhere('is_active', '=', TRUE)
+        ->execute()
+        ->single()['id'];
+    }
+    catch (\Exception $exception) {
+      return NULL;
+    }
   }
 
 }
