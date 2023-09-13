@@ -19,6 +19,9 @@ use Civi\Api4\Generic\AbstractAction;
 use Civi\Api4\Generic\Result;
 use Civi\Hiorg\ConfigProfile;
 
+/**
+ * @method int getConfigProfileId
+ */
 abstract class AbstractHiorgAction extends AbstractAction {
 
   /**
@@ -47,6 +50,9 @@ abstract class AbstractHiorgAction extends AbstractAction {
     // Load the profile.
     $this->_configProfile = ConfigProfile::getById($this->configProfileId);
     return $this;
+  }
+  public function getConfigProfile() {
+    return $this->_configProfile;
   }
 
   /**
