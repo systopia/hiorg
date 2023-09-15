@@ -35,6 +35,28 @@ return [
     ],
   ],
   [
+    'name' => 'OptionValue__eck_sub_types__Generic',
+    'entity' => 'OptionValue',
+    'cleanup' => 'never',
+    'update' => 'unmodified',
+    'params' => [
+      'version' => 4,
+      'values' => [
+        'option_group_id.name' => 'eck_sub_types',
+        'label' => E::ts('Generic'),
+        'name' => 'Generic',
+        'grouping' => 'Hiorg_Education',
+        'weight' => 0,
+        'is_reserved' => TRUE,
+        'icon' => 'fa-graduation-cap',
+      ],
+      'match' => [
+        'option_group_id',
+        'name',
+      ],
+    ],
+  ],
+  [
     'name' => 'CustomGroup__Eck_Hiorg_Education',
     'entity' => 'CustomGroup',
     'cleanup' => 'never',
@@ -78,6 +100,31 @@ return [
         'filter' => 'contact_type=Individual',
         'in_selector' => FALSE,
         'fk_entity' => 'Contact',
+      ],
+      'match' => [
+        'custom_group_id',
+        'name',
+      ],
+    ],
+  ],
+  [
+    'name' => 'CustomField__Hiorg_Education__Hiorg_id',
+    'entity' => 'CustomField',
+    'cleanup' => 'never',
+    'update' => 'unmodified',
+    'params' => [
+      'version' => 4,
+      'values' => [
+        'custom_group_id.name' => 'Eck_Hiorg_Education',
+        'name' => 'Hiorg_id',
+        'label' => E::ts('HiOrg-Server Record ID'),
+        'data_type' => 'String',
+        'html_type' => 'Text',
+        'is_searchable' => FALSE,
+        'is_active' => TRUE,
+        'is_view' => FALSE,
+        'text_length' => 255,
+        'column_name' => 'hiorg_id',
       ],
       'match' => [
         'custom_group_id',

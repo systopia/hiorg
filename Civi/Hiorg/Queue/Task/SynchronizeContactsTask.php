@@ -158,6 +158,61 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
     return $result;
   }
 
+  protected static function synchronizeEducations(int $contactId, array $educations): array {
+    // Load ECK sub-types for the "Hiorg_Education" entity type.
+    static $eckSubTypes;
+    if (!isset($eckSubTypes)) {
+      $eckSubTypes = OptionValue::get(FALSE)
+        ->addWhere('option_group_id:name', '=', 'eck_sub_types')
+        ->addWhere('grouping', '=', 'Hiorg_Education')
+        ->execute()
+        ->indexBy('name')
+        ->getArrayCopy();
+    }
+
+    $result = [];
+    foreach ($educations as $education) {
+      // Extract type from description (everything before the first " - ").
+      $type = substr($education->attributes->bezeichnung, 0, strpos($education->attributes->bezeichnung, ' - '));
+      if (!array_key_exists($type, $eckSubTypes)) {
+        // Use "Generic" education type if it doesn't map to existing ones.
+        $type = 'Generic';
+        // TODO: Add ECK sub-type if it does not yet exist?
+//        $eckSubTypes[$education->id] = OptionValue::create(FALSE)
+//          ->addValue('option_group_id:name', 'eck_sub_types')
+//          ->addValue('grouping', 'Hiorg_Education')
+//          ->addValue('name', $education->id)
+//          ->addValue('label', $education->attributes->bezeichnung)
+//          ->execute();
+      }
+      // Retrieve existing educations for the contact.
+      $existing = EckEntity::get('Hiorg_Education')
+        ->addWhere('subtype:name', '=', $type)
+        ->addWhere('Eck_Hiorg_Education.Contact', '=', $contactId)
+        ->addWhere('Eck_Hiorg_Education.Hiorg_id', '=', $education->id)
+        ->execute();
+
+      // Save  (create or update) custom entity.
+      $record = [
+        'subtype:name' => $type,
+        'title' => $education->attributes->bezeichnung,
+        'Eck_Hiorg_Education.Date_acquired' => $education->attributes->datum,
+        'Eck_Hiorg_Education.Date_expires' => $education->attributes->gueltig_bis,
+        'Eck_Hiorg_Education.Contact' => $contactId,
+        'Eck_Hiorg_Education.Hiorg_id' => $education->id,
+      ];
+      if ($existing->count()) {
+        $record['id'] = $existing->first()['id'];
+      }
+      $result[] = EckEntity::save('Hiorg_Education')
+        ->addRecord($record)
+        ->setMatch(['id'])
+        ->execute();
+    }
+
+    return $result;
+  }
+
   protected static function processGroups($contactId, $organisationId, $groups): array {
     $existingGroups = OptionValue::get(FALSE)
       ->addSelect('value', 'name')
@@ -311,11 +366,19 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
       );
 
       // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact.
+      $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync');
+      $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
       $ausbildungenResult = Hiorg::getAusbildungen()
         ->setConfigProfileId($this->configProfile->id)
-        ->setChangedSince($lastSync)
+        ->setChangedSince($educationsLastSync[$hiorgUser->id] ?? NULL)
         ->setUserId($hiorgUser->id)
         ->execute();
+      $hiorgUserResult['educations'] = self::synchronizeEducations(
+        $hiorgUserResult['contact_id'],
+        (array) $ausbildungenResult
+      );
+      $educationsLastSync[$hiorgUser->id] = $educationsCurrentSync;
+      \Civi::settings()->set('hiorg.synchronizeEducations.lastSync', $educationsLastSync);
 
       // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.
 
