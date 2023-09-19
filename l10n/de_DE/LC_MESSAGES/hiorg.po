@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
+msgid "Synchronizing HiOrg-Server user with ID %1"
+msgstr "Synchronisiere HiOrg-Server-Benutzer mit ID %1"
+
+#: Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
+msgid "HiOrg-Server: Synchronize Contacts"
+msgstr "HiOrg-Server: Kontakte synchronisieren"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "Extended Contact manager (XCM) Profile"
+msgstr "Extended-Contact-Manager-Profil (XCM)"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "XCM Profile"
+msgstr "XCM-Profil"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid ""
+"XCM profile to use for processing contacts with this configuration profile."
+msgstr ""
+"XCM-Profil für die Verarbeitung von Kontakten mit diesem Konfigurationsprofil"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "OAuth Client"
+msgstr "OAuth-Client"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid ""
+"CiviCRM OAuth Client to use for authenticating with this configuration "
+"profile."
+msgstr ""
+"CiviCRM-OAuth-Client für die Authentifizierung mit diesem "
+"Konfigurationsprofil"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "Organisation"
+msgstr "Organisationskontakt"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid ""
+"CiviCRM organisation contact to use as corresponding contact with this "
+"configuration profile."
+msgstr ""
+"CiviCRM-Organisationskontakt zur Verwendung als zugehöriger Kontakt mit "
+"diesem Konfigurationsprofil"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "API Base URI"
+msgstr "API-Basis-URI"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "HiOrg-Server API base URI for this configuration profile."
+msgstr "Basis-URI der HiOrg-Server-API für dieses Konfigurationsprofil"
+
+#: Civi/Hiorg/ConfigProfile.php
+msgid "Error loading configuration profile with ID %1"
+msgstr "Fehler beim Laden des Konfigurationsprofils mit der ID %1"
+
+#: Civi/Hiorg/HiorgClient.php
+msgid "Error looking up OAuth token for OAuth client with ID %1"
+msgstr ""
+"Fehler beim Abrufen eines OAuth-Token für den OAuth-Client mit der ID %1"
+
+#: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
+msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
+msgstr ""
+"Fehler beim Abrufen/Erzeugen eines Kontakts mit Extended Contact Manager "
+"(XCM)"
+
+#: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
+msgid "Synchronized HiOrg-Server user with ID %1"
+msgstr "HiOrg-Server-Benutzer mit ID %1 wurde synchronisiert"
+
+#: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
+msgid "Failed synchronizing HiOrg-Server user with ID %1. Error: %2"
+msgstr ""
+"Synchronisierung des HiOrg-Benutzers mit ID %1 fehlgeschlagen. Fehler: %2"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Contact Data"
+msgstr "Kontaktdaten"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Birth Place"
+msgstr "Geburtsort"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Emergency Information"
+msgstr "Notfallinformationen"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Profession"
+msgstr "Beruf"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Employer"
+msgstr "Arbeitgeber"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Position / Task"
+msgstr "Funktion"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Management Function"
+msgstr "Leitungsfunktion"
+
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
+msgid "Note"
+msgstr "Bemerkungen"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "Driving License"
+msgstr "Fahrerlaubnis"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "Driving License Classes"
+msgstr "Fahrerlaubnisklassen"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "AM"
+msgstr "AM"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "A"
+msgstr "A"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "A1"
+msgstr "A1"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "A2"
+msgstr "A2"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "B"
+msgstr "B"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "BE"
+msgstr "BE"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "B with Code 96"
+msgstr "B mit Schlüsselzahl 96"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "B with Code 196"
+msgstr "B mit Schlüsselzahl 196"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "C"
+msgstr "C"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "CE"
+msgstr "CE"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "C1"
+msgstr "C1"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "C1E"
+msgstr "C1E"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "D"
+msgstr "D"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "DE"
+msgstr "DE"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "D1"
+msgstr "D1"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "D1E"
+msgstr "D1E"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "T"
+msgstr "T"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "L"
+msgstr "L"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "Classes"
+msgstr "Klassen"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "Restriction"
+msgstr "Beschränkungen"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "License Number"
+msgstr "Nummer"
+
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
+msgid "License Date"
+msgstr "Ausstellungsdatum"
+
+#: managed/CustomGroup__hiorg_groups.mgd.php
+#: managed/RelationshipType__hiorg_groups.mgd.php
+msgid "HiOrg-Server: Group Membership"
+msgstr "HiOrg-Server: Gruppenzugehörigkeit"
+
+#: managed/CustomGroup__hiorg_groups.mgd.php
+msgid "HiOrg-Server: Groups"
+msgstr "HiOrg-Server: Gruppen"
+
+#: managed/CustomGroup__hiorg_groups.mgd.php
+msgid "Available groups for all connected HiOrg-Server organisations."
+msgstr "Verfügbare Gruppen für alle verbundenen HiOrg-Server-Organisationen."
+
+#: managed/CustomGroup__hiorg_groups.mgd.php
+msgid "Group"
+msgstr "Gruppe"
+
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
+msgid "Membership Data"
+msgstr "Mitgliedschaftsdaten"
+
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
+msgid "Membership Number"
+msgstr "Mitgliedsnummer"
+
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
+msgid "Membership Start Date"
+msgstr "Mitglied seit"
+
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
+msgid "Membership End Date"
+msgstr "Austrittsdatum"
+
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
+msgid "Transferred from Youth Organization"
+msgstr "Übergang von Jugendorganisation"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "HiOrg-Server: Education"
+msgstr "HiOrg-Server: Ausbildung"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "Generic"
+msgstr "Allgemein"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
+msgid "Contact"
+msgstr "Kontakt"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "HiOrg-Server Record ID"
+msgstr "HiOrg-Server-Datensatz-ID"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
+msgid "Acquirement Date"
+msgstr "Ausstellungsdatum"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "Expiration Date"
+msgstr "Ablaufdatum"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "Last Revision Date"
+msgstr "Letzte Überprüfung"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "Next Revision Date"
+msgstr "Nächste Überprüfung"
+
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+msgid "Document"
+msgstr "Dokument"
+
+#: managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
+msgid "HiOrg-Server: Qualification"
+msgstr "HiOrg-Server: Qualifikation"
+
+#: managed/Navigation__config_profiles.mgd.php
+msgid "Automation"
+msgstr "Automatisierung"
+
+#: managed/Navigation__config_profiles.mgd.php
+msgid "HiOrg-Server API Profiles"
+msgstr "HiOrg-Server - API-Profile"
+
+#: managed/OptionValue__config_profile_type__hiorg.mgd.php
+msgid "HiOrg-Server API"
+msgstr "HiOrg-Server-API"
+
+#: managed/OptionValue__config_profile_type__hiorg.mgd.php
+msgid "Configuration profiles for the HiOrg-Server API extension."
+msgstr "Konfigurationsprofile für die HiOrg-Server-API-Erweiterung."
+
+#: managed/OptionValue__contact_id_history_type__hiorg_user.mgd.php
+msgid "HiOrg-Server User ID"
+msgstr "HiOrg-Server-Benutzer-ID"
+
+#: managed/OptionValue__contact_id_history_type__hiorg_user.mgd.php
+msgid ""
+"The ID of records of the type \"user\" retrieved through the HiOrg-Server "
+"API."
+msgstr ""
+"Die ID des über die HiOrg-Server-API abgerufenen Datensatzes des Typs "
+"\"user\"."
+
+#: managed/RelationshipType__hiorg_groups.mgd.php
+msgid "Stores group memberships of HiOrg users in their organisation's groups."
+msgstr ""
+"Speichert Gruppenzugehörigkeiten von HiOrg-Benutzern in den Gruppen der "
+"jeweiligen Organisation."
