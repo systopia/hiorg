@@ -24,6 +24,16 @@ use Civi\Hiorg\Api\DTO\HiorgUserDTO;
 class SynchronizeContactsAction extends AbstractHiorgAction {
 
   /**
+   * The timeout in seconds after which the execution of queued synchronisation
+   * tasks should be stopped.
+   *
+   * @var int|null $timeout
+   *
+   * @required
+   */
+  protected ?int $timeout = 30;
+
+  /**
    * @inheritDoc
    */
   public function _run(Result $result): void {
@@ -68,7 +78,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
 
     // Run queue for 30 seconds.
     // TODO: Make timeout configurable or use PHP configuration.
-    $maxRunTime = time() + 30;
+    $maxRunTime = time() + $this->timeout;
     $continue = TRUE;
     while(time() < $maxRunTime && $continue) {
       // TODO: Find out why claiming the next task fails for an existing queue that failed at last execution!
