@@ -37,7 +37,6 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
 
   protected static function mapParameters(HiorgUserDTO $user): array {
     $mapping = [
-      // TODO: $user->kontoinhaber etc. as CiviBanking BankingAccount entity.
       'prefix_id' => self::getPrefixId($user->anrede),
       'first_name' => $user->vorname,
       'last_name' => $user->nachname,
@@ -53,6 +52,8 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
       'birth_date' => $user->gebdat
         ? \DateTime::createFromFormat('Y-m-d', $user->gebdat)->format('Y-m-d')
         : NULL,
+
+      // CiviCRM custom fields.
       'hiorg_contact_data.birth_place' => $user->gebort,
       'hiorg_contact_data.emergency_info' => $user->angehoerige,
       'hiorg_contact_data.profession' => $user->beruf,
@@ -60,6 +61,23 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
       'hiorg_contact_data.position' => $user->funktion,
       'hiorg_contact_data.management_function' => (bool) $user->leitung,
       'hiorg_contact_data.note' => $user->bemerkung,
+
+      // Membership fields.
+      'hiorg_membership_data.membership_number' => $user->mitgliednr,
+      'hiorg_membership_data.membership_start_date' => $user->mitglied_seit
+        ? \DateTime::createFromFormat('Y-m-d', $user->mitglied_seit)
+          ->format(('Y-m-d'))
+        : NULL,
+      'hiorg_membership_data.membership_end_date' => $user->austritt_datum
+        ? \DateTime::createFromFormat('Y-m-d', $user->austritt_datum)
+          ->format(('Y-m-d'))
+        : NULL,
+      'hiorg_membership_data.membership_transfer_date' => $user->wechseljgddat
+        ? \DateTime::createFromFormat('Y-m-d', $user->wechseljgddat)
+          ->format(('Y-m-d'))
+        : NULL,
+
+      // Driving license fields.
       'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
       'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
@@ -67,7 +85,10 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
         ? \DateTime::createFromFormat('Y-m-d', $user->fahrerlaubnis['fuehrerscheindatum'])
           ->format(('Y-m-d'))
         : NULL,
-      // TODO: $user->username as IdentityTracker record (new type)
+
+      // TODO: $user->kontoinhaber etc. as CiviBanking BankingAccount entity.
+
+      // TODO: $user->username as IdentityTracker record (new type).
     ];
 
     // Dispatch event for custom mapping.
@@ -177,13 +198,6 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
       if (!array_key_exists($type, $eckSubTypes)) {
         // Use "Generic" education type if it doesn't map to existing ones.
         $type = 'Generic';
-        // TODO: Add ECK sub-type if it does not yet exist?
-//        $eckSubTypes[$education->id] = OptionValue::create(FALSE)
-//          ->addValue('option_group_id:name', 'eck_sub_types')
-//          ->addValue('grouping', 'Hiorg_Education')
-//          ->addValue('name', $education->id)
-//          ->addValue('label', $education->attributes->bezeichnung)
-//          ->execute();
       }
       // Retrieve existing educations for the contact.
       $existing = EckEntity::get('Hiorg_Education')
@@ -352,6 +366,15 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
         $hiorgUser->id
       );
 
+      // TODO: Synchronize bank account data when CiviBanking is installed.
+      if (
+        \CRM_Extension_System::singleton()
+          ->getManager()
+          ->getStatus('org.project60.banking') === \CRM_Extension_Manager::STATUS_INSTALLED
+      ) {
+
+      }
+
       // Synchronize qualifications with custom entities.
       $hiorgUserResult['qualifications'] = self::synchronizeQualifications(
         $hiorgUserResult['contact_id'],
@@ -365,7 +388,7 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
         $hiorgUser->gruppen_namen
       );
 
-      // TODO: Synchronize "ausbildungen": custom entity "ausbildungen instance" referencing the contact.
+      // Synchronize educations with custom entities.
       $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync');
       $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
       $ausbildungenResult = Hiorg::getAusbildungen()
