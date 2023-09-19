@@ -389,18 +389,19 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
       );
 
       // Synchronize educations with custom entities.
-      $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync');
+      $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync') ?? [];
+      $oAuthClientId = $this->configProfile->getOauthClientId();
       $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
       $ausbildungenResult = Hiorg::getAusbildungen()
         ->setConfigProfileId($this->configProfile->id)
-        ->setChangedSince($educationsLastSync[$hiorgUser->id] ?? NULL)
+        ->setChangedSince($educationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
         ->setUserId($hiorgUser->id)
         ->execute();
       $hiorgUserResult['educations'] = self::synchronizeEducations(
         $hiorgUserResult['contact_id'],
         (array) $ausbildungenResult
       );
-      $educationsLastSync[$hiorgUser->id] = $educationsCurrentSync;
+      $educationsLastSync[$oAuthClientId][$hiorgUser->id] = $educationsCurrentSync;
       \Civi::settings()->set('hiorg.synchronizeEducations.lastSync', $educationsLastSync);
 
       // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.

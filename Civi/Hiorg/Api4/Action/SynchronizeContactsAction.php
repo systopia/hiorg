@@ -37,11 +37,12 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    * @inheritDoc
    */
   public function _run(Result $result): void {
-    $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync');
+    $oAuthClientId = $this->getConfigProfile()->getOauthClientId();
+    $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync') ?? [];
     $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
 
     // Load queue.
-    $queue = \Civi::queue('hiorg-synchronize-contacts', [
+    $queue = \Civi::queue('hiorg-synchronize-contacts-' . $oAuthClientId, [
       'type'  => 'Sql',
       'reset' => FALSE,
     ]);
@@ -49,7 +50,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       // Retrieve HiOrg user data via HiOrg-Server API.
       $personalResult = Hiorg::getPersonal()
         ->setConfigProfileId($this->getConfigProfileId())
-        ->setChangedSince($lastSync)
+        ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
         ->execute();
       // TODO: Log/Report errors.
 
@@ -67,7 +68,8 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       }
 
       // Store synchronization time.
-      \Civi::settings()->set('hiorg.synchronizeContacts.lastSync', $currentSync);
+      $lastSync[$oAuthClientId] = $currentSync;
+      \Civi::settings()->set('hiorg.synchronizeContacts.lastSync', $lastSync);
     }
 
     $runner = new \CRM_Queue_Runner([
@@ -76,8 +78,8 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       'errorMode' => \CRM_Queue_Runner::ERROR_CONTINUE,
     ]);
 
-    // Run queue for 30 seconds.
-    // TODO: Make timeout configurable or use PHP configuration.
+    // Run queue for given timeout.
+    // TODO: Validate timeout parameter against PHP configuration.
     $maxRunTime = time() + $this->timeout;
     $continue = TRUE;
     while(time() < $maxRunTime && $continue) {
