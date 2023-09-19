@@ -64,18 +64,19 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
 
       // Membership fields.
       'hiorg_membership_data.membership_number' => $user->mitgliednr,
-      'hiorg_membership_data.membership_start_date' => $user->mitglied_seit
-        ? \DateTime::createFromFormat('Y-m-d', $user->mitglied_seit)
-          ->format(('Y-m-d'))
-        : NULL,
-      'hiorg_membership_data.membership_end_date' => $user->austritt_datum
-        ? \DateTime::createFromFormat('Y-m-d', $user->austritt_datum)
-          ->format(('Y-m-d'))
-        : NULL,
-      'hiorg_membership_data.membership_transfer_date' => $user->wechseljgddat
-        ? \DateTime::createFromFormat('Y-m-d', $user->wechseljgddat)
-          ->format(('Y-m-d'))
-        : NULL,
+      // TODO: Un-comment once the dates come in the correct format.
+//      'hiorg_membership_data.membership_start_date' => $user->mitglied_seit
+//        ? \DateTime::createFromFormat('Y-m-d', $user->mitglied_seit)
+//          ->format(('Y-m-d'))
+//        : NULL,
+//      'hiorg_membership_data.membership_end_date' => $user->austritt_datum
+//        ? \DateTime::createFromFormat('Y-m-d', $user->austritt_datum)
+//          ->format(('Y-m-d'))
+//        : NULL,
+//      'hiorg_membership_data.membership_transfer_date' => $user->wechseljgddat
+//        ? \DateTime::createFromFormat('Y-m-d', $user->wechseljgddat)
+//          ->format(('Y-m-d'))
+//        : NULL,
 
       // Driving license fields.
       'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
