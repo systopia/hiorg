@@ -35,7 +35,14 @@ class IdentitytrackerSubscriber implements EventSubscriberInterface {
 
   public function hook_civicrm_managed(GenericHookEvent $event): void {
     $event->entities[] = [
-      // TODO: Can we use the defining extension's name as "module"?
+      // Note: This defines an entity of the type "Managed" for the custom field
+      // we want to modify, so there are two "Managed" entities managing that
+      // CustomField entity. It is done via this hook, as the mixin reading
+      // *.mgd.php files comes first and sorts "Managed" entities by file name.
+      // Thus, this hook implementation will always come after the initial
+      // definition in the Identity Tracker extension.
+      // We also want two "Managed" entity records so that it is obvious that
+      // there is another extension manipulating the custom field.
       'module' => E::LONG_NAME,
       'name' => 'CustomField__contact_id_history__id_history_context',
       'entity' => 'CustomField',

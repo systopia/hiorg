@@ -87,8 +87,6 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
           ->format(('Y-m-d'))
         : NULL,
 
-      // TODO: $user->kontoinhaber etc. as CiviBanking BankingAccount entity.
-
       // TODO: $user->username as IdentityTracker record (new type).
     ];
 
