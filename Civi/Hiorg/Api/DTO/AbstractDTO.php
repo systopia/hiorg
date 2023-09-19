@@ -31,7 +31,8 @@ class AbstractDTO {
         // Lookup property in "attributes" property of the given object.
         case property_exists($object, 'attributes') && property_exists($object->attributes, $key):
           if ($key === 'benutzerdefinierte_felder') {
-            $value = array_column($object->attributes->benutzerdefinierte_felder, 'value', 'id');
+            // Identify custom fields by "name", not "id".
+            $value = array_column($object->attributes->benutzerdefinierte_felder, 'value', 'name');
           }
           else {
             $value = $object->attributes->$key;
