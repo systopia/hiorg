@@ -41,9 +41,10 @@ abstract class AbstractHiorgAction extends AbstractAction {
   protected ?ConfigProfile $_configProfile = NULL;
 
   /**
+   * @return static
    * @throws \Exception
    */
-  public function setConfigProfileId($configProfileId): static {
+  public function setConfigProfileId($configProfileId) {
     // parent::setConfigProfileId($configProfileId); is magic via
     // parent::__call() and can't be documented.
     parent::__call(__FUNCTION__, func_get_args());
