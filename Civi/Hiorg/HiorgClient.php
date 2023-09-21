@@ -107,7 +107,7 @@ class HiorgClient {
     if (!$self) {
       $body = [
         'filter' => [
-          'changed_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
+          'updated_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
         ],
         'include' => implode(',', $include),
       ];
@@ -138,7 +138,7 @@ class HiorgClient {
       'personal/' . $userId . '/ausbildungen',
       [
         'filter' => [
-          'changed_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
+          'updated_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
         ],
         'include' => implode(',', $include),
       ]
@@ -164,7 +164,7 @@ class HiorgClient {
       'personal/' . $userId . '/uberpruefungen',
       [
         'filter' => [
-          'changed_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
+          'updated_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
         ],
         'include' => implode(',', $include),
       ]
