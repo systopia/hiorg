@@ -83,13 +83,25 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     $maxRunTime = time() + $this->timeout;
     $continue = TRUE;
     while(time() < $maxRunTime && $continue) {
-      // TODO: Find out why claiming the next task fails for an existing queue that failed at last execution!
       $taskResult = $runner->runNext(false);
       if (!$taskResult['is_continue']) {
         // All items in the queue are processed.
         $continue = false;
       }
       $queueResult[] = $taskResult;
+      // If there is a lock on the next item, do not attempt to re-run it.
+      // Otherwise the loop will run until the end of the timeout without doing
+      // anything. This can only be recognized by evaluating the exception
+      // message, if any.
+      // TODO: This should be handled differently, see
+      //       https://lab.civicrm.org/dev/core/-/issues/4622
+      if (
+        !empty($taskResult['is_error'])
+        && isset($taskResult['exception'])
+        && $taskResult['exception']->getMessage() == 'Failed to claim next task'
+      ) {
+        break;
+      }
     }
 
     $result->exchangeArray($queueResult);
