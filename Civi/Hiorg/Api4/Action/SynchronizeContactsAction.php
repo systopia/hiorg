@@ -88,7 +88,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         // All items in the queue are processed.
         $continue = false;
       }
-      $queueResult[] = $taskResult;
+      $queueResult[] = &$taskResult;
       // If there is a lock on the next item, do not attempt to re-run it.
       // Otherwise the loop will run until the end of the timeout without doing
       // anything. This can only be recognized by evaluating the exception
@@ -101,6 +101,10 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         && $taskResult['exception']->getMessage() == 'Failed to claim next task'
       ) {
         break;
+      }
+
+      if (is_a($taskResult['exception'], \Exception::class)) {
+        $taskResult['error_message'] = $taskResult['exception']->getMessage();
       }
     }
 
