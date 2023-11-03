@@ -350,6 +350,70 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
     return $idTrackerResult['id'] ?? NULL;
   }
 
+  /**
+   * @param int $contactId
+   * @param \Civi\Hiorg\Api\DTO\HiorgUserDTO $hiorgUser
+   *
+   * @return array|NULL
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\API\Exception\UnauthorizedException
+   */
+  protected function synchronizeBankAccount(int $contactId, HiorgUserDTO $hiorgUser): ?array {
+    if (
+      \CRM_Extension_System::singleton()
+        ->getManager()
+        ->getStatus('org.project60.banking') === \CRM_Extension_Manager::STATUS_INSTALLED
+    ) {
+      $ibanReferenceTypeId = OptionValue::get(FALSE)
+        ->addSelect('id')
+        ->addWhere('option_group_id.name', '=', 'civicrm_banking.reference_types')
+        ->addWhere('value', '=', 'IBAN')
+        ->addWhere('is_active', '=', TRUE)
+        ->execute()
+        ->single()['id'];
+      // find existing references
+      $existing_references = civicrm_api3('BankingAccountReference', 'get', [
+        'reference' => $hiorgUser->iban,
+        'reference_type_id' => $ibanReferenceTypeId,
+        'option.limit' => 0,
+      ]);
+
+      // get the accounts for this
+      $bank_account_ids = [];
+      foreach ($existing_references['values'] as $account_reference) {
+        $bank_account_ids[] = $account_reference['ba_id'];
+      }
+      if (!empty($bank_account_ids)) {
+        $contact_bank_accounts = civicrm_api3('BankingAccount', 'get', [
+          'id' => ['IN' => $bank_account_ids],
+          'contact_id' => $contactId,
+          'option.limit' => 1,
+        ]);
+        if ($contact_bank_accounts['count']) {
+          // bank account already exists with the contact
+          $account = reset($contact_bank_accounts['values']);
+        }
+      }
+
+      if (!isset($account)) {
+        // if we get here, that means that there is no such bank account
+        //  => create one
+        $data = ['BIC' => $hiorgUser->bic, 'country' => substr($hiorgUser->iban, 0, 2)];
+        $account = civicrm_api3('BankingAccount', 'create', [
+          'contact_id' => $contactId,
+          'data_parsed' => json_encode($data),
+        ]);
+
+        $bank_account_reference = civicrm_api3('BankingAccountReference', 'create', [
+          'reference' => $hiorgUser->iban,
+          'reference_type_id' => $ibanReferenceTypeId,
+          'ba_id' => $account['id'],
+        ]);
+      }
+    }
+    return $account ?? NULL;
+  }
+
   protected function doRun(\CRM_Queue_TaskContext $context, HiorgUserDTO $hiorgUser) {
     try {
       $hiorgUserResult = [];
@@ -365,14 +429,11 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
         $hiorgUser->id
       );
 
-      // TODO: Synchronize bank account data when CiviBanking is installed.
-      if (
-        \CRM_Extension_System::singleton()
-          ->getManager()
-          ->getStatus('org.project60.banking') === \CRM_Extension_Manager::STATUS_INSTALLED
-      ) {
-
-      }
+      // Synchronize bank account data when CiviBanking is installed.
+      $hiorgUserResult['bank_account'] = $this->synchronizeBankAccount(
+        $hiorgUserResult['contact_id'],
+        $hiorgUser
+      );
 
       // Synchronize qualifications with custom entities.
       $hiorgUserResult['qualifications'] = self::synchronizeQualifications(
