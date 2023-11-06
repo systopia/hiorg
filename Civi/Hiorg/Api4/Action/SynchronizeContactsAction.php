@@ -60,10 +60,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
         $hiorgUser = HiorgUserDTO::create($record);
         $queue->createItem(new SynchronizeContactsTask(
           $this->getConfigProfile(),
-          [
-            'hiorgUser' => $hiorgUser,
-          ],
-          E::ts('Synchronizing HiOrg-Server user with ID %1', [1 => $hiorgUser->id])
+          $hiorgUser
         ));
       }
 
@@ -73,7 +70,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     }
 
     $runner = new \CRM_Queue_Runner([
-      'title' => ts('HiOrg-Server: Synchronize Contacts'),
+      'title' => E::ts('HiOrg-Server: Synchronize Contacts'),
       'queue' => $queue,
       'errorMode' => \CRM_Queue_Runner::ERROR_CONTINUE,
     ]);

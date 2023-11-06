@@ -14,6 +14,7 @@
 +--------------------------------------------------------*/
 
 use CRM_Hiorg_ExtensionUtil as E;
+use Civi\Hiorg\Synchronize\ContactIdentity;
 
 return [
   [
@@ -26,8 +27,8 @@ return [
       'values' => [
         'option_group_id.name' => 'contact_id_history_type',
         'label' => E::ts('HiOrg-Server User ID'),
-        'value' => 'hiorg_user',
-        'name' => 'hiorg_user',
+        'value' => ContactIdentity::IDENTIFIER_TYPE,
+        'name' => ContactIdentity::IDENTIFIER_TYPE,
         'grouping' => 'hiorg',
         'filter' => 0,
         'is_default' => FALSE,

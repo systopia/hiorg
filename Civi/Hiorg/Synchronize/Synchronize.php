@@ -21,6 +21,7 @@ use Civi\Api4\Hiorg;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
 use Civi\Core\Event\GenericHookEvent;
+use Civi\Funding\Permission\ContactRelation\Types\Contact;
 use Civi\Hiorg\Api\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfile\ConfigProfile;
 use CRM_Hiorg_ExtensionUtil as E;
@@ -30,7 +31,7 @@ class Synchronize {
   public static function synchronizeContacts(ConfigProfile $configProfile, HiorgUserDTO $hiorgUser): array {
     $result = [];
     $xcmProfile = $configProfile->getXcmProfileName();
-    $idTrackerResult = self::identifyContact($configProfile->id, $hiorgUser->id);
+    $contactId = ContactIdentity::identifyContact($configProfile->id, $hiorgUser->id);
 
     // Synchronize contact data using Extended Contact Manager (XCM) with
     // profile defined in HiOrg-Server API configuration profile.
@@ -38,7 +39,7 @@ class Synchronize {
       $configProfile->id,
       $xcmProfile,
       $hiorgUser,
-      $idTrackerResult
+      $contactId
     );
 
     // Synchronize bank account data when CiviBanking is installed.
@@ -398,28 +399,6 @@ class Synchronize {
     return $event->mapping;
   }
 
-  /**
-   * @param int $configProfileId
-   * @param string $hiorgUserId
-   *   The HiOrg-Server user ID to pass to ID Tracker.
-   *
-   * @return int|null
-   *   The CiviCRM Contact ID.
-   * @throws \CRM_Core_Exception
-   */
-  public static function identifyContact(int $configProfileId, string $hiorgUserId): ?int {
-    $idTrackerResult = civicrm_api3(
-      'Contact',
-      'findbyidentity',
-      [
-        'identifier_type' => 'hiorg_user',
-        'identifier' => $hiorgUserId,
-        'context' => $configProfileId,
-      ]
-    );
-    return $idTrackerResult['id'] ?? NULL;
-  }
-
   public static function getPrefixId($prefix) {
     try {
       $prefix_id = OptionValue::get(FALSE)
@@ -452,7 +431,6 @@ class Synchronize {
    */
   public static function synchronizeContactData(int $configProfileId, string $xcmProfile, HiorgUserDTO $hiorgUser, ?int $contactId = NULL): int {
     $params = self::mapContactParameters($hiorgUser);
-
     if ($contactId) {
       $params['id'] = $contactId;
     }
@@ -470,16 +448,7 @@ class Synchronize {
 
     // Add HiOrg-Server user ID as Identity Tracker ID.
     if (!$contactId && !empty($hiorgUser->id)) {
-      civicrm_api3(
-        'Contact',
-        'addidentity',
-        [
-          'contact_id' => $xcmResult['id'],
-          'identifier_type' => 'hiorg_user',
-          'identifier' => $hiorgUser->id,
-          'context' => $configProfileId,
-        ]
-      );
+      ContactIdentity::addIdentity($xcmResult['id'], $hiorgUser->id, $configProfileId);
     }
 
     return (int) $xcmResult['id'];

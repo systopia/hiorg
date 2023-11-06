@@ -22,16 +22,20 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 class SynchronizeContactsTask extends \CRM_Queue_Task {
 
-  protected ConfigProfile $configProfile;
-
-  public function __construct(ConfigProfile $configProfile, array $arguments = [], ?string $title = NULL) {
-    parent::__construct([$this, 'doRun'], $arguments, $title);
-    $this->configProfile = $configProfile;
+  public function __construct(ConfigProfile $configProfile, HiorgUserDTO $hiorgUser) {
+    parent::__construct(
+      [$this, 'doRun'],
+      [
+        'configProfile' => $configProfile,
+        'hiorgUser' => $hiorgUser,
+      ],
+      E::ts('Synchronizing HiOrg-Server user with ID %1', [1 => $hiorgUser->id])
+    );
   }
 
-  protected function doRun(\CRM_Queue_TaskContext $context, HiorgUserDTO $hiorgUser) {
+  protected function doRun(\CRM_Queue_TaskContext $context, ConfigProfile $configProfile, HiorgUserDTO $hiorgUser) {
     try {
-      $hiorgUserResult = Synchronize::synchronizeContacts($this->configProfile, $hiorgUser);
+      $hiorgUserResult = Synchronize::synchronizeContacts($configProfile, $hiorgUser);
       $result = \CRM_Queue_Task::TASK_SUCCESS;
       $message = E::ts('Synchronized HiOrg-Server user with ID %1', [1 => $hiorgUser->id]);
     }

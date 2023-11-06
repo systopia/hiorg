@@ -38,6 +38,7 @@ class ContactSubscriber implements EventSubscriberInterface {
   public function preDelete(PreDelete $event): void {
     if ($event->object instanceof \CRM_Contact_DAO_Contact) {
       // Remove qualifications.
+      // TODO: Is this safe with merging contacts?
       EckEntity::delete('Hiorg_Qualification', FALSE)
         ->addWhere('Eck_Hiorg_Qualification.Contact', '=', $event->object->id)
         ->execute();
