@@ -13,7 +13,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg;
+namespace Civi\Hiorg\OAuth;
 
 use Civi\OAuth\CiviGenericProvider;
 use League\OAuth2\Client\Provider\GenericResourceOwner;

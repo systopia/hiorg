@@ -15,8 +15,9 @@
 
 namespace Civi\Hiorg;
 
-use CRM_Hiorg_ExtensionUtil as E;
 use Civi\Api4\OAuthSysToken;
+use Civi\Hiorg\ConfigProfile\ConfigProfile;
+use CRM_Hiorg_ExtensionUtil as E;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;

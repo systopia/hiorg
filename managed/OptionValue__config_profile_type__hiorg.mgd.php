@@ -13,7 +13,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-use Civi\Hiorg\ConfigProfile;
+use Civi\Hiorg\ConfigProfile\ConfigProfile;
 use CRM_Hiorg_ExtensionUtil as E;
 
 return [

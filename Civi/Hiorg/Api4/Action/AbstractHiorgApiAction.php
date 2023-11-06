@@ -16,7 +16,7 @@
 namespace Civi\Hiorg\Api4\Action;
 
 use Civi\Api4\Generic\Result;
-use Civi\Hiorg\ConfigProfile;
+use Civi\Hiorg\ConfigProfile\ConfigProfile;
 use Civi\Hiorg\HiorgClient;
 
 abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
