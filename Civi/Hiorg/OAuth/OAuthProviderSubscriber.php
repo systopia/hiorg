@@ -45,9 +45,9 @@ class OAuthProviderSubscriber implements EventSubscriberInterface {
     ];
 
     // TODO: Consider making custom OAuth providers configurable, as
-    //       HiOrg-Server instances may run on any domain which implies defining
-    //       OAuth providers would need an extension implementing the
-    //       "hook_civicrm_oauthProviders" event.
+    //       HiOrg-Server instances may run on any domain which currently
+    //       implies defining OAuth providers would need an extension
+    //       implementing the "hook_civicrm_oauthProviders" event.
   }
 
 }
