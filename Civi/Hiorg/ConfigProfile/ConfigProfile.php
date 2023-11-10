@@ -32,6 +32,9 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
       ->indexBy('id')
       ->getArrayCopy();
     array_walk($oauth_clients, function (&$oauth_client) {
+      // OAuthClient entities do not have a configurable label which might be
+      // useful to display here. See
+      // https://lab.civicrm.org/dev/core/-/issues/4765
       $oauth_client = E::ts(
         '[%1] %2 (Provider: %3)',
         [
