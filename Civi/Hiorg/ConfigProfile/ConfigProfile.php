@@ -27,12 +27,19 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
 
   public static function getFields(): array {
     $oauth_clients = OAuthClient::get(FALSE)
-      ->addSelect('guid', 'provider:label')
+      ->addSelect('id', 'guid', 'provider:label')
       ->execute()
       ->indexBy('id')
       ->getArrayCopy();
     array_walk($oauth_clients, function (&$oauth_client) {
-      $oauth_client = $oauth_client['guid'] . ' (' . $oauth_client['provider:label'] . ')';
+      $oauth_client = E::ts(
+        '[%1] %2 (Provider: %3)',
+        [
+          1 => $oauth_client['id'],
+          2 => $oauth_client['guid'],
+          3 => $oauth_client['provider:label'],
+        ]
+      );
     });
     return [
       'xcm_profile' => (new FieldSpec('xcm_profile', 'ConfigProfile_' . self::NAME, 'String'))
