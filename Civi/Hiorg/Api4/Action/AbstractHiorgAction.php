@@ -72,7 +72,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
         'name' => 'configProfile',
         'data_type' => 'Integer',
         'pseudoconstant' => [
-          'callback' => '\Civi\Hiorg\ConfigProfile::loadAll',
+          'callback' => ConfigProfile::class . '::loadAll',
         ],
       ],
     ];
