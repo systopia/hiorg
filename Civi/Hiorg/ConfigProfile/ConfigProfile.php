@@ -28,6 +28,10 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   public static function getFields(): array {
     $oauth_clients = OAuthClient::get(FALSE)
       ->addSelect('id', 'guid', 'provider:label')
+      // TODO: Filter for HiOrg-Server OAuth clients only - this can't be done
+      //       using the type ("hiorg"), as there might be other compatible
+      //       OAuth providers, e.g. when the HiOrg-Server API is available on
+      //       another server.
       ->execute()
       ->indexBy('id')
       ->getArrayCopy();
