@@ -375,7 +375,7 @@ class Synchronize {
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
       'driving_license.license_date' => self::formatDate($user->fahrerlaubnis['fuehrerscheindatum']),
 
-      // TODO: $user->username as IdentityTracker record (new type).
+      // TODO: $user->username as IdentityTracker record (new type "HiOrg-Server user name).
     ];
 
     // Dispatch event for custom mapping.
