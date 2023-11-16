@@ -352,9 +352,7 @@ class Synchronize {
       'city' => $user->ort,
       // TODO: Validate country label or map, e. g. with similar_text().
       'country:label' => $user->land,
-      'birth_date' => $user->gebdat
-        ? \DateTime::createFromFormat('Y-m-d', $user->gebdat)->format('Y-m-d')
-        : NULL,
+      'birth_date' => self::formatDate($user->gebdat),
 
       // CiviCRM custom fields.
       'hiorg_contact_data.birth_place' => $user->gebort,
@@ -367,28 +365,15 @@ class Synchronize {
 
       // Membership fields.
       'hiorg_membership_data.membership_number' => $user->mitgliednr,
-      // TODO: Un-comment once the dates come in the correct format.
-      //      'hiorg_membership_data.membership_start_date' => $user->mitglied_seit
-      //        ? \DateTime::createFromFormat('Y-m-d', $user->mitglied_seit)
-      //          ->format(('Y-m-d'))
-      //        : NULL,
-      //      'hiorg_membership_data.membership_end_date' => $user->austritt_datum
-      //        ? \DateTime::createFromFormat('Y-m-d', $user->austritt_datum)
-      //          ->format(('Y-m-d'))
-      //        : NULL,
-      //      'hiorg_membership_data.membership_transfer_date' => $user->wechseljgddat
-      //        ? \DateTime::createFromFormat('Y-m-d', $user->wechseljgddat)
-      //          ->format(('Y-m-d'))
-      //        : NULL,
+      'hiorg_membership_data.membership_start_date' => self::formatDate($user->mitglied_seit),
+      'hiorg_membership_data.membership_end_date' => self::formatDate($user->austritt_datum),
+      'hiorg_membership_data.membership_transfer_date' => self::formatDate($user->wechseljgddat),
 
       // Driving license fields.
       'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
       'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
-      'driving_license.license_date' => $user->fahrerlaubnis['fuehrerscheindatum']
-        ? \DateTime::createFromFormat('Y-m-d', $user->fahrerlaubnis['fuehrerscheindatum'])
-          ->format(('Y-m-d'))
-        : NULL,
+      'driving_license.license_date' => self::formatDate($user->fahrerlaubnis['fuehrerscheindatum']),
 
       // TODO: $user->username as IdentityTracker record (new type).
     ];
@@ -412,6 +397,19 @@ class Synchronize {
     catch (\Exception $exception) {
       return NULL;
     }
+  }
+
+  /**
+   * @param string $date
+   * @param string $inputFormat
+   * @param string $outputFormat
+   *
+   * @return string|null
+   */
+  public static function formatDate(string $date, string $inputFormat = 'Y-m-d', string $outputFormat = 'Y-m-d'): ?string {
+    return $date && ($dateParsed = \DateTime::createFromFormat($inputFormat, $date))
+      ? $dateParsed->format(($outputFormat))
+      : NULL;
   }
 
   /**
