@@ -13,10 +13,10 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg;
+namespace Civi\Hiorg\HiorgApi;
 
 use Civi\Api4\OAuthSysToken;
-use Civi\Hiorg\ConfigProfile\ConfigProfile;
+use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use CRM_Hiorg_ExtensionUtil as E;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions;

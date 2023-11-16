@@ -13,7 +13,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg;
+namespace Civi\Hiorg\EventSubscriber;
 
 use Civi\Api4\EckEntity;
 use Civi\Core\DAO\Event\PreDelete;

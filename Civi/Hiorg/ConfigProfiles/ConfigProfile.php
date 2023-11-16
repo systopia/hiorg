@@ -13,7 +13,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg\ConfigProfile;
+namespace Civi\Hiorg\ConfigProfiles;
 
 use Civi\Api4\OAuthClient;
 use Civi\Api4\Service\Spec\FieldSpec;

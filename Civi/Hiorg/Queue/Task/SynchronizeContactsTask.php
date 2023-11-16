@@ -15,8 +15,8 @@
 
 namespace Civi\Hiorg\Queue\Task;
 
-use Civi\Hiorg\Api\DTO\HiorgUserDTO;
-use Civi\Hiorg\ConfigProfile\ConfigProfile;
+use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
+use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Synchronize\Synchronize;
 use CRM_Hiorg_ExtensionUtil as E;
 

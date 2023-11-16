@@ -13,13 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg;
+namespace Civi\Hiorg\EventSubscriber;
 
-use CRM_Hiorg_ExtensionUtil as E;
-use Civi\API\Events;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Civi\Core\Event\GenericHookEvent;
+use CRM_Hiorg_ExtensionUtil as E;
 use CRM_Identitytracker_Configuration;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class IdentitytrackerSubscriber implements EventSubscriberInterface {
 

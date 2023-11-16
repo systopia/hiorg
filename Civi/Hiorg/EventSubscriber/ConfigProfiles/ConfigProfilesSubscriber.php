@@ -13,9 +13,10 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg\ConfigProfile;
+namespace Civi\Hiorg\EventSubscriber\ConfigProfiles;
 
 use Civi\Core\Event\GenericHookEvent;
+use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ConfigProfilesSubscriber implements EventSubscriberInterface {

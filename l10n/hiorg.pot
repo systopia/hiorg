@@ -1,57 +1,57 @@
 #: ./Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
-msgid "Synchronizing HiOrg-Server user with ID %1"
-msgstr ""
-
-#: ./Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
 msgid "HiOrg-Server: Synchronize Contacts"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+msgid "[%1] %2 (Provider: %3)"
+msgstr ""
+
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Extended Contact manager (XCM) Profile"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "XCM Profile"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "XCM profile to use for processing contacts with this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "OAuth Client"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "CiviCRM OAuth Client to use for authenticating with this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Organisation"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "CiviCRM organisation contact to use as corresponding contact with this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "API Base URI"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "HiOrg-Server API base URI for this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfile.php
+#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Error loading configuration profile with ID %1"
 msgstr ""
 
-#: ./Civi/Hiorg/HiorgClient.php
+#: ./Civi/Hiorg/HiorgApi/HiorgClient.php
 msgid "Error looking up OAuth token for OAuth client with ID %1"
 msgstr ""
 
 #: ./Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
-msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
+msgid "Synchronizing HiOrg-Server user with ID %1"
 msgstr ""
 
 #: ./Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
@@ -60,6 +60,10 @@ msgstr ""
 
 #: ./Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
 msgid "Failed synchronizing HiOrg-Server user with ID %1. Error: %2"
+msgstr ""
+
+#: ./Civi/Hiorg/Synchronize/Synchronize.php
+msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
 msgstr ""
 
 #: ./managed/CustomGroup__hiorg_contact_data.mgd.php

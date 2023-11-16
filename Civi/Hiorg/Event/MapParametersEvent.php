@@ -15,7 +15,7 @@
 
 namespace Civi\Hiorg\Event;
 
-use Civi\Hiorg\Api\DTO\HiorgUserDTO;
+use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -34,7 +34,7 @@ class MapParametersEvent extends Event {
   protected array $mappings = [];
 
   /**
-   * @var \Civi\Hiorg\Api\DTO\HiorgUserDTO
+   * @var \Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO
    *   The HiOrg-Server user DTO object containing all properties fetched via
    *   the HiOrg-Server API.
    */
@@ -46,7 +46,7 @@ class MapParametersEvent extends Event {
   }
 
   /**
-   * @return array|\Civi\Hiorg\Api\DTO\HiorgUserDTO
+   * @return array|\Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO
    *   The HiOrg-Sever user DTO object.
    */
   public function getUser(): array {

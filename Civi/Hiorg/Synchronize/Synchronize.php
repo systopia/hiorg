@@ -22,8 +22,8 @@ use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
 use Civi\Core\Event\GenericHookEvent;
 use Civi\Funding\Permission\ContactRelation\Types\Contact;
-use Civi\Hiorg\Api\DTO\HiorgUserDTO;
-use Civi\Hiorg\ConfigProfile\ConfigProfile;
+use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
+use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Event\MapParametersEvent;
 use CRM_Hiorg_ExtensionUtil as E;
 
@@ -191,7 +191,7 @@ class Synchronize {
 
   /**
    * @param int $contactId
-   * @param \Civi\Hiorg\Api\DTO\HiorgUserDTO $hiorgUser
+   * @param \Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO $hiorgUser
    *
    * @return array|NULL
    * @throws \CRM_Core_Exception

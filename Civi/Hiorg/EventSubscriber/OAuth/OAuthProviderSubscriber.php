@@ -13,9 +13,10 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg\OAuth;
+namespace Civi\Hiorg\EventSubscriber\OAuth;
 
 use Civi\Core\Event\GenericHookEvent;
+use Civi\Hiorg\OAuth\OAuthProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OAuthProviderSubscriber implements EventSubscriberInterface {

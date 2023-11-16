@@ -13,7 +13,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg\Api\DTO;
+namespace Civi\Hiorg\HiorgApi\DTO;
 
 class AbstractDTO {
 

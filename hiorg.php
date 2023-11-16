@@ -15,11 +15,10 @@
 
 require_once 'hiorg.civix.php';
 // phpcs:disable
-use CRM_Hiorg_ExtensionUtil as E;
-use Civi\Hiorg\ConfigProfile\ConfigProfilesSubscriber;
-use Civi\Hiorg\ContactSubscriber;
-use Civi\Hiorg\IdentitytrackerSubscriber;
-use Civi\Hiorg\OAuth\OAuthProviderSubscriber;
+use Civi\Hiorg\EventSubscriber\ConfigProfiles\ConfigProfilesSubscriber;
+use Civi\Hiorg\EventSubscriber\ContactSubscriber;
+use Civi\Hiorg\EventSubscriber\IdentitytrackerSubscriber;
+use Civi\Hiorg\EventSubscriber\OAuth\OAuthProviderSubscriber;
 
 // phpcs:enable
 

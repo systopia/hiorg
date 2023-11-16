@@ -19,7 +19,7 @@ use CRM_Hiorg_ExtensionUtil as E;
 use Civi\Hiorg\Queue\Task\SynchronizeContactsTask;
 use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
-use Civi\Hiorg\Api\DTO\HiorgUserDTO;
+use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 
 class SynchronizeContactsAction extends AbstractHiorgAction {
 
