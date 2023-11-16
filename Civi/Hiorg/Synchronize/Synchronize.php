@@ -24,7 +24,7 @@ use Civi\Core\Event\GenericHookEvent;
 use Civi\Funding\Permission\ContactRelation\Types\Contact;
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
-use Civi\Hiorg\Event\MapParametersEvent;
+use Civi\Hiorg\Event\MapContactParametersEvent;
 use CRM_Hiorg_ExtensionUtil as E;
 
 class Synchronize {
@@ -379,8 +379,8 @@ class Synchronize {
     ];
 
     // Dispatch event for custom mapping.
-    $event = new MapParametersEvent($user, $mappings);
-    \Civi::dispatcher()->dispatch(MapParametersEvent::NAME, $event);
+    $event = new MapContactParametersEvent($user, $mappings);
+    \Civi::dispatcher()->dispatch(MapContactParametersEvent::NAME, $event);
     return $event->getMappings();
   }
 

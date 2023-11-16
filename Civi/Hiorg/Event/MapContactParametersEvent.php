@@ -22,9 +22,9 @@ use Symfony\Contracts\EventDispatcher\Event;
  * Event for altering synchronization mappings of HiOrg-Server user fields to
  * CiviCRM contact attributes.
  */
-class MapParametersEvent extends Event {
+class MapContactParametersEvent extends Event {
 
-  public const NAME = 'civi.hiorg.mapParameters';
+  public const NAME = 'civi.hiorg.mapContactParameters';
 
   /**
    * @var array
