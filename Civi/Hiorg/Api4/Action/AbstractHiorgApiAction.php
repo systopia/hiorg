@@ -36,17 +36,10 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
   protected HiorgClient $_hiorgClient;
 
   /**
-   * {@inheritDoc}
-   */
-  public function __construct($entityName, $actionName) {
-    parent::__construct($entityName, $actionName);
-  }
-
-  /**
    * @inheritDoc
    */
   public function _run(Result $result): void {
-    $this->_hiorgClient = new HiorgClient(ConfigProfile::getById($this->configProfileId));
+    $this->_hiorgClient = new HiorgClient($this->getConfigProfile());
     $this->doRun();
     $this->formatResult($result);
   }

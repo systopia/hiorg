@@ -46,10 +46,10 @@ class MapParametersEvent extends Event {
   }
 
   /**
-   * @return array|\Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO
+   * @return \Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO
    *   The HiOrg-Sever user DTO object.
    */
-  public function getUser(): array {
+  public function getUser(): HiorgUserDTO {
     return $this->user;
   }
 
