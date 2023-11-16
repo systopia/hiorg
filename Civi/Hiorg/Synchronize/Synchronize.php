@@ -24,6 +24,7 @@ use Civi\Core\Event\GenericHookEvent;
 use Civi\Funding\Permission\ContactRelation\Types\Contact;
 use Civi\Hiorg\Api\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfile\ConfigProfile;
+use Civi\Hiorg\Event\MapParametersEvent;
 use CRM_Hiorg_ExtensionUtil as E;
 
 class Synchronize {
@@ -338,7 +339,7 @@ class Synchronize {
   }
 
   public static function mapContactParameters(HiorgUserDTO $user): array {
-    $mapping = [
+    $mappings = [
       'prefix_id' => self::getPrefixId($user->anrede),
       'first_name' => $user->vorname,
       'last_name' => $user->nachname,
@@ -393,10 +394,9 @@ class Synchronize {
     ];
 
     // Dispatch event for custom mapping.
-    $event = GenericHookEvent::create(['mapping' => $mapping, 'user' => $user]);
-    \Civi::dispatcher()->dispatch('civi.hiorg.mapParameters', $event);
-
-    return $event->mapping;
+    $event = new MapParametersEvent($user, $mappings);
+    \Civi::dispatcher()->dispatch(MapParametersEvent::NAME, $event);
+    return $event->getMappings();
   }
 
   public static function getPrefixId($prefix) {
