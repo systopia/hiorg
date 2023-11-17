@@ -66,7 +66,7 @@ class MapContactParametersEvent extends Event {
    *
    * @return void
    */
-  public function setMappings(array $mappings = []): void {
+  public function setMappings(array $mappings): void {
     $this->mappings = $mappings;
   }
 
@@ -89,12 +89,12 @@ class MapContactParametersEvent extends Event {
    * Adds a single mapping to the current set of mappings using array addition.
    *
    * @param string $field
-   * @param mixed|NULL $value
+   * @param mixed $value
    *
    * @return bool
    *   Whether the mapping has been added, i.e. did not exist before.
    */
-  public function addMapping(string $field, mixed $value = NULL): bool {
+  public function addMapping(string $field, mixed $value): bool {
     $added = !isset($this->mappings[$field]);
     $this->mappings += [
       $field => $value,
@@ -106,12 +106,12 @@ class MapContactParametersEvent extends Event {
    * Explicitly sets a single mapping in the current set of mappings.
    *
    * @param string $field
-   * @param mixed|NULL $value
+   * @param mixed $value
    *
    * @return bool
    *   Whether the mapping has been added, i.e. did not exist before.
    */
-  public function setMapping(string $field, mixed $value = NULL): bool {
+  public function setMapping(string $field, mixed $value): bool {
     $added = !isset($this->mappings[$field]);
     $this->mappings[$field] = $value;
     return $added;
