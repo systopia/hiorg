@@ -318,8 +318,7 @@ class Synchronize {
       $fieldSpec = array_filter($fieldSpecs, function($fieldSpec) use ($fieldName) {
         return $fieldSpec->getName() === $fieldName;
       });
-      $fieldSpec = reset($fieldSpec);
-      if ($fieldSpec->type == 'Custom') {
+      if ($fieldSpec = reset($fieldSpec) && $fieldSpec->type == 'Custom') {
         $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec->getCustomFieldId());
         if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
           $optionGroupId = CustomField::get(FALSE)
