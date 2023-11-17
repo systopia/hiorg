@@ -22,6 +22,7 @@ use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
 use Civi\Core\Event\GenericHookEvent;
 use Civi\Funding\Permission\ContactRelation\Types\Contact;
+use Civi\Hiorg\Event\SynchronizeContactsEvent;
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Event\MapContactParametersEvent;
@@ -79,6 +80,11 @@ class Synchronize {
     \Civi::settings()->set('hiorg.synchronizeEducations.lastSync', $educationsLastSync);
 
     // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.
+
+    // Dispatch event for custom synchronization.
+    $event = new SynchronizeContactsEvent($hiorgUser, $configProfile, $result['contact_id'], $result);
+    \Civi::dispatcher()->dispatch(SynchronizeContactsEvent::NAME, $event);
+    $result = $event->getResults();
 
     return $result;
   }
@@ -399,13 +405,6 @@ class Synchronize {
     }
   }
 
-  /**
-   * @param string $date
-   * @param string $inputFormat
-   * @param string $outputFormat
-   *
-   * @return string|null
-   */
   public static function formatDate(string $date, string $inputFormat = 'Y-m-d', string $outputFormat = 'Y-m-d'): ?string {
     return $date && ($dateParsed = \DateTime::createFromFormat($inputFormat, $date))
       ? $dateParsed->format(($outputFormat))

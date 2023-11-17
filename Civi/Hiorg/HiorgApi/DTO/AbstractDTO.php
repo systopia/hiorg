@@ -23,27 +23,32 @@ class AbstractDTO {
     foreach ($properties as $property) {
       $key = $property->getName();
       $type = $property->getType()->getName();
-      switch (TRUE) {
-        // Lookup property in top level of the given object.
-        case property_exists($object, $key):
-          $value = $object->$key;
-          break;
-        // Lookup property in "attributes" property of the given object.
-        case property_exists($object, 'attributes') && property_exists($object->attributes, $key):
-          if ($key === 'benutzerdefinierte_felder') {
-            // Identify custom fields by "name", not "id".
-            $value = array_column($object->attributes->benutzerdefinierte_felder, 'value', 'name');
-          }
-          else {
-            $value = $object->attributes->$key;
-          }
-          break;
-      }
+      $value = static::getPropertyValue($key, $object);
       if (isset($value)) {
         settype($value, $type);
         $this->$key = $value;
       }
     }
+  }
+
+  protected static function getPropertyValue(string $key, \stdClass $object): mixed {
+    switch (TRUE) {
+      // Lookup property in top level of the given object.
+      case property_exists($object, $key):
+        $value = $object->$key;
+        break;
+      // Lookup property in "attributes" property of the given object.
+      case property_exists($object, 'attributes') && property_exists($object->attributes, $key):
+        if ($key === 'benutzerdefinierte_felder') {
+          // Identify custom fields by "name", not "id".
+          $value = array_column($object->attributes->benutzerdefinierte_felder, 'value', 'name');
+        }
+        else {
+          $value = $object->attributes->$key;
+        }
+        break;
+    }
+    return $value;
   }
 
 }

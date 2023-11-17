@@ -17,10 +17,6 @@ namespace Civi\Hiorg\HiorgApi\DTO;
 
 class HiorgUserDTO extends AbstractDTO {
 
-  public static function create(\stdClass $object): HiorgUserDTO {
-    return new self($object);
-  }
-
   public string $id;
 
   public string $vorname;
@@ -94,5 +90,9 @@ class HiorgUserDTO extends AbstractDTO {
   public string $funktion;
 
   public array $benutzerdefinierte_felder;
+
+  public static function create(\stdClass $object): HiorgUserDTO {
+    return new self($object);
+  }
 
 }
