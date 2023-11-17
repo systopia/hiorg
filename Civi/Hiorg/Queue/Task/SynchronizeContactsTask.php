@@ -29,7 +29,7 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
         'configProfile' => $configProfile,
         'hiorgUser' => $hiorgUser,
       ],
-      E::ts('Synchronizing HiOrg-Server user with ID %1', [1 => $hiorgUser->id])
+      E::ts('Synchronizing HiOrg-Server user (ID: %1)', [1 => $hiorgUser->id])
     );
   }
 
@@ -37,7 +37,13 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
     try {
       $hiorgUserResult = Synchronize::synchronizeContacts($configProfile, $hiorgUser);
       $result = \CRM_Queue_Task::TASK_SUCCESS;
-      $message = E::ts('Synchronized HiOrg-Server user with ID %1', [1 => $hiorgUser->id]);
+      $message = E::ts(
+        'Synchronized HiOrg-Server user (ID: %1) with CiviCRM contact (ID: %2).',
+        [
+          1 => $hiorgUser->id,
+          2 => $hiorgUserResult['contact_id'],
+        ]
+      );
     }
     catch (\Exception $exception) {
       $result = \CRM_Queue_Task::TASK_FAIL;
