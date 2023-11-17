@@ -392,7 +392,7 @@ class Synchronize {
         ->addWhere('name', '=', $prefix)
         ->addWhere('is_active', '=', TRUE)
         ->execute()
-        ->single()['id'];
+        ->single()['value'];
     }
     catch (\Exception $exception) {
       return NULL;
