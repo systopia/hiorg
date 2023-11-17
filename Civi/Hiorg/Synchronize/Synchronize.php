@@ -391,15 +391,16 @@ class Synchronize {
     try {
       $prefix_id = OptionValue::get(FALSE)
         ->addSelect('value')
-        ->addWhere('option:group_id:name', '=', 'individual_prefix')
+        ->addWhere('option_group_id:name', '=', 'individual_prefix')
         ->addWhere('name', '=', $prefix)
         ->addWhere('is_active', '=', TRUE)
         ->execute()
         ->single()['value'];
     }
     catch (\Exception $exception) {
-      return NULL;
+      $prefix_id = NULL;
     }
+    return $prefix_id;
   }
 
   public static function formatDate(string $date, string $inputFormat = 'Y-m-d', string $outputFormat = 'Y-m-d'): ?string {
