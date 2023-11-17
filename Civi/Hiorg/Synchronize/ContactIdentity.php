@@ -22,12 +22,12 @@ class ContactIdentity {
   /**
    * @param int $contactId
    * @param string $hiorgUserId
-   * @param int $configProfileId
+   * @param mixed $context
    *
    * @return void
    * @throws \CRM_Core_Exception
    */
-  public static function addIdentity(int $contactId, string $hiorgUserId, int $configProfileId) {
+  public static function addIdentity(int $contactId, string $hiorgUserId, mixed $context) {
     civicrm_api3(
       'Contact',
       'addidentity',
@@ -35,13 +35,13 @@ class ContactIdentity {
         'contact_id' => $contactId,
         'identifier_type' => self::IDENTIFIER_TYPE,
         'identifier' => $hiorgUserId,
-        'context' => $configProfileId,
+        'context' => $context,
       ]
     );
   }
 
   /**
-   * @param int $configProfileId
+   * @param mixed $context
    * @param string $hiorgUserId
    *   The HiOrg-Server user ID to pass to ID Tracker.
    *
@@ -49,14 +49,14 @@ class ContactIdentity {
    *   The CiviCRM Contact ID.
    * @throws \CRM_Core_Exception
    */
-  public static function identifyContact(int $configProfileId, string $hiorgUserId): ?int {
+  public static function identifyContact(mixed $context, string $hiorgUserId): ?int {
     $idTrackerResult = civicrm_api3(
       'Contact',
       'findbyidentity',
       [
         'identifier_type' => self::IDENTIFIER_TYPE,
         'identifier' => $hiorgUserId,
-        'context' => $configProfileId,
+        'context' => $context,
       ]
     );
     return $idTrackerResult['id'] ?? NULL;

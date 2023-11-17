@@ -32,16 +32,13 @@ class Synchronize {
 
   public static function synchronizeContacts(ConfigProfile $configProfile, HiorgUserDTO $hiorgUser): array {
     $result = [];
-    $xcmProfile = $configProfile->getXcmProfileName();
-    $contactId = ContactIdentity::identifyContact($configProfile->id, $hiorgUser->id);
 
     // Synchronize contact data using Extended Contact Manager (XCM) with
     // profile defined in HiOrg-Server API configuration profile.
     $result['contact_id'] = self::synchronizeContactData(
-      $configProfile->id,
-      $xcmProfile,
+      $configProfile->getXcmProfileName(),
       $hiorgUser,
-      $contactId
+      $configProfile->id
     );
 
     // Synchronize bank account data when CiviBanking is installed.
@@ -412,23 +409,21 @@ class Synchronize {
   }
 
   /**
-   * @param int $configProfileId
-   *   The XCM profile name.
-   * @param string $xcmProfile
-   *   Contact parameters to pass to XCM.
-   * @param array $params
-   *   The CiviCRM contact ID of the already idfentified contact to pass to XCM.
-   * @param int|null $contactId
    * @param string|null $hiorgUserId
+   *   The HiOrg-Server API configuration profile ID.
+   * @param array $params
+   *   Contact parameters to pass to XCM.
+   * @param mixed $identityContext
    *   The HiOrg-Server user ID to add as ID Tracker record on the contact.
    *
    * @return int
    *   The CiviCRM contact ID of the synchronized contact.
    * @throws \CRM_Core_Exception
    */
-  public static function synchronizeContactData(int $configProfileId, string $xcmProfile, HiorgUserDTO $hiorgUser, ?int $contactId = NULL): int {
+  public static function synchronizeContactData(string $xcmProfile, HiorgUserDTO $hiorgUser, mixed $identityContext): int {
     $params = self::mapContactParameters($hiorgUser);
-    if ($contactId) {
+
+    if ($contactId = ContactIdentity::identifyContact($identityContext, $hiorgUser->id)) {
       $params['id'] = $contactId;
     }
 
@@ -445,7 +440,7 @@ class Synchronize {
 
     // Add HiOrg-Server user ID as Identity Tracker ID.
     if (!$contactId && !empty($hiorgUser->id)) {
-      ContactIdentity::addIdentity($xcmResult['id'], $hiorgUser->id, $configProfileId);
+      ContactIdentity::addIdentity($xcmResult['id'], $hiorgUser->id, $identityContext);
     }
 
     return (int) $xcmResult['id'];
