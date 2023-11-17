@@ -27,7 +27,7 @@ class ContactIdentity {
    * @return void
    * @throws \CRM_Core_Exception
    */
-  public static function addIdentity(int $contactId, string $hiorgUserId, mixed $context) {
+  public static function addIdentity(int $contactId, string $hiorgUserId, $context) {
     civicrm_api3(
       'Contact',
       'addidentity',
@@ -49,7 +49,7 @@ class ContactIdentity {
    *   The CiviCRM Contact ID.
    * @throws \CRM_Core_Exception
    */
-  public static function identifyContact(mixed $context, string $hiorgUserId): ?int {
+  public static function identifyContact($context, string $hiorgUserId): ?int {
     $idTrackerResult = civicrm_api3(
       'Contact',
       'findbyidentity',

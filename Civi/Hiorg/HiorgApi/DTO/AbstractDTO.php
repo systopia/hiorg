@@ -31,7 +31,13 @@ class AbstractDTO {
     }
   }
 
-  protected static function getPropertyValue(string $key, \stdClass $object): mixed {
+  /**
+   * @param string $key
+   * @param \stdClass $object
+   *
+   * @return mixed
+   */
+  protected static function getPropertyValue(string $key, \stdClass $object) {
     switch (TRUE) {
       // Lookup property in top level of the given object.
       case property_exists($object, $key):

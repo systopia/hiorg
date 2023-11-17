@@ -420,7 +420,7 @@ class Synchronize {
    *   The CiviCRM contact ID of the synchronized contact.
    * @throws \CRM_Core_Exception
    */
-  public static function synchronizeContactData(string $xcmProfile, HiorgUserDTO $hiorgUser, mixed $identityContext): int {
+  public static function synchronizeContactData(string $xcmProfile, HiorgUserDTO $hiorgUser, $identityContext): int {
     $params = self::mapContactParameters($hiorgUser);
 
     if ($contactId = ContactIdentity::identifyContact($identityContext, $hiorgUser->id)) {

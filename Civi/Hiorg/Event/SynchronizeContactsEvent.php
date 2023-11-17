@@ -57,7 +57,12 @@ class SynchronizeContactsEvent extends Event {
     return $this->results;
   }
 
-  public function getResult($key): mixed {
+  /**
+   * @param $key
+   *
+   * @return mixed|null
+   */
+  public function getResult($key) {
     return $this->results[$key] ?? NULL;
   }
 
@@ -70,7 +75,7 @@ class SynchronizeContactsEvent extends Event {
    * @return bool
    *   Whether the result has been added, i.e. did not exist before.
    */
-  public function addResult(string $key, mixed $result): bool {
+  public function addResult(string $key, $result): bool {
     $added = !isset($this->results[$key]);
     $this->results += [$key => $result];
     return $added;

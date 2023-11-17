@@ -94,7 +94,7 @@ class MapContactParametersEvent extends Event {
    * @return bool
    *   Whether the mapping has been added, i.e. did not exist before.
    */
-  public function addMapping(string $field, mixed $value): bool {
+  public function addMapping(string $field, $value): bool {
     $added = !isset($this->mappings[$field]);
     $this->mappings += [
       $field => $value,
@@ -111,7 +111,7 @@ class MapContactParametersEvent extends Event {
    * @return bool
    *   Whether the mapping has been added, i.e. did not exist before.
    */
-  public function setMapping(string $field, mixed $value): bool {
+  public function setMapping(string $field, $value): bool {
     $added = !isset($this->mappings[$field]);
     $this->mappings[$field] = $value;
     return $added;
