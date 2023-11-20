@@ -13,32 +13,32 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #: Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
-msgid "Synchronizing HiOrg-Server user with ID %1"
-msgstr "Synchronisiere HiOrg-Server-Benutzer mit ID %1"
-
-#: Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
 msgid "HiOrg-Server: Synchronize Contacts"
 msgstr "HiOrg-Server: Kontakte synchronisieren"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+msgid "[%1] %2 (Provider: %3)"
+msgstr "[%1] %2 (Anbieter: %3)"
+
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Extended Contact manager (XCM) Profile"
 msgstr "Extended-Contact-Manager-Profil (XCM)"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "XCM Profile"
 msgstr "XCM-Profil"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid ""
 "XCM profile to use for processing contacts with this configuration profile."
 msgstr ""
 "XCM-Profil für die Verarbeitung von Kontakten mit diesem Konfigurationsprofil"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "OAuth Client"
 msgstr "OAuth-Client"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid ""
 "CiviCRM OAuth Client to use for authenticating with this configuration "
 "profile."
@@ -46,11 +46,11 @@ msgstr ""
 "CiviCRM-OAuth-Client für die Authentifizierung mit diesem "
 "Konfigurationsprofil"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Organisation"
 msgstr "Organisationskontakt"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid ""
 "CiviCRM organisation contact to use as corresponding contact with this "
 "configuration profile."
@@ -58,37 +58,42 @@ msgstr ""
 "CiviCRM-Organisationskontakt zur Verwendung als zugehöriger Kontakt mit "
 "diesem Konfigurationsprofil"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "API Base URI"
 msgstr "API-Basis-URI"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "HiOrg-Server API base URI for this configuration profile."
 msgstr "Basis-URI der HiOrg-Server-API für dieses Konfigurationsprofil"
 
-#: Civi/Hiorg/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Error loading configuration profile with ID %1"
 msgstr "Fehler beim Laden des Konfigurationsprofils mit der ID %1"
 
-#: Civi/Hiorg/HiorgClient.php
+#: Civi/Hiorg/HiorgApi/HiorgClient.php
 msgid "Error looking up OAuth token for OAuth client with ID %1"
 msgstr ""
 "Fehler beim Abrufen eines OAuth-Token für den OAuth-Client mit der ID %1"
 
 #: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
-msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
-msgstr ""
-"Fehler beim Abrufen/Erzeugen eines Kontakts mit Extended Contact Manager "
-"(XCM)"
+msgid "Synchronizing HiOrg-Server user (ID: %1)"
+msgstr "Synchronisiere HiOrg-Server-Benutzer (ID: %1)"
 
 #: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
-msgid "Synchronized HiOrg-Server user with ID %1"
-msgstr "HiOrg-Server-Benutzer mit ID %1 wurde synchronisiert"
+msgid "Synchronized HiOrg-Server user (ID: %1) with CiviCRM contact (ID: %2)."
+msgstr ""
+"HiOrg-Server-Benutzer (ID: %1) wurde mit Kontakt (ID: %2) synchronisiert."
 
 #: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
 msgid "Failed synchronizing HiOrg-Server user with ID %1. Error: %2"
 msgstr ""
 "Synchronisierung des HiOrg-Benutzers mit ID %1 fehlgeschlagen. Fehler: %2"
+
+#: Civi/Hiorg/Synchronize/Synchronize.php
+msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
+msgstr ""
+"Fehler beim Abrufen/Erzeugen eines Kontakts mit Extended Contact Manager "
+"(XCM)"
 
 #: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Contact Data"
