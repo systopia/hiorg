@@ -1,0 +1,28 @@
+site_name: HiOrg-Server API
+repo_url: https://github.com/systopia/hiorg
+site_description: 'A guide for the HiOrg-Server API extension.'
+site_author: 'systopia'
+theme:
+  name: material
+
+nav:
+  - 'Introduction': index.md
+  - 'Configuration': configuration.md
+  - 'Usage': usage.md
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - def_list
+  - codehilite
+  - toc:
+      permalink: True
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tilde
+  - pymdownx.betterem
+  - pymdownx.mark
+
+plugins:
+  - search:
+      lang: en
