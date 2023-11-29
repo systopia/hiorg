@@ -16,6 +16,8 @@
 namespace Civi\Hiorg\Api4\Action;
 
 use CRM_Hiorg_ExtensionUtil as E;
+use Civi\Api4\ConfigProfile;
+use Civi\Hiorg\ConfigProfiles\ConfigProfile as HiorgConfigProfile;
 use Civi\Hiorg\Queue\Task\SynchronizeContactsTask;
 use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
@@ -24,8 +26,19 @@ use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 class SynchronizeContactsAction extends AbstractHiorgAction {
 
   /**
+   * The ID of the configuration profile to use for the HiOrg-Server API call.
+   *
+   * Leave empty to synchronize data for all active configuration profiles.
+   *
+   * @var int|null $configProfileId
+   */
+  protected ?int $configProfileId = NULL;
+
+  /**
    * The timeout in seconds after which the execution of queued synchronisation
    * tasks should be stopped.
+   *
+   * Leave empty for no timeout.
    *
    * @var int|null $timeout
    */
@@ -35,35 +48,79 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    * @inheritDoc
    */
   public function _run(Result $result): void {
+    $maxRunTime = $this->validateTimeout();
+    $configProfiles = $this->getConfigProfiles();
+
+    $queue = $this->getQueue($configProfiles);
+    $queueResult = self::runQueue($queue, $maxRunTime);
+
+    $result->exchangeArray($queueResult);
+  }
+
+  private function validateTimeout(): ?int {
     $phpMaxExecutionTime = ini_get('max_execution_time');
-    if ($phpMaxExecutionTime > 0 && $this->timeout > $phpMaxExecutionTime) {
+    if (
+      $phpMaxExecutionTime > 0
+      && (
+        !isset($this->timeout)
+        || $this->timeout > $phpMaxExecutionTime
+      )
+    ) {
       throw new \Exception('The timeout exceeds the max_execution_time PHP setting value.');
     }
-    $maxRunTime = isset($this->timeout) ? time() + $this->timeout : NULL;
 
-    $oAuthClientId = $this->getConfigProfile()->getOauthClientId();
-    $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync') ?? [];
-    $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
+    return isset($this->timeout) ? time() + $this->timeout : NULL;
+  }
 
+  protected function getConfigProfiles() {
+    $configProfilesQuery = ConfigProfile::get('hiorg', FALSE)
+      ->addSelect('id')
+      ->addWhere('is_active', '=', TRUE);
+    if (isset($this->configProfileId)) {
+      $configProfilesQuery
+        ->addWhere('id', '=', $this->configProfileId);
+    }
+    return $configProfilesQuery
+      ->addOrderBy('id')
+      ->execute()
+      ->indexBy('id')
+      ->getArrayCopy();
+  }
+
+  private function getQueue(array $configProfiles) {
+    $queue = \Civi::queue(
+      'hiorg-synchronize-contacts-' . ($this->getConfigProfileId() ?? implode('-', array_keys($configProfiles))),
+      [
+        'type' => 'Sql',
+        'reset' => FALSE,
+      ]
+    );
     // Load queue.
-    $queue = \Civi::queue('hiorg-synchronize-contacts-' . $oAuthClientId, [
-      'type'  => 'Sql',
-      'reset' => FALSE,
-    ]);
     if (!$queue->existsQueue()) {
+      self::fillQueue($queue, $configProfiles);
+    }
+    return $queue;
+  }
+
+  private static function fillQueue(\CRM_Queue_Queue $queue, array $configProfiles) {
+    foreach ($configProfiles as $configProfile) {
+      $hiorgConfigProfile = HiorgConfigProfile::getById($configProfile['id']);
+      $oAuthClientId = $hiorgConfigProfile->getOauthClientId();
+      $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync') ?? [];
+      $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
+
       // Retrieve HiOrg user data via HiOrg-Server API.
       $personalResult = Hiorg::getPersonal()
-        ->setConfigProfileId($this->getConfigProfileId())
+        ->setConfigProfileId($hiorgConfigProfile->id)
         ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
         ->execute();
       // TODO: Log/Report errors.
 
       // Add queue items for each record.
       foreach ($personalResult as $record) {
-        $hiorgUserResult = [];
         $hiorgUser = HiorgUserDTO::create($record);
         $queue->createItem(new SynchronizeContactsTask(
-          $this->getConfigProfile(),
+          $hiorgConfigProfile,
           $hiorgUser
         ));
       }
@@ -72,7 +129,9 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       $lastSync[$oAuthClientId] = $currentSync;
       \Civi::settings()->set('hiorg.synchronizeContacts.lastSync', $lastSync);
     }
+  }
 
+  private static function runQueue(\CRM_Queue_Queue $queue, ?int $maxRunTime = NULL): array {
     $runner = new \CRM_Queue_Runner([
       'title' => E::ts('HiOrg-Server: Synchronize Contacts'),
       'queue' => $queue,
@@ -81,6 +140,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
 
     // Run queue for given timeout.
     $continue = TRUE;
+    $queueResult = [];
     while((!isset($maxRunTime) || time() < $maxRunTime) && $continue) {
       $taskResult = $runner->runNext(false);
       if (!$taskResult['is_continue']) {
@@ -107,7 +167,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       }
     }
 
-    $result->exchangeArray($queueResult);
+    return $queueResult;
   }
 
 }
