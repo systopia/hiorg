@@ -28,15 +28,19 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
    * tasks should be stopped.
    *
    * @var int|null $timeout
-   *
-   * @required
    */
-  protected ?int $timeout = 30;
+  protected ?int $timeout = NULL;
 
   /**
    * @inheritDoc
    */
   public function _run(Result $result): void {
+    $phpMaxExecutionTime = ini_get('max_execution_time');
+    if ($phpMaxExecutionTime > 0 && $this->timeout > $phpMaxExecutionTime) {
+      throw new \Exception('The timeout exceeds the max_execution_time PHP setting value.');
+    }
+    $maxRunTime = isset($this->timeout) ? time() + $this->timeout : NULL;
+
     $oAuthClientId = $this->getConfigProfile()->getOauthClientId();
     $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync') ?? [];
     $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
@@ -76,10 +80,8 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
     ]);
 
     // Run queue for given timeout.
-    // TODO: Validate timeout parameter against PHP configuration.
-    $maxRunTime = time() + $this->timeout;
     $continue = TRUE;
-    while(time() < $maxRunTime && $continue) {
+    while((!isset($maxRunTime) || time() < $maxRunTime) && $continue) {
       $taskResult = $runner->runNext(false);
       if (!$taskResult['is_continue']) {
         // All items in the queue are processed.
