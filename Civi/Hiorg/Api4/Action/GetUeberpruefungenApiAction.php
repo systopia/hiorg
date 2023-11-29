@@ -15,6 +15,9 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use Civi\Api4\Generic\Result;
+use Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO;
+
 /**
  * @method $this setUserId(string $userId)
  * @method $this setChangedSince(string $changedSince)
@@ -41,6 +44,15 @@ class GetUeberpruefungenApiAction extends AbstractHiorgApiAction {
       $this->userId,
       $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL
     );
+  }
+
+  protected function formatResult(Result $result): void {
+    parent::formatResult($result);
+    $dtoResult = [];
+    foreach ($result as $verification) {
+      $dtoResult[] = HiorgVerificationDTO::create($verification);
+    }
+    $result->exchangeArray($dtoResult);
   }
 
   /**

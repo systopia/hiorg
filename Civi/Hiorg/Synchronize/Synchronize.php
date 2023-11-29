@@ -26,6 +26,7 @@ use Civi\Hiorg\Event\SynchronizeContactsEvent;
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Event\MapContactParametersEvent;
+use Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO;
 use CRM_Hiorg_ExtensionUtil as E;
 
 class Synchronize {
@@ -47,12 +48,6 @@ class Synchronize {
       $hiorgUser
     );
 
-    // Synchronize qualifications with custom entities.
-    $result['qualifications'] = self::synchronizeQualifications(
-      $result['contact_id'],
-      $hiorgUser->qualifikationen
-    );
-
     // Synchronize groups with relationships of type "hiorg_groups".
     $result['relationships'] = self::processGroups(
       $result['contact_id'],
@@ -60,23 +55,25 @@ class Synchronize {
       $hiorgUser->gruppen_namen
     );
 
+    // Synchronize qualifications with custom entities.
+    $result['qualifications'] = self::synchronizeQualifications(
+      $result['contact_id'],
+      $hiorgUser->qualifikationen
+    );
+
     // Synchronize educations with custom entities.
-    $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync') ?? [];
-    $oAuthClientId = $configProfile->getOauthClientId();
-    $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
-    $ausbildungenResult = Hiorg::getAusbildungen()
-      ->setConfigProfileId($configProfile->id)
-      ->setChangedSince($educationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
-      ->setUserId($hiorgUser->id)
-      ->execute();
     $result['educations'] = self::synchronizeEducations(
       $result['contact_id'],
-      (array) $ausbildungenResult
+      $hiorgUser,
+      $configProfile
     );
-    $educationsLastSync[$oAuthClientId][$hiorgUser->id] = $educationsCurrentSync;
-    \Civi::settings()->set('hiorg.synchronizeEducations.lastSync', $educationsLastSync);
 
-    // TODO: Synchronize "ueberpruefungen": custom entity referencing the contact.
+    // Synchronize verifications with custom entities.
+    $result['verifications'] = self::synchronizeVerifications(
+      $result['contact_id'],
+      $hiorgUser,
+      $configProfile
+    );
 
     // Dispatch event for custom synchronization.
     $event = new SynchronizeContactsEvent($hiorgUser, $configProfile, $result['contact_id'], $result);
@@ -192,6 +189,79 @@ class Synchronize {
     return $result;
   }
 
+  public static function synchronizeVerifications(int $contactId, HiorgUserDTO $hiorgUser, ConfigProfile $configProfile): array {
+    $result = [];
+    $oAuthClientId = $configProfile->getOauthClientId();
+    $verificationsLastSync = \Civi::settings()->get('hiorg.synchronizeVerifications.lastSync') ?? [];
+    $verificationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
+    // TODO: Introduce dedicated Result classes.
+    /* @var HiorgVerificationDTO[] $verifications */
+    $verifications = Hiorg::getUeberpruefungen()
+      ->setConfigProfileId($configProfile->id)
+      ->setChangedSince($verificationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
+      ->setUserId($hiorgUser->id)
+      ->execute()
+      ->getArrayCopy();
+
+    if (!empty($verifications)) {
+      // Load ECK sub-types for the "Hiorg_Verification" entity type.
+      static $eckSubTypes;
+      if (!isset($eckSubTypes)) {
+        $eckSubTypes = OptionValue::get(FALSE)
+          ->addWhere('option_group_id:name', '=', 'eck_sub_types')
+          ->addWhere('grouping', '=', 'Hiorg_Verification')
+          ->execute()
+          ->indexBy('name')
+          ->getArrayCopy();
+      }
+
+      foreach ($verifications as $verification) {
+        // Add ECK sub-type if it does not yet exist.
+        if (!array_key_exists($type = $verification->bezeichnung, $eckSubTypes)) {
+          $eckSubTypes[$type] = OptionValue::create(FALSE)
+            ->addValue('option_group_id:name', 'eck_sub_types')
+            ->addValue('grouping', 'Hiorg_Verification')
+            ->addValue('name', $type)
+            ->addValue('label', $verification->bezeichnung)
+            ->execute()
+            ->getArrayCopy();
+        }
+        // Retrieve existing verification for the contact.
+        // TODO: Retrieve only once per contact, group by type (name).
+        $existing = EckEntity::get('Hiorg_Verification')
+          ->addWhere('subtype:name', '=', $type)
+          ->addWhere('Eck_Hiorg_Verification.Contact', '=', $contactId)
+          ->addWhere('Eck_Hiorg_Verification.Hiorg_id', '=', $verification->id)
+          ->execute();
+
+        // Save  (create or update) custom entity.
+        $record = [
+          'subtype:name' => $type,
+          'title' => $verification->bezeichnung,
+          'Eck_Hiorg_Verification.Contact' => $contactId,
+          'Eck_Hiorg_Verification.Hiorg_id' => $verification->id,
+          'Eck_Hiorg_Verification.Date_last_revision' => $verification->letzte_pruefung,
+          'Eck_Hiorg_Verification.Date_next_revision' => $verification->naechste_pruefung,
+          'Eck_Hiorg_Verification.Revision_result' => $verification->pruefergebnis_bestanden,
+          'Eck_Hiorg_Verification.Result_restriction' => $verification->pruefergebnis_einschraenkungen,
+        ];
+        if ($existing->count()) {
+          $record['id'] = $existing->first()['id'];
+        }
+        $result[] = EckEntity::save('Hiorg_Verification')
+          ->addRecord($record)
+          ->setMatch(['id'])
+          ->execute()
+          ->getArrayCopy();
+      }
+    }
+
+    $verificationsLastSync[$oAuthClientId][$hiorgUser->id] = $verificationsCurrentSync;
+    \Civi::settings()->set('hiorg.synchronizeVerifications.lastSync', $verificationsLastSync);
+
+    return $result;
+  }
+
   /**
    * @param int $contactId
    * @param \Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO $hiorgUser
@@ -260,7 +330,16 @@ class Synchronize {
     return $account ?? NULL;
   }
 
-  public static function synchronizeEducations(int $contactId, array $educations): array {
+  public static function synchronizeEducations(int $contactId, HiorgUserDTO $hiorgUser, ConfigProfile $configProfile): array {
+    $oAuthClientId = $configProfile->getOauthClientId();
+    $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync') ?? [];
+    $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
+    $educations = Hiorg::getAusbildungen()
+      ->setConfigProfileId($configProfile->id)
+      ->setChangedSince($educationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
+      ->setUserId($hiorgUser->id)
+      ->execute();
+
     // Load ECK sub-types for the "Hiorg_Education" entity type.
     static $eckSubTypes;
     if (!isset($eckSubTypes)) {
@@ -306,6 +385,9 @@ class Synchronize {
         ->getArrayCopy();
     }
 
+    $educationsLastSync[$oAuthClientId][$hiorgUser->id] = $educationsCurrentSync;
+    \Civi::settings()->set('hiorg.synchronizeEducations.lastSync', $educationsLastSync);
+
     return $result;
   }
 
@@ -318,7 +400,7 @@ class Synchronize {
       $fieldSpec = array_filter($fieldSpecs, function($fieldSpec) use ($fieldName) {
         return $fieldSpec->getName() === $fieldName;
       });
-      if ($fieldSpec = reset($fieldSpec) && $fieldSpec->type == 'Custom') {
+      if (($fieldSpec = reset($fieldSpec)) && $fieldSpec->type == 'Custom') {
         $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec->getCustomFieldId());
         if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
           $optionGroupId = CustomField::get(FALSE)
@@ -377,7 +459,7 @@ class Synchronize {
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
       'driving_license.license_date' => self::formatDate($user->fahrerlaubnis['fuehrerscheindatum']),
 
-      // TODO: $user->username as IdentityTracker record (new type "HiOrg-Server user name).
+      // TODO: $user->username as IdentityTracker record (new type "HiOrg-Server user name").
     ];
 
     // Dispatch event for custom mapping.

@@ -25,9 +25,10 @@ class AbstractDTO {
       $type = $property->getType()->getName();
       $value = static::getPropertyValue($key, $object);
       if (isset($value)) {
+        // TODO: settype() only works for primitives.
         settype($value, $type);
-        $this->$key = $value;
       }
+      $this->$key = $value;
     }
   }
 

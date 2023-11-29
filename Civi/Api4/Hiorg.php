@@ -19,6 +19,7 @@ use Civi\Api4\Generic\BasicGetFieldsAction;
 use Civi\Hiorg\Api4\Action\GetAusbildungenApiAction;
 use Civi\Hiorg\Api4\Action\GetHelferstundenApiAction;
 use Civi\Hiorg\Api4\Action\GetPersonalApiAction;
+use Civi\Hiorg\Api4\Action\GetUeberpruefungenApiAction;
 use Civi\Hiorg\Api4\Action\SynchronizeContactsAction;
 
 class Hiorg extends Generic\AbstractEntity {
@@ -50,6 +51,11 @@ class Hiorg extends Generic\AbstractEntity {
 
   public static function getHelferstunden($checkPermissions = TRUE): GetHelferstundenApiAction {
     return (new GetHelferstundenApiAction(__CLASS__, __FUNCTION__))
+      ->setCheckPermissions($checkPermissions);
+  }
+
+  public static function getUeberpruefungen($checkPermissions = TRUE): GetUeberpruefungenApiAction {
+    return (new GetUeberpruefungenApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 

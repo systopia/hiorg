@@ -162,7 +162,7 @@ class HiorgClient {
    */
   public function getUeberpruefungen(string $userId, \DateTime $changedSince = NULL, array $include = []) {
     return $this->get(
-      'personal/' . $userId . '/uberpruefungen',
+      'personal/' . $userId . '/ueberpruefungen',
       [
         'filter' => [
           'updated_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
