@@ -436,7 +436,7 @@ class Synchronize {
       'city' => $user->ort,
       // TODO: Validate country label or map, e. g. with similar_text().
       'country:label' => $user->land,
-      'birth_date' => self::formatDate($user->gebdat),
+      'birth_date' => self::formatDate($user->gebdat ?? ''),
 
       // CiviCRM custom fields.
       'hiorg_contact_data.birth_place' => $user->gebort,
@@ -449,15 +449,15 @@ class Synchronize {
 
       // Membership fields.
       'hiorg_membership_data.membership_number' => $user->mitgliednr,
-      'hiorg_membership_data.membership_start_date' => self::formatDate($user->mitglied_seit),
-      'hiorg_membership_data.membership_end_date' => self::formatDate($user->austritt_datum),
-      'hiorg_membership_data.membership_transfer_date' => self::formatDate($user->wechseljgddat),
+      'hiorg_membership_data.membership_start_date' => self::formatDate($user->mitglied_seit ?? ''),
+      'hiorg_membership_data.membership_end_date' => self::formatDate($user->austritt_datum ?? ''),
+      'hiorg_membership_data.membership_transfer_date' => self::formatDate($user->wechseljgddat ?? ''),
 
       // Driving license fields.
       'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
       'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
       'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
-      'driving_license.license_date' => self::formatDate($user->fahrerlaubnis['fuehrerscheindatum']),
+      'driving_license.license_date' => self::formatDate($user->fahrerlaubnis['fuehrerscheindatum'] ?? ''),
 
       // TODO: $user->username as IdentityTracker record (new type "HiOrg-Server user name").
     ];
