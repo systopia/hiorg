@@ -196,7 +196,7 @@ class Synchronize {
     $verificationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
     // TODO: Introduce dedicated Result classes.
     /* @var HiorgVerificationDTO[] $verifications */
-    $verifications = Hiorg::getUeberpruefungen()
+    $verifications = Hiorg::getUeberpruefungen(FALSE)
       ->setConfigProfileId($configProfile->id)
       ->setChangedSince($verificationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
       ->setUserId($hiorgUser->id)
@@ -334,7 +334,7 @@ class Synchronize {
     $oAuthClientId = $configProfile->getOauthClientId();
     $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync') ?? [];
     $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
-    $educations = Hiorg::getAusbildungen()
+    $educations = Hiorg::getAusbildungen(FALSE)
       ->setConfigProfileId($configProfile->id)
       ->setChangedSince($educationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
       ->setUserId($hiorgUser->id)

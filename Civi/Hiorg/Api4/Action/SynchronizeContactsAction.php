@@ -110,7 +110,7 @@ class SynchronizeContactsAction extends AbstractHiorgAction {
       $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
 
       // Retrieve HiOrg user data via HiOrg-Server API.
-      $personalResult = Hiorg::getPersonal()
+      $personalResult = Hiorg::getPersonal(FALSE)
         ->setConfigProfileId($hiorgConfigProfile->id)
         ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
         ->execute();
