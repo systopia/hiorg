@@ -15,6 +15,8 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use Civi\Api4\Generic\Result;
+
 /**
  * @method $this setSelf(bool $self)
  * @method $this setChangedSince(string $changedSince)
@@ -39,6 +41,20 @@ class GetPersonalApiAction extends AbstractHiorgApiAction {
       $this->self,
       $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL
     );
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  protected function formatResult(Result $result): void {
+    parent::formatResult($result);
+    $filteredResult = array_filter($result->getArrayCopy(), function($record) {
+      return !in_array(
+        $record->attributes->status,
+        $this->getConfigProfile()->getExcludeHiOrgUserStatus()
+      );
+    });
+    $result->exchangeArray($filteredResult);
   }
 
   /**

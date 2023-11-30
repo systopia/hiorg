@@ -26,6 +26,54 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   const NAME = 'hiorg';
 
   public static function getFields(): array {
+    return [
+      'xcm_profile' => (new FieldSpec('xcm_profile', 'ConfigProfile_' . self::NAME, 'String'))
+        ->setTitle(ts('Extended Contact manager (XCM) Profile'))
+        ->setLabel(ts('XCM Profile'))
+        ->setDescription(ts('XCM profile to use for processing contacts with this configuration profile.'))
+        ->setRequired(TRUE)
+        ->setInputType('Select')
+        ->setOptionsCallback([\CRM_Xcm_Configuration::class, 'getProfileList']),
+      'oauth_client_id' => (new FieldSpec('oauth_client_id', 'ConfigProfile_' . self::NAME, 'String'))
+        ->setTitle(ts('OAuth Client'))
+        ->setLabel(ts('OAuth Client'))
+        ->setDescription(ts('CiviCRM OAuth Client to use for authenticating with this configuration profile.'))
+        ->setRequired(TRUE)
+        ->setInputType('Select')
+        ->setOptionsCallback([__CLASS__, 'getOAuthClientOptions']),
+      'organisation_id' => (new FieldSpec('organisation_id', 'ConfigProfile_' . self::NAME, 'String'))
+        ->setTitle(ts('Organisation'))
+        ->setLabel(ts('Organisation'))
+        ->setDescription(ts('CiviCRM organisation contact to use as corresponding contact with this configuration profile.'))
+        ->setRequired(TRUE)
+        ->setFkEntity('Contact')
+        ->setInputAttrs(['filter' => ['contact_type' => 'Organization']])
+        ->setInputType('EntityRef'),
+      'api_base_uri' => (new FieldSpec('api_base_uri', 'ConfigProfile_' . self::NAME, 'String'))
+        ->setTitle(ts('API Base URI'))
+        ->setLabel(ts('API Base URI'))
+        ->setDescription(ts('HiOrg-Server API base URI for this configuration profile.'))
+        ->setRequired(TRUE)
+        ->setInputType('Text'),
+      'exclude_hiorg_user_status' => (new FieldSpec('exclude_hiorg_user_status', 'ConfigProfile_' . self::NAME, 'Array'))
+        ->setTitle(ts('Exclude HiOrg-Server User status'))
+        ->setLabel(ts('Exclude HiOrg-Server User status'))
+        ->setDescription(ts('HiOrg-Server user status to exclude when retrieving user data via the HiOrg-Server API.'))
+        ->setRequired(FALSE)
+        ->setInputType('Select')
+        ->setInputAttrs(['multiple' => TRUE])
+        ->setOperators(['IN', 'NOT IN'])
+        ->setOptionsCallback([__CLASS__, 'getHiorgUserStatusOptions']),
+    ];
+  }
+
+  public static function modifyFieldSpec(RequestSpec $spec): void {
+  }
+
+  public static function processValues(array &$profile): void {
+  }
+
+  public static function getOAuthClientOptions(): array {
     $oauth_clients = OAuthClient::get(FALSE)
       ->addSelect('id', 'guid', 'provider:label')
       // TODO: Filter for HiOrg-Server OAuth clients only - this can't be done
@@ -48,42 +96,17 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
         ]
       );
     });
-    return [
-      'xcm_profile' => (new FieldSpec('xcm_profile', 'ConfigProfile_' . self::NAME, 'String'))
-        ->setTitle(ts('Extended Contact manager (XCM) Profile'))
-        ->setLabel(ts('XCM Profile'))
-        ->setDescription(ts('XCM profile to use for processing contacts with this configuration profile.'))
-        ->setRequired(TRUE)
-        ->setInputType('Select')
-        ->setOptions(\CRM_Xcm_Configuration::getProfileList()),
-      'oauth_client_id' => (new FieldSpec('oauth_client_id', 'ConfigProfile_' . self::NAME, 'String'))
-        ->setTitle(ts('OAuth Client'))
-        ->setLabel(ts('OAuth Client'))
-        ->setDescription(ts('CiviCRM OAuth Client to use for authenticating with this configuration profile.'))
-        ->setRequired(TRUE)
-        ->setInputType('Select')
-        ->setOptions($oauth_clients),
-      'organisation_id' => (new FieldSpec('organisation_id', 'ConfigProfile_' . self::NAME, 'String'))
-        ->setTitle(ts('Organisation'))
-        ->setLabel(ts('Organisation'))
-        ->setDescription(ts('CiviCRM organisation contact to use as corresponding contact with this configuration profile.'))
-        ->setRequired(TRUE)
-        ->setFkEntity('Contact')
-        ->setInputAttrs(['filter' => ['contact_type' => 'Organization']])
-        ->setInputType('EntityRef'),
-      'api_base_uri' => (new FieldSpec('api_base_uri', 'ConfigProfile_' . self::NAME, 'String'))
-        ->setTitle(ts('API Base URI'))
-        ->setLabel(ts('API Base URI'))
-        ->setDescription(ts('HiOrg-Server API base URI for this configuration profile.'))
-        ->setRequired(TRUE)
-        ->setInputType('Text'),
+    return $oauth_clients;
+  }
+
+  public static function getHiorgUserStatusOptions(): array {
+    $hiorgUserStatus = [
+      'aktiv',
+      'eingeschraenkt',
+      'extern',
+      'gesperrt',
     ];
-  }
-
-  public static function modifyFieldSpec(RequestSpec $spec): void {
-  }
-
-  public static function processValues(array &$profile): void {
+    return array_combine($hiorgUserStatus, $hiorgUserStatus);
   }
 
   /**
@@ -120,6 +143,15 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
   public function getApiBaseUri(): string {
     $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
     return (string) $data['api_base_uri'];
+  }
+
+  /**
+   * @return string
+   * @throws \CRM_Core_Exception
+   */
+  public function getExcludeHiOrgUserStatus(): array {
+    $data = self::unSerializeField($this->data, self::SERIALIZE_JSON);
+    return (array) $data['exclude_hiorg_user_status'];
   }
 
   /**
