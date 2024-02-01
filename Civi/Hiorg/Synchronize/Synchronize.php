@@ -114,16 +114,25 @@ class Synchronize {
     $record = [
       'activity_type_id:name' => 'hiorg_volunteer_hours',
       'subject' => E::ts('HiOrg-Server Volunteer Hours'),
-      'activity_date_time' => \DateTime::createFromFormat('Y-m-d\TH:i:sP', $hiorgVolunteerHours->von)
-        ->format('Y-m-d H:i:s'),
+      'activity_date_time' => self::formatDate(
+        $hiorgVolunteerHours->von,
+        'Y-m-d\TH:i:sP',
+        'Y-m-d H:i:s'
+      ),
       'duration' => $hiorgVolunteerHours->stunden * 60,
       'status_id:name' => 'Completed',
       'source_contact_id' => \CRM_Core_Session::getLoggedInContactID(),
       'hiorg_volunteer_hours.hiorg_id' => $hiorgVolunteerHours->id,
-      'hiorg_volunteer_hours.start_date' => \DateTime::createFromFormat('Y-m-d\TH:i:sP', $hiorgVolunteerHours->von)
-        ->format('Y-m-d H:i:s'),
-      'hiorg_volunteer_hours.end_date' => \DateTime::createFromFormat('Y-m-d\TH:i:sP', $hiorgVolunteerHours->bis)
-        ->format('Y-m-d H:i:s'),
+      'hiorg_volunteer_hours.start_date' => self::formatDate(
+        $hiorgVolunteerHours->von,
+        'Y-m-d\TH:i:sP',
+        'Y-m-d H:i:s'
+      ),
+      'hiorg_volunteer_hours.end_date' => self::formatDate(
+        $hiorgVolunteerHours->bis,
+        'Y-m-d\TH:i:sP',
+        'Y-m-d H:i:s'
+      ),
       'hiorg_volunteer_hours.hours' => $hiorgVolunteerHours->stunden,
       'hiorg_volunteer_hours.call_out_km' => $hiorgVolunteerHours->anfahrt_km,
       'hiorg_volunteer_hours.occasion' => $hiorgVolunteerHours->anlass_id,
@@ -162,6 +171,17 @@ class Synchronize {
     return $result;
   }
 
+  /**
+   * Synchronizes HiOrg-Server users' group memberships with CiviCRM
+   * relationships.
+   *
+   * @param $contactId
+   * @param $organisationId
+   * @param $groups
+   *
+   * @return array
+   * @throws \CRM_Core_Exception
+   */
   public static function processGroups($contactId, $organisationId, $groups): array {
     $existingGroups = OptionValue::get(FALSE)
       ->addSelect('value', 'name')
@@ -342,12 +362,14 @@ class Synchronize {
   }
 
   /**
+   * Synchronizes HiOrg-Server users' bank account information with CiviBanking
+   * account entities, if CiviBanking is installed.
+   *
    * @param int $contactId
    * @param \Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO $hiorgUser
    *
    * @return array|NULL
    * @throws \CRM_Core_Exception
-   * @throws \Civi\API\Exception\UnauthorizedException
    */
   public static function synchronizeBankAccount(int $contactId, HiorgUserDTO $hiorgUser): ?array {
     if (
@@ -470,6 +492,16 @@ class Synchronize {
     return $result;
   }
 
+  /**
+   * Creates missing option values for custom fields mapped to HiOrg-Server
+   * users' (or other entities/records) attributes.
+   *
+   * @param array $fields
+   * @param string $entity
+   *
+   * @return void
+   * @throws \CRM_Core_Exception
+   */
   public static function synchronizeOptionValues(array $fields, string $entity = 'Contact') {
     /** @var \Civi\Api4\Service\Spec\SpecGatherer $gatherer */
     $gatherer = \Civi::container()->get('spec_gatherer');
@@ -565,7 +597,7 @@ class Synchronize {
 
   public static function formatDate(string $date, string $inputFormat = 'Y-m-d', string $outputFormat = 'Y-m-d'): ?string {
     return $date && ($dateParsed = \DateTime::createFromFormat($inputFormat, $date))
-      ? $dateParsed->format(($outputFormat))
+      ? $dateParsed->format($outputFormat)
       : NULL;
   }
 
