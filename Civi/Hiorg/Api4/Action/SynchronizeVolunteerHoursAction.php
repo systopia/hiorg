@@ -22,12 +22,12 @@ use Civi\Hiorg\Queue\Task\SynchronizeContactsTask;
 use Civi\Hiorg\Queue\Task\SynchronizeVolunteerHoursTask;
 use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
-use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
+use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 
-class SynchronizeContactsAction extends AbstractSynchronizeAction {
+class SynchronizeVolunteerHoursAction extends AbstractSynchronizeAction {
 
   protected function getQueueName(): string {
-    return 'hiorg-synchronize-contacts-'
+    return 'hiorg-synchronize-volunteer-hours-'
       . (
         $this->getConfigProfileId()
         ?? implode('-', array_keys($this->getConfigProfiles()))
@@ -35,39 +35,40 @@ class SynchronizeContactsAction extends AbstractSynchronizeAction {
   }
 
   protected static function getQueueTitle(): string {
-    return E::ts('HiOrg-Server: Synchronize Contacts');
+    return E::ts('HiOrg-Server: Synchronize Volunteer Hours');
   }
 
   protected function fillQueue(\CRM_Queue_Queue $queue): void {
     foreach ($this->getConfigProfiles() as $configProfile) {
       $hiorgConfigProfile = HiorgConfigProfile::getById($configProfile['id']);
       $oAuthClientId = $hiorgConfigProfile->getOauthClientId();
-      $lastSync = \Civi::settings()->get('hiorg.synchronizeContacts.lastSync') ?? [];
+      $lastSync = \Civi::settings()->get('hiorg.synchronizeVolunteerHours.lastSync') ?? [];
+      if (isset($lastSync[$oAuthClientId])) {
+        $lastSyncDate = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $lastSync[$oAuthClientId])
+          ->format('Y-m-d');
+      }
       $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
 
-      // Retrieve HiOrg user data via HiOrg-Server API.
-      $personalResult = Hiorg::getPersonal(FALSE)
+      // Retrieve HiOrg volunteer hours data via HiOrg-Server API.
+      $helferstundenResult = Hiorg::getHelferstunden(FALSE)
         ->setConfigProfileId($hiorgConfigProfile->id)
-        ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
+        ->setFrom($lastSyncDate ?? NULL)
+        ->setOwn(FALSE)
         ->execute();
       // TODO: Log/Report errors.
 
       // Add queue items for each record.
-      foreach ($personalResult as $record) {
-        $hiorgUser = HiorgUserDTO::create($record);
-        $queue->createItem(new SynchronizeContactsTask(
-          $hiorgConfigProfile,
-          $hiorgUser
-        ));
+      foreach ($helferstundenResult as $record) {
+        $hiorgVolunteerHours = HiorgVolunteerHoursDTO::create($record);
         $queue->createItem(new SynchronizeVolunteerHoursTask(
           $hiorgConfigProfile,
-          $hiorgUser
+          $hiorgVolunteerHours
         ));
       }
 
       // Store synchronization time.
       $lastSync[$oAuthClientId] = $currentSync;
-      \Civi::settings()->set('hiorg.synchronizeContacts.lastSync', $lastSync);
+      \Civi::settings()->set('hiorg.synchronizeVolunteerHours.lastSync', $lastSync);
     }
   }
 

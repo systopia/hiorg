@@ -71,7 +71,7 @@ class HiorgClient {
 
   protected function formatRequestOptions($options = []): array {
     return [
-      RequestOptions::JSON => $options,
+      RequestOptions::QUERY => $options,
     ];
   }
 
@@ -201,13 +201,15 @@ class HiorgClient {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getHelferstunden($id = NULL, bool $own = TRUE, \DateTime $from = NULL, \DateTime $to = NULL, array $include = []) {
-    $from ??= new \DateTime('-6 months');
+    // The API is documented to default to "-6 months" for the "from" date, so
+    // this is not necessary to declare here.
+    // $from ??= new \DateTime('-6 months');
     if (!$id) {
       $body = [
         'filter' => [
-          'eigene' => $own,
-          'von' => $from->format('Y-m-d'),
-          'bis' => $to->format('Y-m-d'),
+          'eigene' => $own ? 'true' : 'false',
+          'von' => isset($from) ? $from->format('Y-m-d') : NULL,
+          'bis' => isset($to) ? $to->format('Y-m-d') : NULL,
         ],
         'include' => implode(',', $include),
       ];

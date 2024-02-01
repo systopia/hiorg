@@ -21,6 +21,7 @@ use Civi\Hiorg\Api4\Action\GetHelferstundenApiAction;
 use Civi\Hiorg\Api4\Action\GetPersonalApiAction;
 use Civi\Hiorg\Api4\Action\GetUeberpruefungenApiAction;
 use Civi\Hiorg\Api4\Action\SynchronizeContactsAction;
+use Civi\Hiorg\Api4\Action\SynchronizeVolunteerHoursAction;
 
 class Hiorg extends Generic\AbstractEntity {
 
@@ -61,6 +62,11 @@ class Hiorg extends Generic\AbstractEntity {
 
   public static function synchronizeContacts($checkPermissions = TRUE): SynchronizeContactsAction {
     return (new SynchronizeContactsAction(__CLASS__, __FUNCTION__))
+      ->setCheckPermissions($checkPermissions);
+  }
+
+  public static function synchronizeVolunteerHours($checkPermissions = TRUE): SynchronizeVolunteerHoursAction {
+    return (new SynchronizeVolunteerHoursAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 

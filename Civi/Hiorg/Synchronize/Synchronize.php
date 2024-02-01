@@ -15,6 +15,8 @@
 
 namespace Civi\Hiorg\Synchronize;
 
+use Civi\Api4\Activity;
+use Civi\Api4\ActivityContact;
 use Civi\Api4\CustomField;
 use Civi\Api4\EckEntity;
 use Civi\Api4\Hiorg;
@@ -24,9 +26,10 @@ use Civi\Core\Event\GenericHookEvent;
 use Civi\Funding\Permission\ContactRelation\Types\Contact;
 use Civi\Hiorg\Event\SynchronizeContactsEvent;
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
+use Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO;
+use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Event\MapContactParametersEvent;
-use Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO;
 use CRM_Hiorg_ExtensionUtil as E;
 
 class Synchronize {
@@ -79,6 +82,82 @@ class Synchronize {
     $event = new SynchronizeContactsEvent($hiorgUser, $configProfile, $result['contact_id'], $result);
     \Civi::dispatcher()->dispatch(SynchronizeContactsEvent::NAME, $event);
     $result = $event->getResults();
+
+    return $result;
+  }
+
+  public static function synchronizeVolunteerHours(ConfigProfile $configProfile, HiorgVolunteerHoursDTO $hiorgVolunteerHours): array {
+    $result = [];
+
+    if (!isset($hiorgVolunteerHours->user_id)) {
+      throw new \Exception(
+        E::ts('HiOrg-Server user ID missing in volunteer hours record.')
+      );
+    }
+    $result['contact_id'] = ContactIdentity::identifyContact($configProfile->id, $hiorgVolunteerHours->user_id);
+    if (NULL === $result['contact_id']) {
+      throw new \Exception(
+        E::ts(
+          'Could not identify contact for HiOrg-Server user ID %1',
+          [1 => $hiorgVolunteerHours->user_id]
+        )
+      );
+    }
+
+    // Retrieve existing activity.
+    $existing = Activity::get(FALSE)
+      ->addWhere('activity_type_id:name', '=', 'hiorg_volunteer_hours')
+      ->addWhere('hiorg_volunteer_hours.hiorg_id', '=', $hiorgVolunteerHours->id)
+      ->execute();
+
+    // Save  (create or update) activity.
+    $record = [
+      'activity_type_id:name' => 'hiorg_volunteer_hours',
+      'subject' => E::ts('HiOrg-Server Volunteer Hours'),
+      'activity_date_time' => \DateTime::createFromFormat('Y-m-d\TH:i:sP', $hiorgVolunteerHours->von)
+        ->format('Y-m-d H:i:s'),
+      'duration' => $hiorgVolunteerHours->stunden * 60,
+      'status_id:name' => 'Completed',
+      'source_contact_id' => \CRM_Core_Session::getLoggedInContactID(),
+      'hiorg_volunteer_hours.hiorg_id' => $hiorgVolunteerHours->id,
+      'hiorg_volunteer_hours.start_date' => \DateTime::createFromFormat('Y-m-d\TH:i:sP', $hiorgVolunteerHours->von)
+        ->format('Y-m-d H:i:s'),
+      'hiorg_volunteer_hours.end_date' => \DateTime::createFromFormat('Y-m-d\TH:i:sP', $hiorgVolunteerHours->bis)
+        ->format('Y-m-d H:i:s'),
+      'hiorg_volunteer_hours.hours' => $hiorgVolunteerHours->stunden,
+      'hiorg_volunteer_hours.call_out_km' => $hiorgVolunteerHours->anfahrt_km,
+      'hiorg_volunteer_hours.occasion' => $hiorgVolunteerHours->anlass_id,
+      'hiorg_volunteer_hours.organization' => $configProfile->getOrganisationId(),
+    ];
+    if ($existing->count()) {
+      $record['id'] = $existing->first()['id'];
+    }
+    $result['activity'] = Activity::save(FALSE)
+      ->addRecord($record)
+      ->setMatch(['id'])
+      ->execute()
+      ->single();
+
+    // Save ActivityContact with the HiOrg-Server user contact as "target".
+    $existingActivityContact = ActivityContact::get(FALSE)
+      ->addSelect('id')
+      ->addWhere('activity_id', '=', $result['activity']['id'])
+      ->addWhere('contact_id', '=', $result['contact_id'])
+      ->addWhere('record_type_id:name', '=', 'Activity Targets')
+      ->execute();
+    $record = [
+      'activity_id' => $result['activity']['id'],
+      'contact_id' => $result['contact_id'],
+      'record_type_id:name' => 'Activity Targets',
+    ];
+    if ($existingActivityContact->count()) {
+      $record['id'] = $existingActivityContact->first()['id'];
+    }
+    $result['activity_contact'] = ActivityContact::save(FALSE)
+      ->addRecord($record)
+      ->setMatch(['id'])
+      ->execute()
+      ->single();
 
     return $result;
   }

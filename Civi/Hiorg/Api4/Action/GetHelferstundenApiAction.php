@@ -15,6 +15,12 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+/**
+ * @method $this setId(int $id)
+ * @method $this setOwn(bool $own)
+ * @method $this setFrom(string $from)
+ * @method $this setTo(string $to)
+ */
 class GetHelferstundenApiAction extends AbstractHiorgApiAction {
 
   /**
@@ -44,8 +50,8 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
     $this->_response = $this->_hiorgClient->getHelferstunden(
       $this->id,
       $this->own,
-      \DateTime::createFromFormat('Y-m-d', $this->from),
-      \DateTime::createFromFormat('Y-m-d', $this->to)
+      isset($this->from) ? \DateTime::createFromFormat('Y-m-d', $this->from) : NULL,
+      isset($this->to) ? \DateTime::createFromFormat('Y-m-d', $this->to) : NULL
     );
   }
   /**
