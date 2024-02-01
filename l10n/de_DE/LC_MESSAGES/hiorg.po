@@ -16,9 +16,9 @@ msgstr ""
 msgid "HiOrg-Server: Synchronize Contacts"
 msgstr "HiOrg-Server: Kontakte synchronisieren"
 
-#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
-msgid "[%1] %2 (Provider: %3)"
-msgstr "[%1] %2 (Anbieter: %3)"
+#: Civi/Hiorg/Api4/Action/SynchronizeVolunteerHoursAction.php
+msgid "HiOrg-Server: Synchronize Volunteer Hours"
+msgstr "HiOrg-Server: Helferstunden synchronisieren"
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Extended Contact manager (XCM) Profile"
@@ -67,6 +67,22 @@ msgid "HiOrg-Server API base URI for this configuration profile."
 msgstr "Basis-URI der HiOrg-Server-API für dieses Konfigurationsprofil"
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+msgid "Exclude HiOrg-Server User status"
+msgstr "HiOrg-Server-Benutzerstatus ausschließen"
+
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+msgid ""
+"HiOrg-Server user status to exclude when retrieving user data via the HiOrg-"
+"Server API."
+msgstr ""
+"Status von HiOrg-Server-Benutzern, die beim Abrufen von Benutzerdaten über "
+"die HiOrg-Server-Schnittstelle ausgeschlossen werden sollen."
+
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+msgid "[%1] %2 (Provider: %3)"
+msgstr "[%1] %2 (Anbieter: %3)"
+
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Error loading configuration profile with ID %1"
 msgstr "Fehler beim Laden des Konfigurationsprofils mit der ID %1"
 
@@ -87,7 +103,40 @@ msgstr ""
 #: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
 msgid "Failed synchronizing HiOrg-Server user with ID %1. Error: %2"
 msgstr ""
-"Synchronisierung des HiOrg-Benutzers mit ID %1 fehlgeschlagen. Fehler: %2"
+"Synchronisierung des HiOrg-Server-Benutzers mit ID %1 fehlgeschlagen. "
+"Fehler: %2"
+
+#: Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
+msgid "Synchronizing HiOrg-Server volunteer hours (ID: %1)"
+msgstr "Synchronisiere HiOrg-Server-Helferstunden (ID: %1)"
+
+#: Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
+msgid ""
+"Synchronized HiOrg-Server volunteer hours (ID: %1) with CiviCRM activity "
+"(ID: %2)."
+msgstr ""
+"HiOrg-Server-Helferstunden (ID: %1) wurde mit Aktivität (ID: %2) "
+"synchronisiert."
+
+#: Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
+msgid "Failed synchronizing HiOrg-Server volunteer hours with ID %1. Error: %2"
+msgstr ""
+"Synchronisierung der HiOrg-Server-Helferstunden mit ID %1 fehlgeschlagen. "
+"Fehler: %2"
+
+#: Civi/Hiorg/Synchronize/Synchronize.php
+msgid "HiOrg-Server user ID missing in volunteer hours record."
+msgstr "HiOrg-Server-Benutzer-ID fehlt im Helferstunden-Datensatz."
+
+#: Civi/Hiorg/Synchronize/Synchronize.php
+msgid "Could not identify contact for HiOrg-Server user ID %1"
+msgstr ""
+"Kontakt für HiOrg-Server-Benutzer mit ID %1 konnte nicht identifiziert werden"
+
+#: Civi/Hiorg/Synchronize/Synchronize.php
+#: managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
+msgid "HiOrg-Server Volunteer Hours"
+msgstr "HiOrg-Server-Helferstunden"
 
 #: Civi/Hiorg/Synchronize/Synchronize.php
 msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
@@ -212,6 +261,7 @@ msgid "Classes"
 msgstr "Klassen"
 
 #: managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Restriction"
 msgstr "Beschränkungen"
 
@@ -260,6 +310,38 @@ msgstr "Austrittsdatum"
 msgid "Transferred from Youth Organization"
 msgstr "Übergang von Jugendorganisation"
 
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Volunteer Hours"
+msgstr "Helferstunden"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "HiOrg-Server ID"
+msgstr "HiOrg-Server-ID"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Start Date"
+msgstr "Beginn"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "End Date"
+msgstr "Ende"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Number of Hours"
+msgstr "Anzahl Stunden"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Call-Out Distance (km)"
+msgstr "Anfahrt (km)"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Occasion"
+msgstr "Anlass"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Organization"
+msgstr "Organisationskontakt"
+
 #: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
 msgid "HiOrg-Server: Education"
 msgstr "HiOrg-Server: Ausbildung"
@@ -270,10 +352,12 @@ msgstr "Allgemein"
 
 #: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
 #: managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Contact"
 msgstr "Kontakt"
 
 #: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "HiOrg-Server Record ID"
 msgstr "HiOrg-Server-Datensatz-ID"
 
@@ -287,10 +371,12 @@ msgid "Expiration Date"
 msgstr "Ablaufdatum"
 
 #: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Last Revision Date"
 msgstr "Letzte Überprüfung"
 
 #: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Next Revision Date"
 msgstr "Nächste Überprüfung"
 
@@ -302,6 +388,14 @@ msgstr "Dokument"
 msgid "HiOrg-Server: Qualification"
 msgstr "HiOrg-Server: Qualifikation"
 
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+msgid "HiOrg-Server: Verification"
+msgstr "HiOrg-Server: Überprüfung"
+
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+msgid "Revision Result"
+msgstr "Überprüfungsergebnis"
+
 #: managed/Navigation__config_profiles.mgd.php
 msgid "Automation"
 msgstr "Automatisierung"
@@ -309,6 +403,10 @@ msgstr "Automatisierung"
 #: managed/Navigation__config_profiles.mgd.php
 msgid "HiOrg-Server API Profiles"
 msgstr "HiOrg-Server - API-Profile"
+
+#: managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
+msgid "Volunteer Hours retrieved by the HiOrg-Server API extension."
+msgstr "Mit der HiOrg-Server-API-Erweiterung abgerufene Helferstunden"
 
 #: managed/OptionValue__config_profile_type__hiorg.mgd.php
 msgid "HiOrg-Server API"
