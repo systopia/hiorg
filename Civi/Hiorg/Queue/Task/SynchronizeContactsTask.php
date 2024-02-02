@@ -44,6 +44,7 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
           2 => $hiorgUserResult['contact_id'],
         ]
       );
+      $context->log->info($message);
     }
     catch (\Exception $exception) {
       $result = \CRM_Queue_Task::TASK_FAIL;
@@ -54,9 +55,8 @@ class SynchronizeContactsTask extends \CRM_Queue_Task {
           2 => $exception->getMessage(),
         ]
       );
+      $context->log->err($message);
     }
-
-    $context->log->info($message);
     return $result;
   }
 

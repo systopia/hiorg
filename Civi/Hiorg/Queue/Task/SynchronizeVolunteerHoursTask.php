@@ -45,6 +45,7 @@ class SynchronizeVolunteerHoursTask extends \CRM_Queue_Task {
           2 => $volunteerHoursResult['activity']['id'],
         ]
       );
+      $context->log->info($message);
     }
     catch (\Exception $exception) {
       $result = \CRM_Queue_Task::TASK_FAIL;
@@ -55,9 +56,8 @@ class SynchronizeVolunteerHoursTask extends \CRM_Queue_Task {
           2 => $exception->getMessage(),
         ]
       );
+      $context->log->err($message);
     }
-
-    $context->log->info($message);
     return $result;
   }
 
