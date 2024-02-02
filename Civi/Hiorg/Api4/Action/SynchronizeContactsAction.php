@@ -59,10 +59,6 @@ class SynchronizeContactsAction extends AbstractSynchronizeAction {
           $hiorgConfigProfile,
           $hiorgUser
         ));
-        $queue->createItem(new SynchronizeVolunteerHoursTask(
-          $hiorgConfigProfile,
-          $hiorgUser
-        ));
       }
 
       // Store synchronization time.
