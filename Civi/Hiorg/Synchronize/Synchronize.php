@@ -565,9 +565,9 @@ class Synchronize {
       'hiorg_membership_data.membership_transfer_date' => self::formatDate($user->wechseljgddat ?? ''),
 
       // Driving license fields.
-      'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?: [],
-      'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'],
-      'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'],
+      'driving_license.classes' => $user->fahrerlaubnis['klassen'] ?? [],
+      'driving_license.restriction' => $user->fahrerlaubnis['beschraenkung'] ?? '',
+      'driving_license.license_number' => $user->fahrerlaubnis['fuehrerscheinnummer'] ?? '',
       'driving_license.license_date' => self::formatDate($user->fahrerlaubnis['fuehrerscheindatum'] ?? ''),
 
       // TODO: $user->username as IdentityTracker record (new type "HiOrg-Server user name").
