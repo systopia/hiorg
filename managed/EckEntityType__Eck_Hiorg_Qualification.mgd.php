@@ -78,6 +78,7 @@ return [
         'filter' => 'contact_type=Individual',
         'in_selector' => FALSE,
         'fk_entity' => 'Contact',
+        'fk_entity_on_delete' => 'cascade',
       ],
       'match' => [
         'custom_group_id',
