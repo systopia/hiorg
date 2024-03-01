@@ -107,6 +107,7 @@ class Synchronize {
     // Retrieve existing activity.
     $existing = Activity::get(FALSE)
       ->addWhere('activity_type_id:name', '=', 'hiorg_volunteer_hours')
+      ->addWhere('hiorg_volunteer_hours.organization', '=', $configProfile->getOrganisationId())
       ->addWhere('hiorg_volunteer_hours.hiorg_id', '=', $hiorgVolunteerHours->id)
       ->execute();
 
