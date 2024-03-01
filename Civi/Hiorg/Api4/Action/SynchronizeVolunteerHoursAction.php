@@ -43,17 +43,13 @@ class SynchronizeVolunteerHoursAction extends AbstractSynchronizeAction {
       $hiorgConfigProfile = HiorgConfigProfile::getById($configProfile['id']);
       $oAuthClientId = $hiorgConfigProfile->getOauthClientId();
       $lastSync = \Civi::settings()->get('hiorg.synchronizeVolunteerHours.lastSync') ?? [];
-      if (isset($lastSync[$oAuthClientId])) {
-        $lastSyncDate = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $lastSync[$oAuthClientId])
-          ->format('Y-m-d');
-      }
       $currentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
 
       // Retrieve HiOrg volunteer hours data via HiOrg-Server API.
       $helferstundenResult = Hiorg::getHelferstunden(FALSE)
         ->setConfigProfileId($hiorgConfigProfile->id)
-        ->setFrom($lastSyncDate ?? NULL)
         ->setOwn(FALSE)
+        ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
         ->execute();
       // TODO: Log/Report errors.
 

@@ -20,6 +20,7 @@ namespace Civi\Hiorg\Api4\Action;
  * @method $this setOwn(bool $own)
  * @method $this setFrom(string $from)
  * @method $this setTo(string $to)
+ * @method $this setChangedSince(string $changedSince)
  */
 class GetHelferstundenApiAction extends AbstractHiorgApiAction {
 
@@ -44,6 +45,11 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
   protected ?string $to = NULL;
 
   /**
+   * @var string|null
+   */
+  protected ?string $changedSince = NULL;
+
+  /**
    * @inheritDoc
    */
   public function doRun(): void {
@@ -51,7 +57,8 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
       $this->id,
       $this->own,
       isset($this->from) ? \DateTime::createFromFormat('Y-m-d', $this->from) : NULL,
-      isset($this->to) ? \DateTime::createFromFormat('Y-m-d', $this->to) : NULL
+      isset($this->to) ? \DateTime::createFromFormat('Y-m-d', $this->to) : NULL,
+      $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL
     );
   }
   /**

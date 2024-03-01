@@ -190,6 +190,8 @@ class HiorgClient {
    * @param \DateTime|NULL $to
    *   The latest date to retrieve records for. Only applies when $id is not
    *   given.
+   * @param \DateTime|NULL $changedSince
+   *    The date retrieved records have to have been changed since.
    * @param array $include
    *   A list of linked objects to include in the response, e.g.
    *   - "anlass"
@@ -200,7 +202,7 @@ class HiorgClient {
    * @return \Psr\Http\Message\ResponseInterface
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getHelferstunden($id = NULL, bool $own = TRUE, \DateTime $from = NULL, \DateTime $to = NULL, array $include = []) {
+  public function getHelferstunden($id = NULL, bool $own = TRUE, \DateTime $from = NULL, \DateTime $to = NULL, \DateTime $changedSince = NULL, array $include = []) {
     // The API is documented to default to "-6 months" for the "from" date, so
     // this is not necessary to declare here.
     // $from ??= new \DateTime('-6 months');
