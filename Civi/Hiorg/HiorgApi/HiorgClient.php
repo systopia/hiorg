@@ -212,6 +212,7 @@ class HiorgClient {
           'eigene' => $own ? 'true' : 'false',
           'von' => isset($from) ? $from->format('Y-m-d') : NULL,
           'bis' => isset($to) ? $to->format('Y-m-d') : NULL,
+          'changed_since' => isset($changedSince) ? $changedSince->format('Y-m-d\TH:i:sP') : NULL,
         ],
         'include' => implode(',', $include),
       ];
