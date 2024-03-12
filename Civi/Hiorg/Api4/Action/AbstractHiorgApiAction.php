@@ -67,7 +67,30 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
     }
     elseif (isset($this->_response->data)) {
       // Wrap single result in array for CiviCRM API to count correctly.
-      $result->exchangeArray(is_object($this->_response->data) ? [$this->_response->data] : $this->_response->data);
+      $data = is_object($this->_response->data) ? [$this->_response->data] : $this->_response->data;
+    }
+
+    // Add data from included records to relationships.
+    if (!empty($this->_response->included)) {
+      foreach ($data as &$record) {
+        foreach ($record->relationships as &$relationship) {
+          self::addRelationshipIncludeData($relationship, $this->_response->included);
+        }
+      }
+    }
+
+    $result->exchangeArray($data);
+  }
+
+  protected static function addRelationshipIncludeData(\stdClass $relationship, array $included) {
+    foreach ($included as $include) {
+      if (
+        $include->type == $relationship->data->type
+        && $include->id == $relationship->data->id
+      ) {
+        $relationship->data->attributes = $include->attributes;
+        break;
+      }
     }
   }
 

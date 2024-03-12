@@ -33,6 +33,10 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
 
   public ?string $anlass_id;
 
+  public ?string $anlass_typ;
+
+  public ?string $anlass_beschreibung;
+
   public ?string $typ_id;
 
   public ?string $user_id;
@@ -45,6 +49,12 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
     switch ($key) {
       case 'anlass_id':
         $value = $object->relationships->anlass->data->id;
+        break;
+      case 'anlass_typ':
+        $value = $object->relationships->anlass->data->attributes->typ;
+        break;
+      case 'anlass_beschreibung':
+        $value = $object->relationships->anlass->data->attributes->beschreibung;
         break;
       case 'typ_id':
         $value = $object->relationships->typ->data->id;

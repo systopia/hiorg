@@ -17,6 +17,30 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 return [
   [
+    'name' => 'OptionGroup__hiorg_volunteer_hours_occasion',
+    'entity' => 'OptionGroup',
+    'cleanup' => 'never',
+    'update' => 'unmodified',
+    'params' => [
+      'version' => 4,
+      'values' => [
+        'name' => 'hiorg_volunteer_hours_occasion',
+        'title' => E::ts('HiOrg-Server: Volunteer Hours - Occasions'),
+        'description' => E::ts('Available occasions for volunteer hours of all connected HiOrg-Server organisations.'),
+        'is_reserved' => TRUE,
+        'is_active' => TRUE,
+        'option_value_fields' => [
+          'name',
+          'label',
+          'grouping',
+        ],
+      ],
+      'match' => [
+        'name',
+      ],
+    ],
+  ],
+  [
     'name' => 'CustomGroup__hiorg_volunteer_hours',
     'entity' => 'CustomGroup',
     'cleanup' => 'never',
@@ -172,10 +196,14 @@ return [
         'custom_group_id.name' => 'hiorg_volunteer_hours',
         'name' => 'occasion',
         'label' => E::ts('Occasion'),
-        'html_type' => 'Text',
-        'is_searchable' => TRUE,
-        'text_length' => 255,
         'column_name' => 'occasion_id',
+        'html_type' => 'Select',
+        'data_type' => 'String',
+        'is_searchable' => TRUE,
+        'is_search_range' => FALSE,
+        'is_view' => FALSE,
+        'in_selector' => TRUE,
+        'option_group_id.name' => 'hiorg_volunteer_hours_occasion',
       ],
       'match' => [
         'custom_group_id',

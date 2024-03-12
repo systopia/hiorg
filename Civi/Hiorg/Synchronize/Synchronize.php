@@ -136,9 +136,20 @@ class Synchronize {
       ),
       'hiorg_volunteer_hours.hours' => $hiorgVolunteerHours->stunden,
       'hiorg_volunteer_hours.call_out_km' => $hiorgVolunteerHours->anfahrt_km,
-      'hiorg_volunteer_hours.occasion' => $hiorgVolunteerHours->anlass_id,
+      'hiorg_volunteer_hours.occasion:label' => $hiorgVolunteerHours->anlass_beschreibung,
       'hiorg_volunteer_hours.organization' => $configProfile->getOrganisationId(),
     ];
+
+    // Synchronize occasion option value.
+    OptionValue::save(FALSE)
+      ->addRecord([
+        'option_group_id:name' => 'hiorg_volunteer_hours_occasion',
+        'label' => $hiorgVolunteerHours->anlass_beschreibung,
+        'grouping' => $hiorgVolunteerHours->anlass_typ,
+      ])
+      ->setMatch(['option_group_id', 'label', 'grouping'])
+      ->execute();
+
     if ($existing->count()) {
       $record['id'] = $existing->first()['id'];
     }
@@ -511,6 +522,7 @@ class Synchronize {
       $fieldSpec = $fieldSpecs[$fieldName];
       if ($fieldSpec['type'] == 'Custom') {
         $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
+        $value = (array) $value;
         if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
           $optionGroupId = CustomField::get(FALSE)
             ->addWhere('id', '=', $fieldSpec['custom_field_id'])
@@ -518,13 +530,15 @@ class Synchronize {
             ->addSelect('option_group_id')
             ->execute()
             ->column('option_group_id')[0];
-          foreach ($newOptionValues as $newOptionValue) {
-            OptionValue::create(FALSE)
-              ->addValue('option_group_id', $optionGroupId)
-              ->addValue('name', $newOptionValue)
-              ->addValue('value', $newOptionValue)
-              ->addValue('label', $newOptionValue)
-              ->execute();
+          if (isset($optionGroupId)) {
+            foreach ($newOptionValues as $newOptionValue) {
+              OptionValue::create(FALSE)
+                ->addValue('option_group_id', $optionGroupId)
+                ->addValue('name', $newOptionValue)
+                ->addValue('value', $newOptionValue)
+                ->addValue('label', $newOptionValue)
+                ->execute();
+            }
           }
         }
       }

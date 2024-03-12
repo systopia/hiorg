@@ -58,7 +58,8 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
       $this->own,
       isset($this->from) ? \DateTime::createFromFormat('Y-m-d', $this->from) : NULL,
       isset($this->to) ? \DateTime::createFromFormat('Y-m-d', $this->to) : NULL,
-      $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL
+      $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL,
+      ['anlass']
     );
   }
   /**
