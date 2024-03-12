@@ -506,17 +506,14 @@ class Synchronize {
   public static function synchronizeOptionValues(array $fields, string $entity = 'Contact') {
     /** @var \Civi\Api4\Service\Spec\SpecGatherer $gatherer */
     $gatherer = \Civi::container()->get('spec_gatherer');
-    $spec = $gatherer->getSpec($entity, 'create', TRUE);
-    $fieldSpecs = $spec->getFields(array_keys($fields));
+    $fieldSpecs = $gatherer->getAllFields($entity, 'create');
     foreach ($fields as $fieldName => $value) {
-      $fieldSpec = array_filter($fieldSpecs, function($fieldSpec) use ($fieldName) {
-        return $fieldSpec->getName() === $fieldName;
-      });
-      if (($fieldSpec = reset($fieldSpec)) && $fieldSpec->type == 'Custom') {
-        $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec->getCustomFieldId());
+      $fieldSpec = $fieldSpecs[$fieldName];
+      if ($fieldSpec['type'] == 'Custom') {
+        $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
         if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
           $optionGroupId = CustomField::get(FALSE)
-            ->addWhere('id', '=', $fieldSpec->getCustomFieldId())
+            ->addWhere('id', '=', $fieldSpec['custom_field_id'])
             ->addWhere('option_group_id', 'IS NOT NULL')
             ->addSelect('option_group_id')
             ->execute()
