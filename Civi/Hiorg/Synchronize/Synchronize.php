@@ -521,7 +521,12 @@ class Synchronize {
     foreach ($fields as $fieldName => $value) {
       $fieldSpec = $fieldSpecs[$fieldName];
       if ($fieldSpec['type'] == 'Custom') {
-        $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
+        if (method_exists(\CRM_Core_DAO_AllCoreTables::class, 'getDAONameForEntity')) {
+          $options = (\CRM_Core_DAO_AllCoreTables::getDAONameForEntity($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
+        }
+        else {
+          $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
+        }
         $value = (array) $value;
         if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
           $optionGroupId = CustomField::get(FALSE)
