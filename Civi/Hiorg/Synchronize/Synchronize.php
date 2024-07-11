@@ -275,7 +275,7 @@ class Synchronize {
       }
       // Retrieve existing qualification for the contact.
       // TODO: Retrieve only once per contact, group by type (name).
-      $existing = EckEntity::get('Hiorg_Qualification')
+      $existing = EckEntity::get('Hiorg_Qualification', FALSE)
         ->addWhere('subtype:name', '=', $qualification->name_kurz)
         ->addWhere('Eck_Hiorg_Qualification.Contact', '=', $contactId)
         ->execute();
@@ -290,7 +290,7 @@ class Synchronize {
       if ($existing->count()) {
         $record['id'] = $existing->first()['id'];
       }
-      $result[] = EckEntity::save('Hiorg_Qualification')
+      $result[] = EckEntity::save('Hiorg_Qualification', FALSE)
         ->addRecord($record)
         ->setMatch(['id'])
         ->execute()
@@ -339,7 +339,7 @@ class Synchronize {
         }
         // Retrieve existing verification for the contact.
         // TODO: Retrieve only once per contact, group by type (name).
-        $existing = EckEntity::get('Hiorg_Verification')
+        $existing = EckEntity::get('Hiorg_Verification', FALSE)
           ->addWhere('subtype:name', '=', $type)
           ->addWhere('Eck_Hiorg_Verification.Contact', '=', $contactId)
           ->addWhere('Eck_Hiorg_Verification.Hiorg_id', '=', $verification->id)
@@ -359,7 +359,7 @@ class Synchronize {
         if ($existing->count()) {
           $record['id'] = $existing->first()['id'];
         }
-        $result[] = EckEntity::save('Hiorg_Verification')
+        $result[] = EckEntity::save('Hiorg_Verification', FALSE)
           ->addRecord($record)
           ->setMatch(['id'])
           ->execute()
@@ -473,7 +473,7 @@ class Synchronize {
         $type = 'Generic';
       }
       // Retrieve existing educations for the contact.
-      $existing = EckEntity::get('Hiorg_Education')
+      $existing = EckEntity::get('Hiorg_Education', FALSE)
         ->addWhere('subtype:name', '=', $type)
         ->addWhere('Eck_Hiorg_Education.Contact', '=', $contactId)
         ->addWhere('Eck_Hiorg_Education.Hiorg_id', '=', $education->id)
@@ -491,7 +491,7 @@ class Synchronize {
       if ($existing->count()) {
         $record['id'] = $existing->first()['id'];
       }
-      $result[] = EckEntity::save('Hiorg_Education')
+      $result[] = EckEntity::save('Hiorg_Education', FALSE)
         ->addRecord($record)
         ->setMatch(['id'])
         ->execute()
