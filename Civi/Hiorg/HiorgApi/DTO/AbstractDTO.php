@@ -54,6 +54,11 @@ class AbstractDTO {
           $value = $object->attributes->$key;
         }
         break;
+      default:
+        $value = NULL;
+        \Civi::log()->debug(
+          sprintf("Property '%s' not found in source object for DTO of type '%s'.", $key, static::class)
+        );
     }
     return $value;
   }
