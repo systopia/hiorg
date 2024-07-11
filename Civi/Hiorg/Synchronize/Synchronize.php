@@ -535,7 +535,7 @@ class Synchronize {
               ->addWhere('option_group_id', 'IS NOT NULL')
               ->addSelect('option_group_id')
               ->execute()
-              ->column('option_group_id')[0];
+              ->column('option_group_id')[0] ?? NULL;
             if (isset($optionGroupId)) {
               foreach ($newOptionValues as $newOptionValue) {
                 OptionValue::create(FALSE)
