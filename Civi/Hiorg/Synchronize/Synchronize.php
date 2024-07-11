@@ -519,30 +519,32 @@ class Synchronize {
     $gatherer = \Civi::container()->get('spec_gatherer');
     $fieldSpecs = $gatherer->getAllFields($entity, 'create');
     foreach ($fields as $fieldName => $value) {
-      $fieldSpec = $fieldSpecs[$fieldName];
-      if ($fieldSpec['type'] == 'Custom') {
-        if (method_exists(\CRM_Core_DAO_AllCoreTables::class, 'getDAONameForEntity')) {
-          $options = (\CRM_Core_DAO_AllCoreTables::getDAONameForEntity($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
-        }
-        else {
-          $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
-        }
-        $value = (array) $value;
-        if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
-          $optionGroupId = CustomField::get(FALSE)
-            ->addWhere('id', '=', $fieldSpec['custom_field_id'])
-            ->addWhere('option_group_id', 'IS NOT NULL')
-            ->addSelect('option_group_id')
-            ->execute()
-            ->column('option_group_id')[0];
-          if (isset($optionGroupId)) {
-            foreach ($newOptionValues as $newOptionValue) {
-              OptionValue::create(FALSE)
-                ->addValue('option_group_id', $optionGroupId)
-                ->addValue('name', $newOptionValue)
-                ->addValue('value', $newOptionValue)
-                ->addValue('label', $newOptionValue)
-                ->execute();
+      if (isset($fieldSpecs[$fieldName])) {
+        $fieldSpec = $fieldSpecs[$fieldName];
+        if ($fieldSpec['type'] == 'Custom') {
+          if (method_exists(\CRM_Core_DAO_AllCoreTables::class, 'getDAONameForEntity')) {
+            $options = (\CRM_Core_DAO_AllCoreTables::getDAONameForEntity($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
+          }
+          else {
+            $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
+          }
+          $value = (array) $value;
+          if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
+            $optionGroupId = CustomField::get(FALSE)
+              ->addWhere('id', '=', $fieldSpec['custom_field_id'])
+              ->addWhere('option_group_id', 'IS NOT NULL')
+              ->addSelect('option_group_id')
+              ->execute()
+              ->column('option_group_id')[0];
+            if (isset($optionGroupId)) {
+              foreach ($newOptionValues as $newOptionValue) {
+                OptionValue::create(FALSE)
+                  ->addValue('option_group_id', $optionGroupId)
+                  ->addValue('name', $newOptionValue)
+                  ->addValue('value', $newOptionValue)
+                  ->addValue('label', $newOptionValue)
+                  ->execute();
+              }
             }
           }
         }
