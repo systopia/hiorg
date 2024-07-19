@@ -40,6 +40,10 @@ class HiorgVerificationDTO extends AbstractDTO {
         $realKey = substr($key, strlen('pruefergebnis_'));
         $value = $object->attributes->pruefergebnis->$realKey;
         break;
+      case 'letzte_pruefung':
+        // The actual attribute has a typo ("letze" instead of "letzte").
+        $value = $object->attributes->letze_pruefung;
+        break;
       default:
         $value = parent::getPropertyValue($key, $object);
     }
