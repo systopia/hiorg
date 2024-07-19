@@ -20,6 +20,7 @@ use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use CRM_Hiorg_ExtensionUtil as E;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\RequestOptions;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Psr\Http\Message\ResponseInterface;
 
 class HiorgClient {
@@ -63,10 +64,20 @@ class HiorgClient {
    * @throws \Civi\API\Exception\UnauthorizedException
    */
   protected function lookupToken(int $oauthClientId): ?array {
-    return OAuthSysToken::refresh(FALSE)
-      ->addWhere('client_id.id', '=', $oauthClientId)
-      ->execute()
-      ->first();
+    try {
+      return OAuthSysToken::refresh(FALSE)
+        ->addWhere('client_id.id', '=', $oauthClientId)
+        ->execute()
+        ->first();
+    }
+    catch (IdentityProviderException $exception) {
+      throw new \CRM_Core_Exception(
+        $exception->getMessage() . ': ' . $exception->getResponseBody()['message'],
+        $exception->getCode(),
+        $exception->getResponseBody(),
+        $exception
+      );
+    }
   }
 
   protected function formatRequestOptions($options = []): array {
