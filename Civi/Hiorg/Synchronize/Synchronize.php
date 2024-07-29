@@ -39,44 +39,98 @@ class Synchronize {
 
     // Synchronize contact data using Extended Contact Manager (XCM) with
     // profile defined in HiOrg-Server API configuration profile.
-    $result['contact_id'] = self::synchronizeContactData(
-      $configProfile->getXcmProfileName(),
-      $hiorgUser,
-      $configProfile->id
-    );
+    try {
+      $result['contact_id'] = self::synchronizeContactData(
+        $configProfile->getXcmProfileName(),
+        $hiorgUser,
+        $configProfile->id
+      );
+    }
+    catch (\Exception $exception) {
+      throw new \Exception(
+        'Error synchronising contact data: ' . $exception->getMessage(),
+        $exception->getCode(),
+        $exception
+      );
+    }
 
     // Synchronize bank account data when CiviBanking is installed.
-    $result['bank_account'] = self::synchronizeBankAccount(
-      $result['contact_id'],
-      $hiorgUser
-    );
+    try {
+      $result['bank_account'] = self::synchronizeBankAccount(
+        $result['contact_id'],
+        $hiorgUser
+      );
+    }
+    catch (\Exception $exception) {
+      throw new \Exception(
+        'Error synchronising bank account: ' . $exception->getMessage(),
+        $exception->getCode(),
+        $exception
+      );
+    }
 
     // Synchronize groups with relationships of type "hiorg_groups".
-    $result['relationships'] = self::processGroups(
-      $result['contact_id'],
-      $configProfile->getOrganisationId(),
-      $hiorgUser->gruppen_namen
-    );
+    try {
+      $result['relationships'] = self::processGroups(
+        $result['contact_id'],
+        $configProfile->getOrganisationId(),
+        $hiorgUser->gruppen_namen
+      );
+    }
+    catch (\Exception $exception) {
+      throw new \Exception(
+        'Error processing HiOrg-Server groups: ' . $exception->getMessage(),
+        $exception->getCode(),
+        $exception
+      );
+    }
 
     // Synchronize qualifications with custom entities.
-    $result['qualifications'] = self::synchronizeQualifications(
-      $result['contact_id'],
-      $hiorgUser->qualifikationen
-    );
+    try {
+      $result['qualifications'] = self::synchronizeQualifications(
+        $result['contact_id'],
+        $hiorgUser->qualifikationen
+      );
+    }
+    catch (\Exception $exception) {
+      throw new \Exception(
+        'Error synchronising qualifications: ' . $exception->getMessage(),
+        $exception->getCode(),
+        $exception
+      );
+    }
 
     // Synchronize educations with custom entities.
-    $result['educations'] = self::synchronizeEducations(
-      $result['contact_id'],
-      $hiorgUser,
-      $configProfile
-    );
+    try {
+      $result['educations'] = self::synchronizeEducations(
+        $result['contact_id'],
+        $hiorgUser,
+        $configProfile
+      );
+    }
+    catch (\Exception $exception) {
+      throw new \Exception(
+        'Error synchronising educations: ' . $exception->getMessage(),
+        $exception->getCode(),
+        $exception
+      );
+    }
 
     // Synchronize verifications with custom entities.
-    $result['verifications'] = self::synchronizeVerifications(
-      $result['contact_id'],
-      $hiorgUser,
-      $configProfile
-    );
+    try {
+      $result['verifications'] = self::synchronizeVerifications(
+        $result['contact_id'],
+        $hiorgUser,
+        $configProfile
+      );
+    }
+    catch (\Exception $exception) {
+      throw new \Exception(
+        'Error synchronising verifications: ' . $exception->getMessage(),
+        $exception->getCode(),
+        $exception
+      );
+    }
 
     // Dispatch event for custom synchronization.
     $event = new SynchronizeContactsEvent($hiorgUser, $configProfile, $result['contact_id'], $result);
