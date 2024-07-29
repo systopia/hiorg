@@ -284,7 +284,7 @@ class Synchronize {
       $record = [
         'subtype:name' => $qualification->name_kurz,
         'title' => $qualification->name,
-        'Eck_Hiorg_Qualification.Date_acquired' => $qualification->erwerb_datum,
+        'Eck_Hiorg_Qualification.Date_acquired' => self::formatDate($qualification->erwerb_datum ?? ''),
         'Eck_Hiorg_Qualification.Contact' => $contactId,
       ];
       if ($existing->count()) {
@@ -483,8 +483,8 @@ class Synchronize {
       $record = [
         'subtype:name' => $type,
         'title' => $education->attributes->bezeichnung,
-        'Eck_Hiorg_Education.Date_acquired' => $education->attributes->datum,
-        'Eck_Hiorg_Education.Date_expires' => $education->attributes->gueltig_bis,
+        'Eck_Hiorg_Education.Date_acquired' => self::formatDate($education->attributes->datum ?? ''),
+        'Eck_Hiorg_Education.Date_expires' => self::formatDate($education->attributes->gueltig_bis ?? ''),
         'Eck_Hiorg_Education.Contact' => $contactId,
         'Eck_Hiorg_Education.Hiorg_id' => $education->id,
       ];
@@ -614,8 +614,12 @@ class Synchronize {
     return $prefix_id;
   }
 
-  public static function formatDate(string $date, string $inputFormat = 'Y-m-d', string $outputFormat = 'Y-m-d'): ?string {
-    return $date && ($dateParsed = \DateTime::createFromFormat($inputFormat, $date))
+  public static function formatDate(
+    string $date,
+    string $inputFormat = 'Y-m-d',
+    string $outputFormat = 'Y-m-d'
+  ): ?string {
+    return '' !== $date && (FALSE !== $dateParsed = \DateTime::createFromFormat($inputFormat, $date))
       ? $dateParsed->format($outputFormat)
       : NULL;
   }
