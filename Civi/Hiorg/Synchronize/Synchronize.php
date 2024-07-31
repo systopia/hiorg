@@ -673,7 +673,12 @@ class Synchronize {
     string $inputFormat = 'Y-m-d',
     string $outputFormat = 'Y-m-d'
   ): ?string {
-    return '' !== $date && (FALSE !== $dateParsed = \DateTime::createFromFormat($inputFormat, $date))
+    return (
+      '' !== $date
+      && (FALSE !== $dateParsed = \DateTime::createFromFormat($inputFormat, $date))
+      // Check for invalid dates, such as "0000-00-00".
+      && $dateParsed->format($inputFormat) === $date
+    )
       ? $dateParsed->format($outputFormat)
       : NULL;
   }
