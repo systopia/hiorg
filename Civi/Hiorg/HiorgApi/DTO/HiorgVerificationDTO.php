@@ -42,7 +42,7 @@ class HiorgVerificationDTO extends AbstractDTO {
         break;
       case 'letzte_pruefung':
         // The actual attribute has a typo ("letze" instead of "letzte").
-        $value = $object->attributes->letze_pruefung;
+        $value = $object->attributes->letzte_pruefung ?? $object->attributes->letze_pruefung;
         break;
       default:
         $value = parent::getPropertyValue($key, $object);
