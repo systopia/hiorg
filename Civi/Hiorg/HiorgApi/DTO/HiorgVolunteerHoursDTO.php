@@ -23,7 +23,7 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
 
   public string $von;
 
-  public string $bis;
+  public ?string $bis;
 
   public float $stunden;
 

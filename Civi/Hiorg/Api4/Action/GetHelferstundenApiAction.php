@@ -15,6 +15,9 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
+use Civi\Api4\Generic\Result;
+use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
+
 /**
  * @method $this setId(int $id)
  * @method $this setOwn(bool $own)
@@ -46,22 +49,11 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
 
   /**
    * @var string|null
+   *
+   * Format: Y-m-d\TH:i:sP
    */
   protected ?string $changedSince = NULL;
 
-  /**
-   * @inheritDoc
-   */
-  public function doRun(): void {
-    $this->_response = $this->_hiorgClient->getHelferstunden(
-      $this->id,
-      $this->own,
-      isset($this->from) ? \DateTime::createFromFormat('Y-m-d', $this->from) : NULL,
-      isset($this->to) ? \DateTime::createFromFormat('Y-m-d', $this->to) : NULL,
-      $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL,
-      ['anlass']
-    );
-  }
   /**
    * {@inheritDoc}
    */
@@ -85,7 +77,25 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
           'name' => 'to',
           'data_type' => 'String',
         ],
+        [
+          'name' => 'changedSince',
+          'data_type' => 'String',
+        ],
       ];
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function doRun(): void {
+    $this->_response = $this->_hiorgClient->getHelferstunden(
+      $this->id,
+      $this->own,
+      isset($this->from) ? \DateTime::createFromFormat('Y-m-d', $this->from) : NULL,
+      isset($this->to) ? \DateTime::createFromFormat('Y-m-d', $this->to) : NULL,
+      $this->changedSince ? \DateTime::createFromFormat('Y-m-d\TH:i:sP', $this->changedSince) : NULL,
+      ['anlass']
+    );
   }
 
 }
