@@ -29,7 +29,7 @@ use Civi\Hiorg\EventSubscriber\OAuth\OAuthProviderSubscriber;
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
  */
-function hiorg_civicrm_config(&$config): void {
+function hiorg_civicrm_config(\CRM_Core_Config &$config): void {
   _hiorg_civix_civicrm_config($config);
 
   Civi::dispatcher()->addSubscriber(new OAuthProviderSubscriber());
