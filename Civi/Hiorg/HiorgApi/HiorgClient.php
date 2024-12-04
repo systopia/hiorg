@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\HiorgApi;
 
 use Civi\Api4\OAuthSysToken;
@@ -25,9 +27,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class HiorgClient {
 
-  const BASE_URI_DEFAULT = 'https://api.hiorg-server.de/';
+  public const BASE_URI_DEFAULT = 'https://api.hiorg-server.de/';
 
-  const BASE_PATH = 'core/v1/';
+  public const BASE_PATH = 'core/v1/';
 
   protected string $oauthToken;
 
@@ -213,7 +215,14 @@ class HiorgClient {
    * @return \Psr\Http\Message\ResponseInterface
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function getHelferstunden($id = NULL, bool $own = TRUE, \DateTime $from = NULL, \DateTime $to = NULL, \DateTime $changedSince = NULL, array $include = []) {
+  public function getHelferstunden(
+    $id = NULL,
+    bool $own = TRUE,
+    \DateTime $from = NULL,
+    \DateTime $to = NULL,
+    \DateTime $changedSince = NULL,
+    array $include = []
+  ) {
     // The API is documented to default to "-6 months" for the "from" date, so
     // this is not necessary to declare here.
     // $from ??= new \DateTime('-6 months');
