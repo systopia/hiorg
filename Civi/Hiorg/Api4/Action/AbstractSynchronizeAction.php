@@ -80,6 +80,9 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
       : NULL;
   }
 
+  /**
+   * @phpstan-return list<array<string, mixed>>
+   */
   protected function runQueue(\CRM_Queue_Queue $queue, ?int $maxRunTime = NULL): array {
     $totalItems = $queue->getStatistic('total');
     $runner = new \CRM_Queue_Runner([
@@ -129,7 +132,7 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
         || $this->timeout > $phpMaxExecutionTime
       )
     ) {
-      throw new \Exception('The timeout exceeds the max_execution_time PHP setting value.');
+      throw new \RuntimeException('The timeout exceeds the max_execution_time PHP setting value.');
     }
 
     return isset($this->timeout) ? time() + $this->timeout : NULL;
