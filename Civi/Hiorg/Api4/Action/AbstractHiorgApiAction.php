@@ -16,7 +16,6 @@
 namespace Civi\Hiorg\Api4\Action;
 
 use Civi\Api4\Generic\Result;
-use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\HiorgApi\HiorgClient;
 
 abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
@@ -24,14 +23,14 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
   /**
    * The JSON-decoded HiOrg-Server API result.
    *
-   * @var object $_response
+   * @var object
    */
   protected object $_response;
 
   /**
    * The HiOrg-Server API client.
    *
-   * @var \Civi\Hiorg\HiorgApi\HiorgClient $_hiorgClient
+   * @var \Civi\Hiorg\HiorgApi\HiorgClient
    */
   protected HiorgClient $_hiorgClient;
 

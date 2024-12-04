@@ -40,6 +40,7 @@ class HiorgVerificationDTO extends AbstractDTO {
         $realKey = substr($key, strlen('pruefergebnis_'));
         $value = $object->attributes->pruefergebnis->$realKey;
         break;
+
       default:
         $value = parent::getPropertyValue($key, $object);
     }

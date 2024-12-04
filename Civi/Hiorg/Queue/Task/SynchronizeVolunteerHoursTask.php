@@ -15,7 +15,6 @@
 
 namespace Civi\Hiorg\Queue\Task;
 
-use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 use Civi\Hiorg\Synchronize\Synchronize;

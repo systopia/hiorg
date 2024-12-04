@@ -44,6 +44,7 @@ class AbstractDTO {
       case property_exists($object, $key):
         $value = $object->$key;
         break;
+
       // Lookup property in "attributes" property of the given object.
       case property_exists($object, 'attributes') && property_exists($object->attributes, $key):
         if ($key === 'benutzerdefinierte_felder') {
@@ -54,6 +55,7 @@ class AbstractDTO {
           $value = $object->attributes->$key;
         }
         break;
+
       default:
         $value = NULL;
         \Civi::log()->debug(

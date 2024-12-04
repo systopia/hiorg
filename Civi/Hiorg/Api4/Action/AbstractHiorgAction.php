@@ -27,7 +27,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
   /**
    * The ID of the configuration profile to use for the HiOrg-Server API call.
    *
-   * @var int|null $configProfileId
+   * @var int|null
    *
    * @required
    */
@@ -36,7 +36,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
   /**
    * The configuration profile to use for the HiOrg-Server API call.
    *
-   * @var ConfigProfile|null
+   * @var \Civi\Hiorg\ConfigProfiles\ConfigProfile|null
    */
   protected ?ConfigProfile $_configProfile = NULL;
 
@@ -52,6 +52,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
     $this->_configProfile = ConfigProfile::getById($this->configProfileId);
     return $this;
   }
+
   public function getConfigProfile() {
     return $this->_configProfile;
   }

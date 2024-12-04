@@ -52,12 +52,15 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
       case 'anlass_id':
         $value = $object->relationships->anlass->data->id;
         break;
+
       case 'anlass_typ':
         $value = $object->relationships->anlass->data->attributes->typ;
         break;
+
       case 'anlass_beschreibung':
         $value = $object->relationships->anlass->data->attributes->beschreibung;
         break;
+
       case 'typ_id':
         $value = $object->relationships->typ->data->id;
         break;
@@ -69,6 +72,7 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
       case 'user_id':
         $value = $object->relationships->user->data->id;
         break;
+
       default:
         $value = parent::getPropertyValue($key, $object);
     }

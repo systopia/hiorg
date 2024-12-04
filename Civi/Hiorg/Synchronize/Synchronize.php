@@ -22,11 +22,8 @@ use Civi\Api4\EckEntity;
 use Civi\Api4\Hiorg;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
-use Civi\Core\Event\GenericHookEvent;
-use Civi\Funding\Permission\ContactRelation\Types\Contact;
 use Civi\Hiorg\Event\SynchronizeContactsEvent;
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
-use Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO;
 use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Event\MapContactParametersEvent;
@@ -495,7 +492,7 @@ class Synchronize {
         //  => create one
         $data = [
           'BIC' => $hiorgUser->bic,
-          'country' => substr($hiorgUser->iban, 0, 2)
+          'country' => substr($hiorgUser->iban, 0, 2),
         ];
         $account = civicrm_api3('BankingAccount', 'create', [
           'contact_id' => $contactId,

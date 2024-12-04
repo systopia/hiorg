@@ -42,7 +42,7 @@ class OAuthProviderSubscriber implements EventSubscriberInterface {
         'scopes' => [
           'openid personal/selbst:read personal:read organisation/selbst/stammdaten:read helferstunden:read',
         ],
-      ]
+      ],
     ];
 
     // TODO: Consider making custom OAuth providers configurable, as

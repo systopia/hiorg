@@ -15,9 +15,6 @@
 
 namespace Civi\Hiorg\Api4\Action;
 
-use Civi\Api4\Generic\Result;
-use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
-
 /**
  * @method $this setId(int $id)
  * @method $this setOwn(bool $own)
@@ -81,7 +78,7 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
           'name' => 'changedSince',
           'data_type' => 'String',
         ],
-      ];
+    ];
   }
 
   /**
