@@ -4,7 +4,6 @@
     <description>CiviCRM coding standard with some additional changes</description>
 
     <file>Civi</file>
-    <file>CRM</file>
     <file>managed</file>
     <file>settings</file>
     <file>tests</file>

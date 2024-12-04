@@ -1,7 +1,6 @@
 parameters:
 	paths:
 		- Civi
-		- CRM
 		- managed
 		- settings
 		- tests
