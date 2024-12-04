@@ -13,8 +13,11 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Hiorg_ExtensionUtil as E;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
 return [
   [
     'name' => 'Job__hiorg_synchronize_contacts',
@@ -26,7 +29,9 @@ return [
       'values' => [
         'run_frequency:name' => 'Always',
         'name' => E::ts('HiOrg-Server API: Synchronize Contacts'),
-        'description' => E::ts('Fetches HiOrg-Server users and related records via the HiOrg-Server API and synchronizes them with CiviCRM contacts.'),
+        'description' => E::ts(
+          'Fetches HiOrg-Server users and related records via the HiOrg-Server API and synchronizes them with CiviCRM contacts.'
+        ),
         'api_entity' => 'Hiorg',
         'api_action' => 'synchronizeContacts',
         'parameters' => 'version=4',
@@ -36,3 +41,4 @@ return [
     ],
   ],
 ];
+// phpcs:enable

@@ -13,14 +13,19 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Hiorg_ExtensionUtil as E;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
 return [
   'hiorg.synchronizeContacts.lastSync' => [
     'name' => 'hiorg.synchronizeContacts.lastSync',
     'type' => 'Array',
     'title' => E::ts('Last Contacts Synchronization'),
-    'description' => E::ts('Timestamps of last synchronization of contacts, grouped by OAuth Client IDs used for fetching data.'),
+    'description' => E::ts(
+      'Timestamps of last synchronization of contacts, grouped by OAuth Client IDs used for fetching data.'
+    ),
     'is_domain' => 1,
     'is_contact' => 0,
   ],
@@ -28,7 +33,9 @@ return [
     'name' => 'hiorg.synchronizeVolunteerHours.lastSync',
     'type' => 'Array',
     'title' => E::ts('Last Volunteer Hours Synchronization'),
-    'description' => E::ts('Timestamps of last synchronization of volunteer hours, grouped by OAuth Client IDs used for fetching data.'),
+    'description' => E::ts(
+      'Timestamps of last synchronization of volunteer hours, grouped by OAuth Client IDs used for fetching data.'
+    ),
     'is_domain' => 1,
     'is_contact' => 0,
   ],
@@ -36,7 +43,9 @@ return [
     'name' => 'hiorg.synchronizeVerifications.lastSync',
     'type' => 'Array',
     'title' => E::ts('Last Verifications Synchronization'),
-    'description' => E::ts('Timestamps of last synchronization of verifications, grouped by OAuth Client IDs used for fetching data and HiOrg-Server user IDs.'),
+    'description' => E::ts(
+      'Timestamps of last synchronization of verifications, grouped by OAuth Client IDs used for fetching data and HiOrg-Server user IDs.'
+    ),
     'is_domain' => 1,
     'is_contact' => 0,
   ],
@@ -44,8 +53,11 @@ return [
     'name' => 'hiorg.synchronizeEducations.lastSync',
     'type' => 'Array',
     'title' => E::ts('Last Educations Synchronization'),
-    'description' => E::ts('Timestamps of last synchronization of educations, grouped by OAuth Client IDs used for fetching data and HiOrg-Server user IDs.'),
+    'description' => E::ts(
+      'Timestamps of last synchronization of educations, grouped by OAuth Client IDs used for fetching data and HiOrg-Server user IDs.'
+    ),
     'is_domain' => 1,
     'is_contact' => 0,
   ],
 ];
+// phpcs: enable

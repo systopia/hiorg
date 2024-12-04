@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\HiorgApi\DTO;
 
 class HiorgVolunteerHoursDTO extends AbstractDTO {

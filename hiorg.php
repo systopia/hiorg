@@ -13,14 +13,16 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
+// phpcs:disable PSR1.Files.SideEffects
 require_once 'hiorg.civix.php';
-// phpcs:disable
+// phpcs:enable
+
 use Civi\Hiorg\EventSubscriber\ConfigProfiles\ConfigProfilesSubscriber;
 use Civi\Hiorg\EventSubscriber\ContactSubscriber;
 use Civi\Hiorg\EventSubscriber\IdentitytrackerSubscriber;
 use Civi\Hiorg\EventSubscriber\OAuth\OAuthProviderSubscriber;
-
-// phpcs:enable
 
 /**
  * Implements hook_civicrm_config().
