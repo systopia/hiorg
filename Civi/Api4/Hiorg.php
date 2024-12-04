@@ -30,7 +30,7 @@ class Hiorg extends Generic\AbstractEntity {
   /**
    * @inheritDoc
    */
-  public static function getFields($checkPermissions = TRUE): BasicGetFieldsAction {
+  public static function getFields(bool $checkPermissions = TRUE): BasicGetFieldsAction {
     return (new BasicGetFieldsAction(
       __CLASS__,
       __FUNCTION__,
@@ -42,32 +42,32 @@ class Hiorg extends Generic\AbstractEntity {
       ->setLoadOptions(TRUE);
   }
 
-  public static function getPersonal($checkPermissions = TRUE): GetPersonalApiAction {
+  public static function getPersonal(bool $checkPermissions = TRUE): GetPersonalApiAction {
     return (new GetPersonalApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function getAusbildungen($checkPermissions = TRUE): GetAusbildungenApiAction {
+  public static function getAusbildungen(bool $checkPermissions = TRUE): GetAusbildungenApiAction {
     return (new GetAusbildungenApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function getHelferstunden($checkPermissions = TRUE): GetHelferstundenApiAction {
+  public static function getHelferstunden(bool $checkPermissions = TRUE): GetHelferstundenApiAction {
     return (new GetHelferstundenApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function getUeberpruefungen($checkPermissions = TRUE): GetUeberpruefungenApiAction {
+  public static function getUeberpruefungen(bool $checkPermissions = TRUE): GetUeberpruefungenApiAction {
     return (new GetUeberpruefungenApiAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function synchronizeContacts($checkPermissions = TRUE): SynchronizeContactsAction {
+  public static function synchronizeContacts(bool $checkPermissions = TRUE): SynchronizeContactsAction {
     return (new SynchronizeContactsAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 
-  public static function synchronizeVolunteerHours($checkPermissions = TRUE): SynchronizeVolunteerHoursAction {
+  public static function synchronizeVolunteerHours(bool $checkPermissions = TRUE): SynchronizeVolunteerHoursAction {
     return (new SynchronizeVolunteerHoursAction(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
