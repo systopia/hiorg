@@ -22,6 +22,8 @@ a [*HiOrg-Server*](https://www.hiorg-server.de/) instance.
   * Qualifications
 * Adds a relationship type for synchronizing *HiOrg-Server* group memberships in
   *HiOrg-Server* organisations
+* Adds an activity type for synchronizing volunteer hours of *HiOrg-Server*
+  users
 * Utilizes the [*Identity
   Tracker*](https://github.com/systopia/de.systopia.identitytracker) extension
   for tracking *HiOrg-Server* user IDs on CiviCRM contacts
@@ -53,4 +55,6 @@ their [documentation](https://api.hiorg-server.de/docs)):
 
 Synchronization of all those data with CiviCRM data structures (contacts, ECK
 entities, etc.) is also done via a CiviCRM API action,
-called `synchronizeContacts`.
+called `synchronizeContacts`, and another one called `synchronizeVolunteerHours`
+for synchronizing *Helferstunden* records (volunteer hours) with CiviCRM
+activities.
