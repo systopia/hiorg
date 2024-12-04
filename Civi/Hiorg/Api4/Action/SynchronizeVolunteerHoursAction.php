@@ -16,11 +16,8 @@
 namespace Civi\Hiorg\Api4\Action;
 
 use CRM_Hiorg_ExtensionUtil as E;
-use Civi\Api4\ConfigProfile;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile as HiorgConfigProfile;
-use Civi\Hiorg\Queue\Task\SynchronizeContactsTask;
 use Civi\Hiorg\Queue\Task\SynchronizeVolunteerHoursTask;
-use Civi\Api4\Generic\Result;
 use Civi\Api4\Hiorg;
 use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 
