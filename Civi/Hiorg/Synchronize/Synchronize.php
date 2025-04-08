@@ -183,16 +183,18 @@ class Synchronize {
         'Y-m-d\TH:i:sP',
         'Y-m-d H:i:s'
       ),
-      'hiorg_volunteer_hours.end_date' => self::formatDate(
-        $hiorgVolunteerHours->bis,
-        'Y-m-d\TH:i:sP',
-        'Y-m-d H:i:s'
-      ),
       'hiorg_volunteer_hours.hours' => $hiorgVolunteerHours->stunden,
       'hiorg_volunteer_hours.call_out_km' => $hiorgVolunteerHours->anfahrt_km,
       'hiorg_volunteer_hours.occasion:label' => $hiorgVolunteerHours->anlass_beschreibung,
       'hiorg_volunteer_hours.organization' => $configProfile->getOrganisationId(),
     ];
+    if (NULL !== $hiorgVolunteerHours->bis) {
+      $record['hiorg_volunteer_hours.end_date'] = self::formatDate(
+        $hiorgVolunteerHours->bis,
+        'Y-m-d\TH:i:sP',
+        'Y-m-d H:i:s'
+      );
+    }
 
     // Synchronize occasion option value.
     OptionValue::save(FALSE)
