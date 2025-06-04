@@ -20,7 +20,7 @@ return [
     'name' => 'Job__hiorg_synchronize_contacts',
     'entity' => 'Job',
     'cleanup' => 'always',
-    'update' => 'never',
+    'update' => 'unmodified',
     'params' => [
       'version' => 4,
       'values' => [

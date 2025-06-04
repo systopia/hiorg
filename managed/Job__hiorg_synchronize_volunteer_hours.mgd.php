@@ -20,7 +20,7 @@ return [
     'name' => 'Job__hiorg_synchronize_volunteer_hours',
     'entity' => 'Job',
     'cleanup' => 'always',
-    'update' => 'never',
+    'update' => 'unmodified',
     'params' => [
       'version' => 4,
       'values' => [
