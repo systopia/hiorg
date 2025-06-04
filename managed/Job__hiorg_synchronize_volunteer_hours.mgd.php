@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Hiorg_ExtensionUtil as E;
 
 return [
@@ -26,7 +28,9 @@ return [
       'values' => [
         'run_frequency:name' => 'Always',
         'name' => E::ts('HiOrg-Server API: Synchronize Volunteer Hours'),
-        'description' => E::ts('Fetches HiOrg-Server volunteer hours via the HiOrg-Server API and synchronizes them with CiviCRM activities.'),
+        'description' => E::ts(
+          'Fetches HiOrg-Server volunteer hours via the HiOrg-Server API and synchronizes them with CiviCRM activities.'
+        ),
         'api_entity' => 'Hiorg',
         'api_action' => 'synchronizeVolunteerHours',
         'parameters' => 'version=4',

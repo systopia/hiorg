@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\ConfigProfiles;
 
 use Civi\Api4\OAuthClient;
@@ -23,7 +25,7 @@ use CRM_Hiorg_ExtensionUtil as E;
 
 class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements ConfigProfileInterface {
 
-  const NAME = 'hiorg';
+  public const NAME = 'hiorg';
 
   public static function getFields(): array {
     return [
@@ -41,10 +43,14 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
         ->setRequired(TRUE)
         ->setInputType('Select')
         ->setOptionsCallback([__CLASS__, 'getOAuthClientOptions']),
+      // phpcs:disable Drupal.Arrays.Array.ArrayIndentation
       'organisation_id' => (new FieldSpec('organisation_id', 'ConfigProfile_' . self::NAME, 'String'))
         ->setTitle(E::ts('Organisation'))
         ->setLabel(E::ts('Organisation'))
-        ->setDescription(E::ts('CiviCRM organisation contact to use as corresponding contact with this configuration profile.'))
+        ->setDescription(
+          E::ts('CiviCRM organisation contact to use as corresponding contact with this configuration profile.')
+        )
+        // phpcs:enable
         ->setRequired(TRUE)
         ->setFkEntity('Contact')
         ->setInputAttrs(['filter' => ['contact_type' => 'Organization']])
@@ -55,10 +61,16 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
         ->setDescription(E::ts('HiOrg-Server API base URI for this configuration profile.'))
         ->setRequired(TRUE)
         ->setInputType('Text'),
-      'exclude_hiorg_user_status' => (new FieldSpec('exclude_hiorg_user_status', 'ConfigProfile_' . self::NAME, 'Array'))
+      'exclude_hiorg_user_status' => (
+        new FieldSpec('exclude_hiorg_user_status', 'ConfigProfile_' . self::NAME, 'Array')
+      )
         ->setTitle(E::ts('Exclude HiOrg-Server User status'))
         ->setLabel(E::ts('Exclude HiOrg-Server User status'))
-        ->setDescription(E::ts('HiOrg-Server user status to exclude when retrieving user data via the HiOrg-Server API.'))
+        // phpcs:disable Drupal.Arrays.Array.ArrayIndentation
+        ->setDescription(
+          E::ts('HiOrg-Server user status to exclude when retrieving user data via the HiOrg-Server API.')
+        )
+        // phpcs:enable
         ->setRequired(FALSE)
         ->setInputType('Select')
         ->setInputAttrs(['multiple' => TRUE])

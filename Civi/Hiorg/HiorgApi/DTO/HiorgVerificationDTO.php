@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\HiorgApi\DTO;
 
 class HiorgVerificationDTO extends AbstractDTO {
@@ -40,6 +42,7 @@ class HiorgVerificationDTO extends AbstractDTO {
         $realKey = substr($key, strlen('pruefergebnis_'));
         $value = $object->attributes->pruefergebnis->$realKey;
         break;
+
       default:
         $value = parent::getPropertyValue($key, $object);
     }

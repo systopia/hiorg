@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\EventSubscriber\OAuth;
 
 use Civi\Core\Event\GenericHookEvent;
@@ -42,7 +44,7 @@ class OAuthProviderSubscriber implements EventSubscriberInterface {
         'scopes' => [
           'openid personal/selbst:read personal:read organisation/selbst/stammdaten:read helferstunden:read',
         ],
-      ]
+      ],
     ];
 
     // TODO: Consider making custom OAuth providers configurable, as
