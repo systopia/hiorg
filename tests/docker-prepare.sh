@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eu -o pipefail
 
+CONFIG_PROFILES_VERSION=1.0.0-beta1
+XCM_VERSION=1.13.1
+IDENTITYTRACKER_VERSION=1.4.0
+
 EXT_DIR=$(dirname "$(dirname "$(realpath "$0")")")
 EXT_NAME=$(basename "$EXT_DIR")
 
@@ -42,6 +46,10 @@ else
   # For headless tests these files need to exist.
   touch /var/www/html/sites/all/modules/civicrm/sql/test_data.mysql
   touch /var/www/html/sites/all/modules/civicrm/sql/test_data_second_domain.mysql
+
+  cv ext:download "config-profiles@https://github.com/systopia/config-profiles/releases/download/$CONFIG_PROFILES_VERSION/config-profiles-$CONFIG_PROFILES_VERSION.zip"
+  cv ext:download "de.systopia.xcm@https://github.com/systopia/de.systopia.xcm/releases/download/$XCM_VERSION/de.systopia.xcm-$XCM_VERSION.zip"
+  cv ext:download "de.systopia.identitytracker@https://github.com/systopia/de.systopia.identitytracker/releases/download/$IDENTITYTRACKER_VERSION/de.systopia.identitytracker-$IDENTITYTRACKER_VERSION.zip"
 
   cv ext:enable "$EXT_NAME"
 fi
