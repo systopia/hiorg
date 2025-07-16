@@ -47,7 +47,7 @@ class SynchronizeContactsAction extends AbstractSynchronizeAction {
 
       // Retrieve HiOrg user data via HiOrg-Server API.
       $personalResult = Hiorg::getPersonal(FALSE)
-        ->setConfigProfileId($hiorgConfigProfile->id)
+        ->setConfigProfileId($hiorgConfigProfile->getId())
         ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
         ->execute();
       // TODO: Log/Report errors.

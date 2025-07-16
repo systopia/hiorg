@@ -47,7 +47,7 @@ class SynchronizeVolunteerHoursAction extends AbstractSynchronizeAction {
 
       // Retrieve HiOrg volunteer hours data via HiOrg-Server API.
       $helferstundenResult = Hiorg::getHelferstunden(FALSE)
-        ->setConfigProfileId($hiorgConfigProfile->id)
+        ->setConfigProfileId($hiorgConfigProfile->getId())
         ->setOwn(FALSE)
         ->setChangedSince($lastSync[$oAuthClientId] ?? NULL)
         ->execute();

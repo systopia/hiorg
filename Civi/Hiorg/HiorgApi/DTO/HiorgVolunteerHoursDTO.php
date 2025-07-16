@@ -39,6 +39,8 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
 
   public ?string $typ_id;
 
+  public ?string $typ_bezeichnung;
+
   public ?string $user_id;
 
   public static function create(\stdClass $object): HiorgVolunteerHoursDTO {
@@ -59,6 +61,11 @@ class HiorgVolunteerHoursDTO extends AbstractDTO {
       case 'typ_id':
         $value = $object->relationships->typ->data->id;
         break;
+
+      case 'typ_bezeichnung':
+        $value = $object->relationships->typ->data->attributes->bezeichnung;
+        break;
+
       case 'user_id':
         $value = $object->relationships->user->data->id;
         break;

@@ -1,380 +1,448 @@
-#: ./Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
+#: Civi/Hiorg/Api4/Action/SynchronizeContactsAction.php
 msgid "HiOrg-Server: Synchronize Contacts"
 msgstr ""
 
-#: ./Civi/Hiorg/Api4/Action/SynchronizeVolunteerHoursAction.php
+#: Civi/Hiorg/Api4/Action/SynchronizeVolunteerHoursAction.php
 msgid "HiOrg-Server: Synchronize Volunteer Hours"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Extended Contact manager (XCM) Profile"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "XCM Profile"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "XCM profile to use for processing contacts with this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "OAuth Client"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "CiviCRM OAuth Client to use for authenticating with this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Organisation"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "CiviCRM organisation contact to use as corresponding contact with this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "API Base URI"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "HiOrg-Server API base URI for this configuration profile."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Exclude HiOrg-Server User status"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "HiOrg-Server user status to exclude when retrieving user data via the HiOrg-Server API."
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "[%1] %2 (Provider: %3)"
 msgstr ""
 
-#: ./Civi/Hiorg/ConfigProfiles/ConfigProfile.php
+#: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Error loading configuration profile with ID %1"
 msgstr ""
 
-#: ./Civi/Hiorg/HiorgApi/HiorgClient.php
+#: Civi/Hiorg/HiorgApi/HiorgClient.php
 msgid "Error looking up OAuth token for OAuth client with ID %1"
 msgstr ""
 
-#: ./Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
+#: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
 msgid "Synchronizing HiOrg-Server user (ID: %1)"
 msgstr ""
 
-#: ./Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
+#: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
 msgid "Synchronized HiOrg-Server user (ID: %1) with CiviCRM contact (ID: %2)."
 msgstr ""
 
-#: ./Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
+#: Civi/Hiorg/Queue/Task/SynchronizeContactsTask.php
 msgid "Failed synchronizing HiOrg-Server user with ID %1. Error: %2"
 msgstr ""
 
-#: ./Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
+#: Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
 msgid "Synchronizing HiOrg-Server volunteer hours (ID: %1)"
 msgstr ""
 
-#: ./Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
+#: Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
 msgid "Synchronized HiOrg-Server volunteer hours (ID: %1) with CiviCRM activity (ID: %2)."
 msgstr ""
 
-#: ./Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
+#: Civi/Hiorg/Queue/Task/SynchronizeVolunteerHoursTask.php
 msgid "Failed synchronizing HiOrg-Server volunteer hours with ID %1. Error: %2"
 msgstr ""
 
-#: ./Civi/Hiorg/Synchronize/Synchronize.php
+#: Civi/Hiorg/Synchronize/Synchronize.php
 msgid "HiOrg-Server user ID missing in volunteer hours record."
 msgstr ""
 
-#: ./Civi/Hiorg/Synchronize/Synchronize.php
+#: Civi/Hiorg/Synchronize/Synchronize.php
 msgid "Could not identify contact for HiOrg-Server user ID %1"
 msgstr ""
 
-#: ./Civi/Hiorg/Synchronize/Synchronize.php ./managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
+#: Civi/Hiorg/Synchronize/Synchronize.php managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
 msgid "HiOrg-Server Volunteer Hours"
 msgstr ""
 
-#: ./Civi/Hiorg/Synchronize/Synchronize.php
+#: Civi/Hiorg/Synchronize/Synchronize.php
 msgid "Error retrieving/creating contact with Extended Contact Manager (XCM)."
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Contact Data"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Birth Place"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Emergency Information"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Profession"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Employer"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Position / Task"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Management Function"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_contact_data.mgd.php
+#: managed/CustomGroup__hiorg_contact_data.mgd.php
 msgid "Note"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "Driving License"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "Driving License Classes"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "AM"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "A"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "A1"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "A2"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "B"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "BE"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "B with Code 96"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "B with Code 196"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "C"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "CE"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "C1"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "C1E"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "D"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "DE"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "D1"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "D1E"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "T"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "L"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "Classes"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Restriction"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "License Number"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_driving_license.mgd.php
+#: managed/CustomGroup__hiorg_driving_license.mgd.php
 msgid "License Date"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_groups.mgd.php ./managed/RelationshipType__hiorg_groups.mgd.php
+#: managed/CustomGroup__hiorg_groups.mgd.php managed/RelationshipType__hiorg_groups.mgd.php
 msgid "HiOrg-Server: Group Membership"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_groups.mgd.php
+#: managed/CustomGroup__hiorg_groups.mgd.php
 msgid "HiOrg-Server: Groups"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_groups.mgd.php
+#: managed/CustomGroup__hiorg_groups.mgd.php
 msgid "Available groups for all connected HiOrg-Server organisations."
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_groups.mgd.php
+#: managed/CustomGroup__hiorg_groups.mgd.php
 msgid "Group"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_membership_data.mgd.php
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
 msgid "Membership Data"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_membership_data.mgd.php
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
 msgid "Membership Number"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_membership_data.mgd.php
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
 msgid "Membership Start Date"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_membership_data.mgd.php
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
 msgid "Membership End Date"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_membership_data.mgd.php
+#: managed/CustomGroup__hiorg_membership_data.mgd.php
 msgid "Transferred from Youth Organization"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "HiOrg-Server: Volunteer Hours - Occasions"
+msgstr ""
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Available occasions for volunteer hours of all connected HiOrg-Server organisations."
+msgstr ""
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "HiOrg-Server: Volunteer Hours - Types"
+msgstr ""
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Available types for volunteer hours of all connected HiOrg-Server organisations."
+msgstr ""
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Volunteer Hours"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "HiOrg-Server ID"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Start Date"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "End Date"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Number of Hours"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Call-Out Distance (km)"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Occasion"
 msgstr ""
 
-#: ./managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Type"
+msgstr ""
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Organization"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
 msgid "HiOrg-Server: Education"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
 msgid "Generic"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php ./managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Contact"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "HiOrg-Server Record ID"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php ./managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
 msgid "Acquirement Date"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
 msgid "Expiration Date"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Last Revision Date"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Next Revision Date"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Education.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Education.mgd.php
 msgid "Document"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Qualification.mgd.php
 msgid "HiOrg-Server: Qualification"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "HiOrg-Server: Verification"
 msgstr ""
 
-#: ./managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
+#: managed/EckEntityType__Eck_Hiorg_Verification.mgd.php
 msgid "Revision Result"
 msgstr ""
 
-#: ./managed/Navigation__config_profiles.mgd.php
+#: managed/Job__hiorg_synchronize_contacts.mgd.php
+msgid "HiOrg-Server API: Synchronize Contacts"
+msgstr ""
+
+#: managed/Job__hiorg_synchronize_contacts.mgd.php
+msgid "Fetches HiOrg-Server users and related records via the HiOrg-Server API and synchronizes them with CiviCRM contacts."
+msgstr ""
+
+#: managed/Job__hiorg_synchronize_volunteer_hours.mgd.php
+msgid "HiOrg-Server API: Synchronize Volunteer Hours"
+msgstr ""
+
+#: managed/Job__hiorg_synchronize_volunteer_hours.mgd.php
+msgid "Fetches HiOrg-Server volunteer hours via the HiOrg-Server API and synchronizes them with CiviCRM activities."
+msgstr ""
+
+#: managed/Navigation__config_profiles.mgd.php
 msgid "Automation"
 msgstr ""
 
-#: ./managed/Navigation__config_profiles.mgd.php
+#: managed/Navigation__config_profiles.mgd.php
 msgid "HiOrg-Server API Profiles"
 msgstr ""
 
-#: ./managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
+#: managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
 msgid "Volunteer Hours retrieved by the HiOrg-Server API extension."
 msgstr ""
 
-#: ./managed/OptionValue__config_profile_type__hiorg.mgd.php
+#: managed/OptionValue__config_profile_type__hiorg.mgd.php
 msgid "HiOrg-Server API"
 msgstr ""
 
-#: ./managed/OptionValue__config_profile_type__hiorg.mgd.php
+#: managed/OptionValue__config_profile_type__hiorg.mgd.php
 msgid "Configuration profiles for the HiOrg-Server API extension."
 msgstr ""
 
-#: ./managed/OptionValue__contact_id_history_type__hiorg_user.mgd.php
+#: managed/OptionValue__contact_id_history_type__hiorg_user.mgd.php
 msgid "HiOrg-Server User ID"
 msgstr ""
 
-#: ./managed/OptionValue__contact_id_history_type__hiorg_user.mgd.php
+#: managed/OptionValue__contact_id_history_type__hiorg_user.mgd.php
 msgid "The ID of records of the type \"user\" retrieved through the HiOrg-Server API."
 msgstr ""
 
-#: ./managed/RelationshipType__hiorg_groups.mgd.php
+#: managed/RelationshipType__hiorg_groups.mgd.php
 msgid "Stores group memberships of HiOrg users in their organisation's groups."
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Last Contacts Synchronization"
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Timestamps of last synchronization of contacts, grouped by OAuth Client IDs used for fetching data."
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Last Volunteer Hours Synchronization"
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Timestamps of last synchronization of volunteer hours, grouped by OAuth Client IDs used for fetching data."
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Last Verifications Synchronization"
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Timestamps of last synchronization of verifications, grouped by OAuth Client IDs used for fetching data and HiOrg-Server user IDs."
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Last Educations Synchronization"
+msgstr ""
+
+#: settings/hiorg.setting.php
+msgid "Timestamps of last synchronization of educations, grouped by OAuth Client IDs used for fetching data and HiOrg-Server user IDs."
 msgstr ""
 

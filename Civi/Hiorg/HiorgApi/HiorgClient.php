@@ -87,7 +87,7 @@ class HiorgClient {
   }
 
   protected function formatResult(): object {
-    return json_decode($this->result->getBody());
+    return json_decode($this->result->getBody()->getContents());
   }
 
   /**
