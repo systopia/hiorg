@@ -32,7 +32,8 @@ msgstr "XCM-Profil"
 msgid ""
 "XCM profile to use for processing contacts with this configuration profile."
 msgstr ""
-"XCM-Profil für die Verarbeitung von Kontakten mit diesem Konfigurationsprofil"
+"XCM-Profil für die Verarbeitung von Kontakten mit diesem "
+"Konfigurationsprofil."
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "OAuth Client"
@@ -44,7 +45,7 @@ msgid ""
 "profile."
 msgstr ""
 "CiviCRM-OAuth-Client für die Authentifizierung mit diesem "
-"Konfigurationsprofil"
+"Konfigurationsprofil."
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Organisation"
@@ -56,7 +57,7 @@ msgid ""
 "configuration profile."
 msgstr ""
 "CiviCRM-Organisationskontakt zur Verwendung als zugehöriger Kontakt mit "
-"diesem Konfigurationsprofil"
+"diesem Konfigurationsprofil."
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "API Base URI"
@@ -64,7 +65,7 @@ msgstr "API-Basis-URI"
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "HiOrg-Server API base URI for this configuration profile."
-msgstr "Basis-URI der HiOrg-Server-API für dieses Konfigurationsprofil"
+msgstr "Basis-URI der HiOrg-Server-API für dieses Konfigurationsprofil."
 
 #: Civi/Hiorg/ConfigProfiles/ConfigProfile.php
 msgid "Exclude HiOrg-Server User status"
@@ -311,6 +312,30 @@ msgid "Transferred from Youth Organization"
 msgstr "Übergang von Jugendorganisation"
 
 #: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "HiOrg-Server: Volunteer Hours - Occasions"
+msgstr "HiOrg-Server: Helferstunden - Anlässe"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid ""
+"Available occasions for volunteer hours of all connected HiOrg-Server "
+"organisations."
+msgstr ""
+"Verfügbare Anlässe für Helfetrstunden aller verbundenen HiOrg-Server-"
+"Organisationen."
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "HiOrg-Server: Volunteer Hours - Types"
+msgstr "HiOrg-Server: Helferstunden - Typen"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid ""
+"Available types for volunteer hours of all connected HiOrg-Server "
+"organisations."
+msgstr ""
+"Verfügbare Typen für Helferstunden aller verbundenen HiOrg-Server-"
+"Organisationen."
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Volunteer Hours"
 msgstr "Helferstunden"
 
@@ -337,6 +362,10 @@ msgstr "Anfahrt (km)"
 #: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Occasion"
 msgstr "Anlass"
+
+#: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
+msgid "Type"
+msgstr "Typ"
 
 #: managed/CustomGroup__hiorg_volunteer_hours.mgd.php
 msgid "Organization"
@@ -396,6 +425,30 @@ msgstr "HiOrg-Server: Überprüfung"
 msgid "Revision Result"
 msgstr "Überprüfungsergebnis"
 
+#: managed/Job__hiorg_synchronize_contacts.mgd.php
+msgid "HiOrg-Server API: Synchronize Contacts"
+msgstr "HiOrg-Server-API: Kontakte synchronisieren"
+
+#: managed/Job__hiorg_synchronize_contacts.mgd.php
+msgid ""
+"Fetches HiOrg-Server users and related records via the HiOrg-Server API and "
+"synchronizes them with CiviCRM contacts."
+msgstr ""
+"Ruft HiOrg-Server-Benutzer und verbundene Datensätze über die HiOrg-Server-"
+"API ab und synchronisiert diese mit CiviCRM-Kontakten."
+
+#: managed/Job__hiorg_synchronize_volunteer_hours.mgd.php
+msgid "HiOrg-Server API: Synchronize Volunteer Hours"
+msgstr "HiOrg-Server-API: Helferstunden synchronisieren"
+
+#: managed/Job__hiorg_synchronize_volunteer_hours.mgd.php
+msgid ""
+"Fetches HiOrg-Server volunteer hours via the HiOrg-Server API and "
+"synchronizes them with CiviCRM activities."
+msgstr ""
+"Ruft HiOrg-Server-Helfertstunden über die HiOrg-Server-API ab und "
+"synchronisiert diese mit CiviCRM-Aktivitäten."
+
 #: managed/Navigation__config_profiles.mgd.php
 msgid "Automation"
 msgstr "Automatisierung"
@@ -406,7 +459,7 @@ msgstr "HiOrg-Server - API-Profile"
 
 #: managed/OptionValue__activity_type__hiorg_volunteer_hours.mgd.php
 msgid "Volunteer Hours retrieved by the HiOrg-Server API extension."
-msgstr "Mit der HiOrg-Server-API-Erweiterung abgerufene Helferstunden"
+msgstr "Mit der HiOrg-Server-API-Erweiterung abgerufene Helferstunden."
 
 #: managed/OptionValue__config_profile_type__hiorg.mgd.php
 msgid "HiOrg-Server API"
@@ -433,3 +486,51 @@ msgid "Stores group memberships of HiOrg users in their organisation's groups."
 msgstr ""
 "Speichert Gruppenzugehörigkeiten von HiOrg-Benutzern in den Gruppen der "
 "jeweiligen Organisation."
+
+#: settings/hiorg.setting.php
+msgid "Last Contacts Synchronization"
+msgstr "Letzte Synchronisierung von Kontakten"
+
+#: settings/hiorg.setting.php
+msgid ""
+"Timestamps of last synchronization of contacts, grouped by OAuth Client IDs "
+"used for fetching data."
+msgstr ""
+"Zeitstempel der letzten Synchronisierung von Kontakten, gruppiert nach für "
+"das Abrufen verwendeter OAuth-Client-IDs."
+
+#: settings/hiorg.setting.php
+msgid "Last Volunteer Hours Synchronization"
+msgstr "Letzte Synchronisierung von Helferstunden"
+
+#: settings/hiorg.setting.php
+msgid ""
+"Timestamps of last synchronization of volunteer hours, grouped by OAuth "
+"Client IDs used for fetching data."
+msgstr ""
+"Zeitstempel der letzten Synchronisierung von Helferstunden, gruppiert nach "
+"für das Abrufen verwendeter OAuth-Client-IDs."
+
+#: settings/hiorg.setting.php
+msgid "Last Verifications Synchronization"
+msgstr "Letzte Synchronisierung von Überprüfungen"
+
+#: settings/hiorg.setting.php
+msgid ""
+"Timestamps of last synchronization of verifications, grouped by OAuth Client "
+"IDs used for fetching data and HiOrg-Server user IDs."
+msgstr ""
+"Zeitstempel der letzten Synchronisierung von Überprüfungen, gruppiert nach "
+"für das Abrufen verwendeter OAuth-Client-IDs und HiOrg-Server-Benutzer-IDs."
+
+#: settings/hiorg.setting.php
+msgid "Last Educations Synchronization"
+msgstr "Letzte Synchronisierung von Ausbildungen"
+
+#: settings/hiorg.setting.php
+msgid ""
+"Timestamps of last synchronization of educations, grouped by OAuth Client "
+"IDs used for fetching data and HiOrg-Server user IDs."
+msgstr ""
+"Zeitstempel der letzten Synchronisierung von Ausbildungen, gruppiert nach "
+"für das Abrufen verwendeter OAuth-Client-IDs und HiOrg-Server-Benutzer-IDs."

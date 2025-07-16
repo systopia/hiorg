@@ -109,6 +109,10 @@ class ConfigProfile extends \CRM_ConfigProfiles_BAO_ConfigProfile implements Con
     return array_combine($hiorgUserStatus, $hiorgUserStatus);
   }
 
+  public function getId(): int {
+    return (int) $this->id;
+  }
+
   /**
    * @return string
    * @throws \CRM_Core_Exception

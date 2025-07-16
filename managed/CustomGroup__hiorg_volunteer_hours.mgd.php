@@ -32,6 +32,29 @@ return [
         'option_value_fields' => [
           'name',
           'label',
+        ],
+      ],
+      'match' => [
+        'name',
+      ],
+    ],
+  ],
+  [
+    'name' => 'OptionGroup__hiorg_volunteer_hours_type',
+    'entity' => 'OptionGroup',
+    'cleanup' => 'never',
+    'update' => 'unmodified',
+    'params' => [
+      'version' => 4,
+      'values' => [
+        'name' => 'hiorg_volunteer_hours_type',
+        'title' => E::ts('HiOrg-Server: Volunteer Hours - Types'),
+        'description' => E::ts('Available types for volunteer hours of all connected HiOrg-Server organisations.'),
+        'is_reserved' => TRUE,
+        'is_active' => TRUE,
+        'option_value_fields' => [
+          'name',
+          'label',
           'grouping',
         ],
       ],
@@ -204,6 +227,32 @@ return [
         'is_view' => FALSE,
         'in_selector' => TRUE,
         'option_group_id.name' => 'hiorg_volunteer_hours_occasion',
+      ],
+      'match' => [
+        'custom_group_id',
+        'name',
+      ],
+    ],
+  ],
+  [
+    'name' => 'CustomField__hiorg_volunteer_hours__type',
+    'entity' => 'CustomField',
+    'cleanup' => 'never',
+    'update' => 'unmodified',
+    'params' => [
+      'version' => 4,
+      'values' => [
+        'custom_group_id.name' => 'hiorg_volunteer_hours',
+        'name' => 'type',
+        'label' => E::ts('Type'),
+        'column_name' => 'type_id',
+        'html_type' => 'Select',
+        'data_type' => 'String',
+        'is_searchable' => TRUE,
+        'is_search_range' => FALSE,
+        'is_view' => FALSE,
+        'in_selector' => TRUE,
+        'option_group_id.name' => 'hiorg_volunteer_hours_type',
       ],
       'match' => [
         'custom_group_id',

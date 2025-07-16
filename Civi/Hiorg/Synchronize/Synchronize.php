@@ -43,7 +43,7 @@ class Synchronize {
       $result['contact_id'] = self::synchronizeContactData(
         $configProfile->getXcmProfileName(),
         $hiorgUser,
-        $configProfile->id
+        $configProfile->getId()
       );
     }
     catch (\Exception $exception) {
@@ -148,7 +148,7 @@ class Synchronize {
         E::ts('HiOrg-Server user ID missing in volunteer hours record.')
       );
     }
-    $result['contact_id'] = ContactIdentity::identifyContact($configProfile->id, $hiorgVolunteerHours->user_id);
+    $result['contact_id'] = ContactIdentity::identifyContact($configProfile->getId(), $hiorgVolunteerHours->user_id);
     if (NULL === $result['contact_id']) {
       throw new \Exception(
         E::ts(
@@ -186,6 +186,7 @@ class Synchronize {
       'hiorg_volunteer_hours.hours' => $hiorgVolunteerHours->stunden,
       'hiorg_volunteer_hours.call_out_km' => $hiorgVolunteerHours->anfahrt_km,
       'hiorg_volunteer_hours.occasion:label' => $hiorgVolunteerHours->anlass_beschreibung,
+      'hiorg_volunteer_hours.type:label' => $hiorgVolunteerHours->typ_bezeichnung,
       'hiorg_volunteer_hours.organization' => $configProfile->getOrganisationId(),
     ];
     if (NULL !== $hiorgVolunteerHours->bis) {
@@ -204,6 +205,15 @@ class Synchronize {
         'grouping' => $hiorgVolunteerHours->anlass_typ,
       ])
       ->setMatch(['option_group_id', 'label', 'grouping'])
+      ->execute();
+
+    // Synchronize type option value.
+    OptionValue::save(FALSE)
+      ->addRecord([
+        'option_group_id:name' => 'hiorg_volunteer_hours_type',
+        'label' => $hiorgVolunteerHours->typ_bezeichnung,
+      ])
+      ->setMatch(['option_group_id', 'label'])
       ->execute();
 
     if ($existing->count()) {
@@ -364,7 +374,7 @@ class Synchronize {
     // TODO: Introduce dedicated Result classes.
     /* @var HiorgVerificationDTO[] $verifications */
     $verifications = Hiorg::getUeberpruefungen(FALSE)
-      ->setConfigProfileId($configProfile->id)
+      ->setConfigProfileId($configProfile->getId())
       ->setChangedSince($verificationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
       ->setUserId($hiorgUser->id)
       ->execute()
@@ -504,7 +514,7 @@ class Synchronize {
     $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync') ?? [];
     $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
     $educations = Hiorg::getAusbildungen(FALSE)
-      ->setConfigProfileId($configProfile->id)
+      ->setConfigProfileId($configProfile->getId())
       ->setChangedSince($educationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
       ->setUserId($hiorgUser->id)
       ->execute();
