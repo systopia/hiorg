@@ -176,7 +176,7 @@ class Synchronize {
       ),
       'duration' => $hiorgVolunteerHours->stunden * 60,
       'status_id:name' => 'Completed',
-      'source_contact_id' => \CRM_Core_Session::getLoggedInContactID(),
+      'source_contact_id' => \CRM_Core_Session::getLoggedInContactID() ?? 0,
       'hiorg_volunteer_hours.hiorg_id' => $hiorgVolunteerHours->id,
       'hiorg_volunteer_hours.start_date' => self::formatDate(
         $hiorgVolunteerHours->von,
