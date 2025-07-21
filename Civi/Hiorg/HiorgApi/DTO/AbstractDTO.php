@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\HiorgApi\DTO;
 
 class AbstractDTO {
@@ -44,6 +46,7 @@ class AbstractDTO {
       case property_exists($object, $key):
         $value = $object->$key;
         break;
+
       // Lookup property in "attributes" property of the given object.
       case property_exists($object, 'attributes') && property_exists($object->attributes, $key):
         if ($key === 'benutzerdefinierte_felder') {
@@ -54,6 +57,7 @@ class AbstractDTO {
           $value = $object->attributes->$key;
         }
         break;
+
       default:
         $value = NULL;
         \Civi::log()->debug(

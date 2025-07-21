@@ -13,9 +13,10 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\Queue\Task;
 
-use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 use Civi\Hiorg\Synchronize\Synchronize;
@@ -34,7 +35,11 @@ class SynchronizeVolunteerHoursTask extends \CRM_Queue_Task {
     );
   }
 
-  protected function doRun(\CRM_Queue_TaskContext $context, ConfigProfile $configProfile, HiorgVolunteerHoursDTO $hiorgVolunteerHours) {
+  protected function doRun(
+    \CRM_Queue_TaskContext $context,
+    ConfigProfile $configProfile,
+    HiorgVolunteerHoursDTO $hiorgVolunteerHours
+  ) {
     try {
       $volunteerHoursResult = Synchronize::synchronizeVolunteerHours($configProfile, $hiorgVolunteerHours);
       $result = \CRM_Queue_Task::TASK_SUCCESS;

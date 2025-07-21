@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\Api4\Action;
 
 use Civi\Api4\Generic\AbstractAction;
@@ -20,14 +22,14 @@ use Civi\Api4\Generic\Result;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 
 /**
- * @method int getConfigProfileId
+ * @method int getConfigProfileId()
  */
 abstract class AbstractHiorgAction extends AbstractAction {
 
   /**
    * The ID of the configuration profile to use for the HiOrg-Server API call.
    *
-   * @var int|null $configProfileId
+   * @var int|null
    *
    * @required
    */
@@ -36,7 +38,7 @@ abstract class AbstractHiorgAction extends AbstractAction {
   /**
    * The configuration profile to use for the HiOrg-Server API call.
    *
-   * @var ConfigProfile|null
+   * @var \Civi\Hiorg\ConfigProfiles\ConfigProfile|null
    */
   protected ?ConfigProfile $_configProfile = NULL;
 
@@ -44,27 +46,28 @@ abstract class AbstractHiorgAction extends AbstractAction {
    * @return static
    * @throws \Exception
    */
-  public function setConfigProfileId($configProfileId) {
+  public function setConfigProfileId(int $configProfileId) {
     // parent::setConfigProfileId($configProfileId); is magic via
     // parent::__call() and can't be documented.
     parent::__call(__FUNCTION__, func_get_args());
     // Load the profile.
-    $this->_configProfile = ConfigProfile::getById($this->configProfileId);
+    $this->_configProfile = ConfigProfile::getById($configProfileId);
     return $this;
   }
-  public function getConfigProfile() {
+
+  public function getConfigProfile(): ?ConfigProfile {
     return $this->_configProfile;
   }
 
   /**
    * @inheritDoc
    */
-  abstract public function _run(Result $result);
+  abstract public function _run(Result $result): void;
 
   /**
    * Defines parameters for this API action.
    *
-   * @return array[]
+   * @phpstan-return list<array<string, mixed>>
    */
   public static function fields(): array {
     return [

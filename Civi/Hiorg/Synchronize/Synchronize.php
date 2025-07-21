@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\Synchronize;
 
 use Civi\Api4\Activity;
@@ -22,11 +24,8 @@ use Civi\Api4\EckEntity;
 use Civi\Api4\Hiorg;
 use Civi\Api4\OptionValue;
 use Civi\Api4\Relationship;
-use Civi\Core\Event\GenericHookEvent;
-use Civi\Funding\Permission\ContactRelation\Types\Contact;
 use Civi\Hiorg\Event\SynchronizeContactsEvent;
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;
-use Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO;
 use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
 use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\Event\MapContactParametersEvent;
@@ -140,7 +139,10 @@ class Synchronize {
     return $result;
   }
 
-  public static function synchronizeVolunteerHours(ConfigProfile $configProfile, HiorgVolunteerHoursDTO $hiorgVolunteerHours): array {
+  public static function synchronizeVolunteerHours(
+    ConfigProfile $configProfile,
+    HiorgVolunteerHoursDTO $hiorgVolunteerHours
+  ): array {
     $result = [];
 
     if (!isset($hiorgVolunteerHours->user_id)) {
@@ -369,13 +371,17 @@ class Synchronize {
     return $result;
   }
 
-  public static function synchronizeVerifications(int $contactId, HiorgUserDTO $hiorgUser, ConfigProfile $configProfile): array {
+  public static function synchronizeVerifications(
+    int $contactId,
+    HiorgUserDTO $hiorgUser,
+    ConfigProfile $configProfile
+  ): array {
     $result = [];
     $oAuthClientId = $configProfile->getOauthClientId();
     $verificationsLastSync = \Civi::settings()->get('hiorg.synchronizeVerifications.lastSync') ?? [];
     $verificationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
     // TODO: Introduce dedicated Result classes.
-    /* @var HiorgVerificationDTO[] $verifications */
+    /** @var \Civi\Hiorg\HiorgApi\DTO\HiorgVerificationDTO[] $verifications */
     $verifications = Hiorg::getUeberpruefungen(FALSE)
       ->setConfigProfileId($configProfile->getId())
       ->setChangedSince($verificationsLastSync[$oAuthClientId][$hiorgUser->id] ?? NULL)
@@ -495,7 +501,7 @@ class Synchronize {
         //  => create one
         $data = [
           'BIC' => $hiorgUser->bic,
-          'country' => substr($hiorgUser->iban, 0, 2)
+          'country' => substr($hiorgUser->iban, 0, 2),
         ];
         $account = civicrm_api3('BankingAccount', 'create', [
           'contact_id' => $contactId,
@@ -512,7 +518,11 @@ class Synchronize {
     return $account ?? NULL;
   }
 
-  public static function synchronizeEducations(int $contactId, HiorgUserDTO $hiorgUser, ConfigProfile $configProfile): array {
+  public static function synchronizeEducations(
+    int $contactId,
+    HiorgUserDTO $hiorgUser,
+    ConfigProfile $configProfile
+  ): array {
     $oAuthClientId = $configProfile->getOauthClientId();
     $educationsLastSync = \Civi::settings()->get('hiorg.synchronizeEducations.lastSync') ?? [];
     $educationsCurrentSync = (new \DateTime())->format('Y-m-d\TH:i:sP');
@@ -588,32 +598,34 @@ class Synchronize {
     $gatherer = \Civi::container()->get('spec_gatherer');
     $fieldSpecs = $gatherer->getAllFields($entity, 'create');
     foreach ($fields as $fieldName => $value) {
-      if (isset($fieldSpecs[$fieldName])) {
+      if (isset($fieldSpecs[$fieldName]) && 'Custom' === $fieldSpecs[$fieldName]['type']) {
         $fieldSpec = $fieldSpecs[$fieldName];
-        if ($fieldSpec['type'] == 'Custom') {
-          if (method_exists(\CRM_Core_DAO_AllCoreTables::class, 'getDAONameForEntity')) {
-            $options = (\CRM_Core_DAO_AllCoreTables::getDAONameForEntity($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
-          }
-          else {
-            $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions('custom_' . $fieldSpec['custom_field_id']);
-          }
-          $value = (array) $value;
-          if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
-            $optionGroupId = CustomField::get(FALSE)
-              ->addWhere('id', '=', $fieldSpec['custom_field_id'])
-              ->addWhere('option_group_id', 'IS NOT NULL')
-              ->addSelect('option_group_id')
-              ->execute()
-              ->column('option_group_id')[0] ?? NULL;
-            if (isset($optionGroupId)) {
-              foreach ($newOptionValues as $newOptionValue) {
-                OptionValue::create(FALSE)
-                  ->addValue('option_group_id', $optionGroupId)
-                  ->addValue('name', $newOptionValue)
-                  ->addValue('value', $newOptionValue)
-                  ->addValue('label', $newOptionValue)
-                  ->execute();
-              }
+        if (method_exists(\CRM_Core_DAO_AllCoreTables::class, 'getDAONameForEntity')) {
+          $options = (\CRM_Core_DAO_AllCoreTables::getDAONameForEntity($entity))::buildOptions(
+            'custom_' . $fieldSpec['custom_field_id']
+          );
+        }
+        else {
+          $options = (\CRM_Core_DAO_AllCoreTables::getFullName($entity))::buildOptions(
+            'custom_' . $fieldSpec['custom_field_id']
+          );
+        }
+        $value = (array) $value;
+        if (is_array($value) && !empty($newOptionValues = array_diff($value, array_keys($options)))) {
+          $optionGroupId = CustomField::get(FALSE)
+            ->addWhere('id', '=', $fieldSpec['custom_field_id'])
+            ->addWhere('option_group_id', 'IS NOT NULL')
+            ->addSelect('option_group_id')
+            ->execute()
+            ->column('option_group_id')[0] ?? NULL;
+          if (isset($optionGroupId)) {
+            foreach ($newOptionValues as $newOptionValue) {
+              OptionValue::create(FALSE)
+                ->addValue('option_group_id', $optionGroupId)
+                ->addValue('name', $newOptionValue)
+                ->addValue('value', $newOptionValue)
+                ->addValue('label', $newOptionValue)
+                ->execute();
             }
           }
         }
@@ -699,12 +711,14 @@ class Synchronize {
   }
 
   /**
-   * @param string|null $hiorgUserId
-   *   The HiOrg-Server API configuration profile ID.
-   * @param array $params
-   *   Contact parameters to pass to XCM.
-   * @param mixed $identityContext
-   *   The HiOrg-Server user ID to add as ID Tracker record on the contact.
+   * @param string $xcmProfile
+   *   The Extended Contact Matcher (XCM) profile to use for matching/creating
+   *   the contact.
+   * @param \Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO $hiorgUser
+   *   The HiOrg-Server user data to synchronize with a CiviCRM contact.
+   * @param $identityContext
+   *   The HiOrg-Server API configuration profile ID to use as context value for
+   *   the Identity Tracker record on the contact.
    *
    * @return int
    *   The CiviCRM contact ID of the synchronized contact.

@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\Queue\Task;
 
 use Civi\Hiorg\HiorgApi\DTO\HiorgUserDTO;

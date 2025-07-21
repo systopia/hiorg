@@ -13,10 +13,11 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\Api4\Action;
 
 use Civi\Api4\Generic\Result;
-use Civi\Hiorg\ConfigProfiles\ConfigProfile;
 use Civi\Hiorg\HiorgApi\HiorgClient;
 
 abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
@@ -24,22 +25,26 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
   /**
    * The JSON-decoded HiOrg-Server API result.
    *
-   * @var object $_response
+   * @var object|null
    */
-  protected object $_response;
+  protected ?object $_response = NULL;
 
   /**
    * The HiOrg-Server API client.
    *
-   * @var \Civi\Hiorg\HiorgApi\HiorgClient $_hiorgClient
+   * @var \Civi\Hiorg\HiorgApi\HiorgClient|null
    */
-  protected HiorgClient $_hiorgClient;
+  protected ?HiorgClient $_hiorgClient = NULL;
 
   /**
    * @inheritDoc
    */
   public function _run(Result $result): void {
-    $this->_hiorgClient = new HiorgClient($this->getConfigProfile());
+    $configProfile = $this->getConfigProfile();
+    if (NULL === $configProfile) {
+      throw new \RuntimeException('Configuration Profile not set.');
+    }
+    $this->_hiorgClient = new HiorgClient($configProfile);
     $this->doRun();
     $this->formatResult($result);
   }
@@ -68,21 +73,23 @@ abstract class AbstractHiorgApiAction extends AbstractHiorgAction {
     elseif (isset($this->_response->data)) {
       // Wrap single result in array for CiviCRM API to count correctly.
       $data = is_object($this->_response->data) ? [$this->_response->data] : $this->_response->data;
-    }
 
-    // Add data from included records to relationships.
-    if (!empty($this->_response->included)) {
-      foreach ($data as &$record) {
-        foreach ($record->relationships as &$relationship) {
-          self::addRelationshipIncludeData($relationship, $this->_response->included);
+      // Add data from included records to relationships.
+      if (!empty($this->_response->included)) {
+        foreach ($data as &$record) {
+          foreach ($record->relationships as &$relationship) {
+            self::addRelationshipIncludeData($relationship, $this->_response->included);
+          }
         }
       }
+      $result->exchangeArray($data);
     }
-
-    $result->exchangeArray($data);
   }
 
-  protected static function addRelationshipIncludeData(\stdClass $relationship, array $included) {
+  /**
+   * @phpstan-param array<object{type: string, id: int, attributes: array<string, mixed>}> $included
+   */
+  protected static function addRelationshipIncludeData(\stdClass $relationship, array $included): void {
     foreach ($included as $include) {
       if (
         $include->type == $relationship->data->type

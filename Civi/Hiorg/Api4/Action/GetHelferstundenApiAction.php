@@ -13,10 +13,9 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Hiorg\Api4\Action;
+declare(strict_types = 1);
 
-use Civi\Api4\Generic\Result;
-use Civi\Hiorg\HiorgApi\DTO\HiorgVolunteerHoursDTO;
+namespace Civi\Hiorg\Api4\Action;
 
 /**
  * @method $this setId(int $id)
@@ -81,7 +80,7 @@ class GetHelferstundenApiAction extends AbstractHiorgApiAction {
           'name' => 'changedSince',
           'data_type' => 'String',
         ],
-      ];
+    ];
   }
 
   /**

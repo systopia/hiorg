@@ -13,11 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Hiorg\Api4\Action;
 
 use Civi\Api4\ConfigProfile;
 use Civi\Api4\Generic\Result;
-use Civi\Hiorg\Api4\Action\AbstractHiorgAction;
 
 abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
 
@@ -26,7 +27,7 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
    *
    * Leave empty to synchronize data for all active configuration profiles.
    *
-   * @var int|null $configProfileId
+   * @var int|null
    */
   protected ?int $configProfileId = NULL;
 
@@ -36,7 +37,7 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
    *
    * Leave empty for no timeout.
    *
-   * @var int|null $timeout
+   * @var int|null
    */
   protected ?int $timeout = NULL;
 
@@ -79,6 +80,9 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
       : NULL;
   }
 
+  /**
+   * @phpstan-return list<array<string, mixed>>
+   */
   protected function runQueue(\CRM_Queue_Queue $queue, ?int $maxRunTime = NULL): array {
     $totalItems = $queue->getStatistic('total');
     $runner = new \CRM_Queue_Runner([
@@ -90,11 +94,11 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
     // Run queue for given timeout.
     $continue = TRUE;
     $queueResult = [];
-    while($totalItems > 0 && (!isset($maxRunTime) || time() < $maxRunTime) && $continue) {
-      $taskResult = $runner->runNext(false);
+    while ($totalItems > 0 && (!isset($maxRunTime) || time() < $maxRunTime) && $continue) {
+      $taskResult = $runner->runNext(FALSE);
       if (!$taskResult['is_continue']) {
         // All items in the queue are processed.
-        $continue = false;
+        $continue = FALSE;
       }
       $queueResult[] = &$taskResult;
       // If there is a lock on the next item, do not attempt to re-run it.
@@ -128,7 +132,7 @@ abstract class AbstractSynchronizeAction extends AbstractHiorgAction {
         || $this->timeout > $phpMaxExecutionTime
       )
     ) {
-      throw new \Exception('The timeout exceeds the max_execution_time PHP setting value.');
+      throw new \RuntimeException('The timeout exceeds the max_execution_time PHP setting value.');
     }
 
     return isset($this->timeout) ? time() + $this->timeout : NULL;
