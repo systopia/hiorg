@@ -176,6 +176,9 @@ class Synchronize {
       ),
       'duration' => $hiorgVolunteerHours->stunden * 60,
       'status_id:name' => 'Completed',
+      // TODO: A contact ID might not be available when running the API from the command line. Since an ID of "0" won't
+      //       pass the empty() check in \CRM_Activity_BAO_Activity::dataExists(), this should be set to the default
+      //       organization or a configurable contact.
       'source_contact_id' => \CRM_Core_Session::getLoggedInContactID() ?? 0,
       'hiorg_volunteer_hours.hiorg_id' => $hiorgVolunteerHours->id,
       'hiorg_volunteer_hours.start_date' => self::formatDate(
